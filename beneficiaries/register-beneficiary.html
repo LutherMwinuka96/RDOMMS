@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RDO|MMS – Register Beneficiary</title>
+<meta name="description" content="Register new beneficiaries in RDO|MMS with a simple database-backed intake form.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+<link rel="stylesheet" href="../assets/css/rdomms-icons-offline.css">
+<link rel="stylesheet" href="../assets/css/rdomms-session-countdown.css?v=2">
+<link rel="stylesheet" href="../assets/css/project-nav.css?v=3">
+<link rel="stylesheet" href="../assets/css/rdomms-toast.css">
+<script src="../assets/js/rdomms-security.js"></script>
+<script src="../assets/js/localStorage-service.js"></script>
+<script src="../assets/js/rdomms-toast.js"></script>
+<style>
+:root {
+  --primary-green: #2d5016;
+  --secondary-green: #4a7c28;
+  --dark-green: #1a3009;
+  --success-green: #28a745;
+  --text-primary: #212529;
+  --text-secondary: #6c757d;
+  --border-gray: #dee2e6;
+  --bg-secondary: #f8f9fa;
+  --shadow-sm: 0 2px 4px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 8px rgba(0,0,0,0.12);
+  --radius-lg: 1rem;
+  --radius-md: 0.75rem;
+  --font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-family);
+  background:
+    radial-gradient(circle at top left, rgba(74, 124, 40, 0.14), transparent 28%),
+    linear-gradient(180deg, #fbfcf9 0%, #f0f4f1 100%);
+  color: var(--text-primary);
+  min-height: 100vh;
+}
+.page { max-width: 960px; margin: 0 auto; padding: 1.25rem 1.25rem 3rem; }
+.page-loading {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 36, 20, 0.35);
+  backdrop-filter: blur(3px);
+  color: #fff;
+  font-weight: 600;
+  gap: 0.75rem;
+}
+.page-loading.hidden { display: none; }
+.page-hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+  padding: 1.35rem 1.5rem;
+  background: linear-gradient(135deg, var(--dark-green) 0%, var(--primary-green) 55%, #166534 100%);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+.page-hero-main { display: flex; align-items: center; gap: 1.15rem; flex: 1; min-width: 240px; }
+.hero-icon-wrap {
+  width: 4.25rem; height: 4.25rem;
+  border-radius: 1rem;
+  background: rgba(255,255,255,0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-md);
+  flex-shrink: 0;
+}
+.hero-icon-wrap img { width: 2.75rem; height: 2.75rem; object-fit: contain; }
+.page-hero h1 { font-size: 1.75rem; font-weight: 700; color: #fff; }
+.page-hero p { color: rgba(255,255,255,0.92); font-size: 0.9375rem; margin-top: 0.4rem; max-width: 520px; line-height: 1.5; }
+.header-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  text-decoration: none;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+  color: #fff;
+  border: 2px solid var(--dark-green);
+}
+.btn-outline {
+  background: rgba(255,255,255,0.95);
+  color: var(--primary-green);
+  border: 2px solid rgba(255,255,255,0.5);
+}
+.btn-light {
+  background: #fff;
+  color: var(--primary-green);
+  border: 1.5px solid var(--border-gray);
+}
+.btn-success { background: var(--success-green); color: #fff; }
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+@media (max-width: 560px) { .stats-grid { grid-template-columns: 1fr; } }
+.stat-card {
+  background: rgba(255,255,255,0.97);
+  border: 1.5px solid var(--border-gray);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.15rem;
+  display: flex;
+  gap: 0.85rem;
+  align-items: center;
+}
+.stat-icon {
+  width: 2.75rem; height: 2.75rem;
+  border-radius: 0.75rem;
+  background: var(--bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.stat-icon img { width: 1.5rem; height: 1.5rem; object-fit: contain; }
+.stat-label { font-size: 0.75rem; color: var(--text-secondary); font-weight: 600; }
+.stat-value { font-size: 1.35rem; font-weight: 800; color: var(--primary-green); margin-top: 0.15rem; }
+.panel {
+  background: rgba(255,255,255,0.97);
+  border: 1.5px solid var(--border-gray);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding: 1rem 1.15rem;
+  border-bottom: 1px solid var(--border-gray);
+  background: linear-gradient(180deg, #fff, #f9fbf8);
+}
+.panel-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--primary-green);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.panel-sub {
+  padding: 0 1.15rem 0.85rem;
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-gray);
+}
+.mode-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.28rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  background: #eef7ef;
+  color: var(--primary-green);
+}
+.mode-badge.editing { background: #eff6ff; color: #1d4ed8; }
+.editing-banner {
+  display: none;
+  margin: 1rem 1.15rem 0;
+  padding: 0.75rem 0.9rem;
+  border-radius: var(--radius-md);
+  background: #eff6ff;
+  color: #1e40af;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+  padding: 1.15rem;
+}
+@media (max-width: 680px) { .form-grid { grid-template-columns: 1fr; } }
+.form-group { display: flex; flex-direction: column; gap: 0.35rem; }
+.form-group.span-2 { grid-column: 1 / -1; }
+.form-group label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.form-control {
+  width: 100%;
+  padding: 0.75rem 0.85rem;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border-gray);
+  background: #fff;
+  color: var(--text-primary);
+  font: inherit;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.form-control:focus {
+  border-color: var(--primary-green);
+  box-shadow: 0 0 0 3px rgba(45, 80, 22, 0.1);
+}
+textarea.form-control { min-height: 88px; resize: vertical; }
+.form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding-top: 0.25rem;
+}
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 1rem;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  max-width: 520px;
+  width: 100%;
+  box-shadow: var(--shadow-md);
+}
+.modal h2 {
+  font-size: 1.125rem;
+  color: var(--primary-green);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem 1rem;
+}
+.preview-grid dt {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  font-weight: 700;
+}
+.preview-grid dd {
+  margin: 0.15rem 0 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.preview-grid .span-2 { grid-column: 1 / -1; }
+.modal-actions { display: flex; gap: 0.5rem; margin-top: 1.25rem; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+
+<div id="pageLoading" class="page-loading hidden" aria-live="polite">
+  <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+  <span>Loading…</span>
+</div>
+
+<div class="page">
+  <div class="page-hero">
+    <div class="page-hero-main">
+      <div class="hero-icon-wrap">
+        <img src="../assets/photos/systemicon/addbeneficiary.png" alt="Register Beneficiary">
+      </div>
+      <div>
+        <h1>Register Beneficiary</h1>
+        <p>Capture essential profile details and save directly to the database.</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <a href="../RDOMMS.html" class="btn btn-outline"><i class="fas fa-house"></i> Dashboard</a>
+      <a href="beneficiary-list.php" class="btn btn-outline"><i class="fas fa-list"></i> Beneficiary List</a>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon"><img src="../assets/photos/systemicon/beneficiarylist.png" alt=""></div>
+      <div>
+        <div class="stat-label">Total registered</div>
+        <div class="stat-value" id="statTotal">0</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon"><img src="../assets/photos/systemicon/statustrack.png" alt=""></div>
+      <div>
+        <div class="stat-label">Active</div>
+        <div class="stat-value" id="statActive">0</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <div class="panel-title" id="formTitle"><i class="fas fa-user-plus"></i> Register Beneficiary</div>
+      <span class="mode-badge" id="formModeBadge">New</span>
+    </div>
+    <p class="panel-sub">Required fields are marked with *. Review details before saving.</p>
+    <div class="editing-banner" id="editingBanner">
+      <i class="fas fa-pen-to-square"></i>
+      Editing beneficiary — update fields and click Save Beneficiary
+    </div>
+    <form id="beneficiaryForm" class="form-grid">
+      <div class="form-group">
+        <label for="fullName">Full Name *</label>
+        <input type="text" id="fullName" class="form-control" placeholder="e.g. Asha Juma" required>
+      </div>
+      <div class="form-group">
+        <label for="category">Category *</label>
+        <select id="category" class="form-control" required>
+          <option value="">Select category</option>
+          <option value="kindergarten">Kindergarten Pupils</option>
+          <option value="primary-school">Primary School Pupils</option>
+          <option value="secondary-school">Secondary School Students</option>
+          <option value="college">College / VET Students</option>
+          <option value="university">University Students</option>
+          <option value="vulnerable-households">People in Vulnerable Conditions</option>
+          <option value="children">Children</option>
+          <option value="youth">Youth</option>
+          <option value="women">Women</option>
+          <option value="elderly">Elderly</option>
+          <option value="persons-with-disabilities">Persons with Disabilities</option>
+          <option value="households">Households</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="gender">Gender *</label>
+        <select id="gender" class="form-control" required>
+          <option value="">Select gender</option>
+          <option value="female">Female</option>
+          <option value="male">Male</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="age">Age</label>
+        <input type="number" id="age" class="form-control" min="0" max="120" placeholder="e.g. 27">
+      </div>
+      <div class="form-group">
+        <label for="phone">Phone</label>
+        <input type="tel" id="phone" class="form-control" placeholder="e.g. 07xx xxx xxx">
+      </div>
+      <div class="form-group">
+        <label for="status">Status *</label>
+        <select id="status" class="form-control" required>
+          <option value="active">Active</option>
+          <option value="pending">Pending</option>
+          <option value="inactive">Inactive</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="location">Location *</label>
+        <input type="text" id="location" class="form-control" placeholder="Village, ward, district" required>
+      </div>
+      <div class="form-group">
+        <label for="district">District</label>
+        <input type="text" id="district" class="form-control" placeholder="District">
+      </div>
+      <div class="form-group">
+        <label for="ward">Ward</label>
+        <input type="text" id="ward" class="form-control" placeholder="Ward">
+      </div>
+      <div class="form-group" id="groupCountField" style="display:none">
+        <label for="groupCount">Group Count *</label>
+        <input type="number" id="groupCount" class="form-control" min="1" step="1" placeholder="e.g. 120">
+      </div>
+      <div class="form-group">
+        <label for="registeredDate">Registration Date *</label>
+        <input type="date" id="registeredDate" class="form-control" required>
+      </div>
+      <div class="form-group span-2">
+        <label for="servicesNeeded">Services Needed</label>
+        <textarea id="servicesNeeded" class="form-control" placeholder="Support requested or planned…"></textarea>
+      </div>
+      <div class="form-group span-2">
+        <label for="notes">Notes</label>
+        <textarea id="notes" class="form-control" placeholder="Short internal note…"></textarea>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-success" id="btnSave">
+          <i class="fas fa-floppy-disk"></i>
+          <span id="btnSaveLabel">Save Beneficiary</span>
+        </button>
+        <button type="button" class="btn btn-light" id="btnReset"><i class="fas fa-eraser"></i> Reset</button>
+        <button type="button" class="btn btn-light" id="btnCancelEdit" style="display:none"><i class="fas fa-xmark"></i> Cancel edit</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-overlay" id="previewModal" aria-hidden="true">
+  <div class="modal preview-modal" role="dialog" aria-labelledby="previewTitle">
+    <h2 id="previewTitle"><i class="fas fa-eye"></i> Confirm registration</h2>
+    <div id="previewBody"></div>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-success" id="btnPreviewConfirm"><i class="fas fa-check"></i> Confirm &amp; Save</button>
+      <button type="button" class="btn btn-light" id="btnPreviewCancel"><i class="fas fa-xmark"></i> Back</button>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/js/register-beneficiary.js?v=2"></script>
+</body>
+</html>

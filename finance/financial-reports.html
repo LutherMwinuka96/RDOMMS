@@ -1,0 +1,1836 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>RDO|MMS - Financial Reports Dashboard</title>
+        <link
+            rel="stylesheet"
+            href="../assets/vendor/fontawesome/css/financial-reports-icons.css"
+        />
+<link rel="stylesheet" href="../assets/css/rdomms-icons-offline.css">
+<link rel="stylesheet" href="../assets/css/rdomms-session-countdown.css?v=2">
+        <link rel="stylesheet" href="../assets/css/rdomms-currency.css" />
+        <script src="../assets/js/rdomms-security.js"></script>
+<script src="../assets/js/localStorage-service.js"></script>
+        <script src="../assets/js/number-format.js"></script>
+        <script src="../assets/js/rdomms-departments.js"></script>
+        <script src="../assets/js/rdomms-dates.js"></script>
+<script src="../assets/vendor/chartjs/chart.umd.js"></script>
+        <script src="../assets/vendor/sheetjs/xlsx.full.min.js"></script>
+        <script src="../assets/vendor/html-docx-js/html-docx.js"></script>
+        <style>
+            :root {
+                --primary-green: #2d5016;
+                --secondary-green: #4a7c28;
+                --accent-green: #6dbd6d;
+                --dark-green: #1a3009;
+                --success-green: #16a34a;
+                --warning-amber: #f59e0b;
+                --danger-red: #dc2626;
+                --info-blue: #2563eb;
+                --border-gray: #dee2e6;
+                --text-primary: #111827;
+                --text-secondary: #6b7280;
+                --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
+                --shadow-md: 0 8px 20px rgba(0, 0, 0, 0.12);
+                --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.16);
+                --radius-md: 0.9rem;
+                --radius-lg: 1.25rem;
+                --font-family: "Inter", sans-serif;
+            }
+
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                font-family: var(--font-family), sans-serif;
+                background: linear-gradient(
+                    135deg,
+                    #eef4ee 0%,
+                    #f8fafc 45%,
+                    #e7f4ea 100%
+                );
+                color: var(--text-primary);
+                min-height: 100vh;
+                line-height: 1.6;
+            }
+
+            a {
+                text-decoration: none;
+                color: inherit;
+            }
+
+            button,
+            input,
+            select {
+                font: inherit;
+                outline: none;
+            }
+
+            button {
+                cursor: pointer;
+            }
+
+            /* TOPBAR */
+            .topbar {
+                background: linear-gradient(
+                    135deg,
+                    var(--dark-green) 0%,
+                    var(--primary-green) 100%
+                );
+                color: #fff;
+                padding: 1rem 1.35rem;
+                display: flex;
+                align-items: center;
+                gap: 0.65rem;
+                flex-wrap: wrap;
+                box-shadow: var(--shadow-md);
+                position: sticky;
+                top: 0;
+                z-index: 100;
+            }
+
+            .brand {
+                font-size: 1.05rem;
+                font-weight: 800;
+                letter-spacing: 0.4px;
+            }
+
+            .brand span {
+                color: var(--accent-green);
+            }
+
+            .sep {
+                color: rgba(255, 255, 255, 0.55);
+                font-size: 0.7rem;
+            }
+
+            .crumb {
+                color: rgba(255, 255, 255, 0.82);
+                font-size: 0.82rem;
+                font-weight: 500;
+            }
+
+            .crumb.active {
+                color: #fff;
+                font-weight: 700;
+            }
+
+            .topbar-back {
+                margin-left: auto;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.45rem;
+                color: rgba(255, 255, 255, 0.88);
+                font-size: 0.82rem;
+                font-weight: 700;
+                background: rgba(255, 255, 255, 0.12);
+                padding: 0.45rem 0.9rem;
+                border-radius: 99px;
+                transition: all 0.2s;
+            }
+
+            .topbar-back:hover {
+                color: #fff;
+                background: rgba(255, 255, 255, 0.2);
+            }
+
+            /* PAGE WRAPPER */
+            .page {
+                max-width: 1440px;
+                margin: 0 auto;
+                padding: 1.5rem;
+            }
+
+            /* HERO SECTION */
+            .hero {
+                background: linear-gradient(
+                    135deg,
+                    rgba(45, 80, 22, 0.98) 0%,
+                    rgba(74, 124, 40, 0.95) 100%
+                );
+                border-radius: 24px;
+                padding: 1.5rem 1.8rem;
+                color: #fff;
+                box-shadow: var(--shadow-lg);
+                position: relative;
+                overflow: hidden;
+                margin-bottom: 1.5rem;
+            }
+
+            .hero::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background-image:
+                    radial-gradient(
+                        circle at 15% 20%,
+                        rgba(255, 255, 255, 0.12) 0 2px,
+                        transparent 2px
+                    ),
+                    radial-gradient(
+                        circle at 85% 75%,
+                        rgba(255, 255, 255, 0.12) 0 2px,
+                        transparent 2px
+                    );
+                background-size: 80px 80px;
+                opacity: 0.35;
+                pointer-events: none;
+            }
+
+            .hero-inner {
+                position: relative;
+                z-index: 1;
+            }
+
+            .eyebrow {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                width: max-content;
+                padding: 0.35rem 0.7rem;
+                border-radius: 999px;
+                background: rgba(255, 255, 255, 0.12);
+                color: rgba(255, 255, 255, 0.95);
+                font-size: 0.72rem;
+                font-weight: 800;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+            }
+
+            .hero h1 {
+                font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+                line-height: 1.1;
+                margin: 0.6rem 0 0.3rem;
+                font-weight: 800;
+            }
+
+            .hero p {
+                max-width: 100%;
+                color: rgba(255, 255, 255, 0.9);
+                font-size: 0.92rem;
+            }
+
+            /* STATS DASHBOARD */
+            .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 1rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .stat-card {
+                background: rgba(255, 255, 255, 0.95);
+                border: 1.5px solid var(--border-gray);
+                border-radius: var(--radius-lg);
+                padding: 1.2rem;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                box-shadow: var(--shadow-sm);
+                min-width: 0;
+                overflow: hidden;
+            }
+
+            .stat-icon {
+                width: 3.2rem;
+                height: 3.2rem;
+                border-radius: 1rem;
+                background: #eef7ef;
+                color: var(--primary-green);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.35rem;
+                flex-shrink: 0;
+            }
+
+            .stat-icon.allocated {
+                background: #eff6ff;
+                color: var(--info-blue);
+            }
+            .stat-icon.spent {
+                background: #fff1f2;
+                color: var(--danger-red);
+            }
+            .stat-icon.variance {
+                background: #ecfdf5;
+                color: var(--success-green);
+            }
+            .stat-icon.utilization {
+                background: #fff7ed;
+                color: var(--warning-amber);
+            }
+
+            .stat-info {
+                display: flex;
+                flex-direction: column;
+                min-width: 0;
+                flex: 1 1 auto;
+                overflow: hidden;
+            }
+
+            .stat-val {
+                font-size: clamp(0.72rem, 2.2vw, 1.35rem);
+                font-weight: 800;
+                color: var(--text-primary);
+                line-height: 1.15;
+                max-width: 100%;
+                overflow: hidden;
+            }
+
+            .stat-val .rdomms-currency,
+            .stat-val .rdomms-currency-amount,
+            .stat-val .rdomms-currency-code {
+                white-space: nowrap;
+            }
+
+            .stat-lbl {
+                font-size: 0.78rem;
+                color: var(--text-secondary);
+                font-weight: 600;
+                margin-top: 0.2rem;
+                line-height: 1.3;
+            }
+
+            @media (max-width: 768px) {
+                .stats-grid {
+                    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+                }
+            }
+
+            /* FILTERS CARD */
+            .filter-card {
+                background: rgba(255, 255, 255, 0.96);
+                border: 1.5px solid var(--border-gray);
+                border-radius: var(--radius-lg);
+                box-shadow: var(--shadow-sm);
+                padding: 1.25rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .filter-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 1rem;
+                align-items: flex-end;
+            }
+
+            .filter-group {
+                display: flex;
+                flex-direction: column;
+                gap: 0.4rem;
+            }
+
+            .filter-group label {
+                font-size: 0.72rem;
+                font-weight: 800;
+                color: var(--text-secondary);
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+            }
+
+            .filter-select {
+                width: 100%;
+                padding: 0.7rem 0.8rem;
+                border-radius: var(--radius-md);
+                border: 1.5px solid var(--border-gray);
+                background: #fff;
+                color: var(--text-primary);
+                font-size: 0.85rem;
+                font-weight: 600;
+            }
+
+            /* VISUALIZATION CONTAINER */
+            .chart-container {
+                background: rgba(255, 255, 255, 0.96);
+                border: 1.5px solid var(--border-gray);
+                border-radius: var(--radius-lg);
+                padding: 1.5rem;
+                margin-bottom: 1.5rem;
+                box-shadow: var(--shadow-sm);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .chart-title {
+                font-size: 1rem;
+                font-weight: 800;
+                margin-bottom: 1rem;
+                color: var(--primary-green);
+                align-self: flex-start;
+            }
+
+            .chart-wrapper {
+                position: relative;
+                width: 100%;
+                max-width: 800px;
+                height: 320px;
+            }
+
+            /* REPORT DATATABLE CARD */
+            .report-card {
+                background: rgba(255, 255, 255, 0.96);
+                border: 1.5px solid var(--border-gray);
+                border-radius: var(--radius-lg);
+                box-shadow: var(--shadow-sm);
+                overflow: hidden;
+            }
+
+            .report-header {
+                padding: 1.2rem;
+                border-bottom: 1.5px solid var(--border-gray);
+                background: linear-gradient(180deg, #fff, #f9fbf8);
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 1rem;
+                flex-wrap: wrap;
+            }
+
+            .report-title h2 {
+                font-size: 1.05rem;
+                font-weight: 800;
+            }
+
+            .report-title p {
+                font-size: 0.78rem;
+                color: var(--text-secondary);
+            }
+
+            .export-actions {
+                display: flex;
+                gap: 0.5rem;
+            }
+
+            .btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.45rem;
+                padding: 0.65rem 1rem;
+                border-radius: var(--radius-md);
+                border: 1.5px solid transparent;
+                font-weight: 700;
+                font-size: 0.82rem;
+                transition: all 0.2s;
+            }
+
+            .btn:hover {
+                transform: translateY(-1px);
+            }
+
+            .btn-pdf {
+                background: #fef2f2;
+                color: #dc2626;
+                border-color: #fca5a5;
+            }
+            .btn-pdf:hover {
+                background: #dc2626;
+                color: #fff;
+                border-color: #dc2626;
+            }
+
+            .btn-excel {
+                background: #f0fdf4;
+                color: #16a34a;
+                border-color: #86efac;
+            }
+            .btn-excel:hover {
+                background: #16a34a;
+                color: #fff;
+                border-color: #16a34a;
+            }
+
+            .btn-word {
+                background: #eff6ff;
+                color: #2563eb;
+                border-color: #93c5fd;
+            }
+            .btn-word:hover {
+                background: #2563eb;
+                color: #fff;
+                border-color: #2563eb;
+            }
+
+            /* DATA TABLE */
+            .table-wrap {
+                overflow-x: auto;
+            }
+
+            .table {
+                width: 100%;
+                border-collapse: collapse;
+                text-align: left;
+            }
+
+            .table thead th {
+                font-size: 0.68rem;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                color: var(--text-secondary);
+                background: #f8fafc;
+                padding: 0.9rem 1rem;
+                border-bottom: 2px solid var(--border-gray);
+                user-select: none;
+                cursor: pointer;
+            }
+
+            .table thead th:hover {
+                background: #f1f5f9;
+            }
+
+            .table tbody td {
+                padding: 0.9rem 1rem;
+                border-bottom: 1px solid #eef1f4;
+                font-size: 0.85rem;
+            }
+
+            .table tbody tr:hover td {
+                background: #fcfdfc;
+            }
+
+            .num {
+                text-align: right;
+                font-family: monospace;
+                font-weight: 700;
+                font-size: 0.9rem;
+            }
+
+            .badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.35rem;
+                border-radius: 99px;
+                padding: 0.25rem 0.55rem;
+                font-size: 0.72rem;
+                font-weight: 800;
+                text-transform: uppercase;
+            }
+
+            .badge-approved {
+                background: #ecfdf5;
+                color: var(--success-green);
+            }
+            .badge-pending {
+                background: #fff7ed;
+                color: var(--warning-amber);
+            }
+            .badge-rejected {
+                background: #fef2f2;
+                color: var(--danger-red);
+            }
+
+            /* TOAST */
+            .toast {
+                position: fixed;
+                left: 50%;
+                bottom: 1.5rem;
+                transform: translateX(-50%) translateY(10px);
+                background: #0f2d1e;
+                color: #fff;
+                padding: 0.8rem 1.2rem;
+                border-radius: 999px;
+                box-shadow: 0 18px 30px rgba(0, 0, 0, 0.2);
+                opacity: 0;
+                pointer-events: none;
+                transition:
+                    opacity 0.22s,
+                    transform 0.22s;
+                z-index: 2000;
+                font-size: 0.82rem;
+                font-weight: 700;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .toast.show {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+
+            .empty-state {
+                padding: 4rem 1.5rem;
+                text-align: center;
+                color: var(--text-secondary);
+            }
+
+            .empty-state i {
+                font-size: 2.5rem;
+                margin-bottom: 1rem;
+                color: #cbd5e1;
+            }
+
+            .empty-state h3 {
+                color: var(--text-primary);
+                font-size: 1.1rem;
+                margin-bottom: 0.35rem;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="topbar">
+            <span class="brand">RDO|MMS</span>
+            <i class="fas fa-chevron-right sep"></i>
+            <a class="crumb" href="../RDOMMS.html">Dashboard</a>
+            <i class="fas fa-chevron-right sep"></i>
+            <span class="crumb">Finance</span>
+            <i class="fas fa-chevron-right sep"></i>
+            <span class="crumb active">Financial Reports</span>
+            <a class="topbar-back" href="../RDOMMS.html"
+                ><i class="fas fa-arrow-left"></i> Dashboard</a
+            >
+        </div>
+
+        <div class="page">
+            <!-- HERO -->
+            <header class="hero">
+                <div class="hero-inner">
+                    <h1>Financial Reports</h1>
+                </div>
+            </header>
+
+            <!-- LIVE STATS GRID -->
+            <section class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon allocated">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-val" id="statAllocated">TSH 0</span>
+                        <span class="stat-lbl" id="lblAllocated"
+                            >Total Allocations</span
+                        >
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon spent">
+                        <i class="fas fa-receipt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-val" id="statSpent">TSH 0</span>
+                        <span class="stat-lbl" id="lblSpent">Total Spent</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon variance">
+                        <i class="fas fa-scale-balanced"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-val" id="statVariance">TSH 0</span>
+                        <span class="stat-lbl" id="lblVariance"
+                            >Net Balance</span
+                        >
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon utilization">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-val" id="statUtilization">0.0%</span>
+                        <span class="stat-lbl" id="lblUtilization"
+                            >Utilization rate</span
+                        >
+                    </div>
+                </div>
+            </section>
+
+            <!-- REPORT FILTERS & CONTROLS -->
+            <section class="filter-card">
+                <div class="filter-grid">
+                    <div class="filter-group">
+                        <label for="reportType">Report Model</label>
+                        <select id="reportType" class="filter-select">
+                            <option value="budget">
+                                Budget Allocations Report
+                            </option>
+                            <option value="expense">
+                                Expense Tracking Report
+                            </option>
+                            <option value="variance">
+                                Budget vs Expense Variance Model
+                            </option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="filterDept">Department</label>
+                        <select id="filterDept" class="filter-select">
+                            <option value="all">All Departments</option>
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="filterYear">Fiscal Year</label>
+                        <select id="filterYear" class="filter-select">
+                            <option value="all">All Years</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="filterQuarter">Quarter</label>
+                        <select id="filterQuarter" class="filter-select">
+                            <option value="all">All Quarters</option>
+                            <option value="q1">Q1 (Jan–Mar)</option>
+                            <option value="q2">Q2 (Apr–Jun)</option>
+                            <option value="q3">Q3 (Jul–Sep)</option>
+                            <option value="q4">Q4 (Oct–Dec)</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="filterStatus">Status</label>
+                        <select id="filterStatus" class="filter-select">
+                            <option value="all">All Statuses</option>
+                            <option value="approved">
+                                Approved / Active Only
+                            </option>
+                            <option value="pending">
+                                Pending Entries Only
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- EXECUTIVE VISUALIZATION -->
+            <section class="chart-container" id="chartCard">
+                <div class="chart-title" id="chartTitle">Allocation Chart</div>
+                <div class="chart-wrapper">
+                    <canvas id="financeChart"></canvas>
+                </div>
+            </section>
+
+            <!-- DATA REPORT BOARD -->
+            <section class="report-card">
+                <div class="report-header">
+                    <div class="report-title">
+                        <h2 id="tableHeadingTitle">Budget Allocation Ledger</h2>
+                        <p id="tableSubtitle">
+                            Showing summarized ledger breakdown
+                        </p>
+                    </div>
+                    <div class="export-actions">
+                        <button
+                            type="button"
+                            class="btn btn-pdf"
+                            id="exportPdfBtn"
+                        >
+                            <i class="fas fa-file-pdf"></i> PDF Compile
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-excel"
+                            id="exportExcelBtn"
+                        >
+                            <i class="fas fa-file-excel"></i> Excel Sheet
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-word"
+                            id="exportWordBtn"
+                        >
+                            <i class="fas fa-file-word"></i> Word Doc
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-wrap">
+                    <table class="table" id="reportTable">
+                        <thead id="tableHead">
+                            <!-- Loaded dynamically -->
+                        </thead>
+                        <tbody id="tableBody">
+                            <!-- Loaded dynamically -->
+                        </tbody>
+                    </table>
+
+                    <!-- EMPTY STATE -->
+                    <div
+                        class="empty-state"
+                        id="reportEmptyState"
+                        style="display: none"
+                    >
+                        <i class="fas fa-chart-bar"></i>
+                        <h3>No Financial Logs Match Your Parameters</h3>
+                        <p>
+                            Modify your filters or add budget/expense entries
+                            via navigation dropdowns.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- TOAST -->
+        <div class="toast" id="toast">
+            <i
+                class="fas fa-circle-check"
+                style="color: var(--accent-green)"
+            ></i>
+            <span id="toastMsg">Notification message</span>
+        </div>
+
+        <script>
+            // STORAGE KEYS
+            const STORAGE_BUDGET = "budgetAllocations";
+            const STORAGE_EXPENSE = "expenses";
+
+            function departmentSlugs() {
+                return (window.RDOMMS_DEPARTMENTS || []).map((item) => item.value);
+            }
+
+            function departmentLabels() {
+                return (window.RDOMMS_DEPARTMENTS || []).map((item) => item.label);
+            }
+
+            function normalizeDepartmentKey(value) {
+                if (window.RDOMMSDepartments) {
+                    return RDOMMSDepartments.getValue(value);
+                }
+                return String(value || "");
+            }
+
+            function formatDepartment(value) {
+                if (window.RDOMMSDepartments) {
+                    return RDOMMSDepartments.getLabel(value);
+                }
+                return value || "—";
+            }
+
+            // STATE ENTITIES
+            let budgets = [];
+            let expenses = [];
+            let chartInstance = null;
+            let dashboardUpdateFrame = null;
+
+            // DOM ELEMENT LINKS
+            const reportType = document.getElementById("reportType");
+            const filterDept = document.getElementById("filterDept");
+            const filterYear = document.getElementById("filterYear");
+            const filterQuarter = document.getElementById("filterQuarter");
+            const filterStatus = document.getElementById("filterStatus");
+
+            const statAllocated = document.getElementById("statAllocated");
+            const statSpent = document.getElementById("statSpent");
+            const statVariance = document.getElementById("statVariance");
+            const statUtilization = document.getElementById("statUtilization");
+
+            const lblAllocated = document.getElementById("lblAllocated");
+            const lblSpent = document.getElementById("lblSpent");
+            const lblVariance = document.getElementById("lblVariance");
+            const lblUtilization = document.getElementById("lblUtilization");
+
+            const tableHeadingTitle =
+                document.getElementById("tableHeadingTitle");
+            const tableSubtitle = document.getElementById("tableSubtitle");
+            const tableHead = document.getElementById("tableHead");
+            const tableBody = document.getElementById("tableBody");
+            const reportEmptyState =
+                document.getElementById("reportEmptyState");
+
+            document.addEventListener("DOMContentLoaded", () => {
+                initLocalData();
+                populateDepartmentsDropdown();
+                populateYearDropdown();
+                registerEventListeners();
+                initFinanceStatCardFit();
+                updateDashboard();
+            });
+
+            function refreshReportData() {
+                initLocalData();
+                updateDashboard();
+            }
+
+            function readJsonStorage(key) {
+                try {
+                    const raw = localStorage.getItem(key);
+                    if (!raw) return [];
+                    const parsed = JSON.parse(raw);
+                    return Array.isArray(parsed) ? parsed : [];
+                } catch (error) {
+                    return [];
+                }
+            }
+
+            function normalizeBudgetRecord(record) {
+                return {
+                    id: record.id || record.allocation_id || record._id || "",
+                    department: record.department || "",
+                    quarter: String(record.quarter || "").toLowerCase(),
+                    fiscalYear: String(
+                        record.fiscalYear || record.fiscal_year || record.year || "",
+                    ),
+                    amount: Number(record.amount) || 0,
+                    description: record.description || "",
+                    status: String(record.status || "pending").toLowerCase(),
+                    station: record.station || "",
+                    createdAt:
+                        record.createdAt || record.created_at || record.date || "",
+                };
+            }
+
+            function normalizeExpenseRecord(record) {
+                return {
+                    id: record.id || record.expense_id || record._id || "",
+                    date: record.date || record.createdAt || record.created_at || "",
+                    category: record.category || "",
+                    department: record.department || "",
+                    quarter: String(record.quarter || "").toLowerCase(),
+                    fiscalYear: String(
+                        record.fiscalYear || record.fiscal_year || record.year || "",
+                    ),
+                    amount: Number(record.amount) || 0,
+                    description: record.description || "",
+                    status: String(record.status || "pending").toLowerCase(),
+                    station: record.station || "",
+                };
+            }
+
+            // LOAD DATA FROM FINANCE MODULES
+            function initLocalData() {
+                budgets = readJsonStorage(STORAGE_BUDGET).map(
+                    normalizeBudgetRecord,
+                );
+                expenses = readJsonStorage(STORAGE_EXPENSE).map(
+                    normalizeExpenseRecord,
+                );
+            }
+
+            function populateYearDropdown() {
+                if (!window.RDOMMSDates || !filterYear) return;
+                const current = filterYear.value;
+                RDOMMSDates.fillYearSelect(filterYear, {
+                    allYearsLabel: "All Years",
+                    allYearsValue: "all",
+                    selectedValue:
+                        current && current !== "all"
+                            ? current
+                            : RDOMMSDates.currentYear(),
+                });
+            }
+
+            // DROPDOWN BUILDER
+            function populateDepartmentsDropdown() {
+                const departments = window.RDOMMS_DEPARTMENTS || [];
+                filterDept.innerHTML =
+                    `<option value="all">All Departments</option>` +
+                    departments
+                        .map(
+                            (d) =>
+                                `<option value="${d.value}">${d.label}</option>`,
+                        )
+                        .join("");
+            }
+
+            // REGISTRATION
+            function registerEventListeners() {
+                [
+                    reportType,
+                    filterDept,
+                    filterYear,
+                    filterQuarter,
+                    filterStatus,
+                ].forEach((el) => {
+                    el.addEventListener("change", scheduleDashboardUpdate);
+                    el.addEventListener("input", scheduleDashboardUpdate);
+                });
+
+                document
+                    .getElementById("exportPdfBtn")
+                    .addEventListener("click", exportToPDF);
+                document
+                    .getElementById("exportExcelBtn")
+                    .addEventListener("click", exportToExcel);
+                document
+                    .getElementById("exportWordBtn")
+                    .addEventListener("click", exportToWord);
+            }
+
+            window.addEventListener("storage", (event) => {
+                if (
+                    event.key === STORAGE_BUDGET ||
+                    event.key === STORAGE_EXPENSE
+                ) {
+                    refreshReportData();
+                }
+            });
+
+            window.addEventListener("focus", refreshReportData);
+
+            window.addEventListener("rdommsDataLoaded", refreshReportData);
+
+            function scheduleDashboardUpdate() {
+                if (dashboardUpdateFrame) {
+                    cancelAnimationFrame(dashboardUpdateFrame);
+                }
+                dashboardUpdateFrame = requestAnimationFrame(() => {
+                    dashboardUpdateFrame = null;
+                    updateDashboard();
+                });
+            }
+
+            // MONEY UTILITIES
+            function formatCurrency(n) {
+                return formatRdommsCurrency(n || 0);
+            }
+
+            function formatCurrencyHtml(n) {
+                if (typeof formatRdommsCurrencyHtml === 'function') {
+                    return formatRdommsCurrencyHtml(n || 0);
+                }
+                return formatCurrency(n);
+            }
+
+            function setCurrencyStat(el, n) {
+                if (!el) return;
+                el.style.fontSize = "";
+                el.style.whiteSpace = "";
+                el.style.wordBreak = "";
+                el.style.overflowWrap = "";
+                if (typeof setRdommsCurrencyElement === 'function') {
+                    setRdommsCurrencyElement(el, n || 0);
+                } else {
+                    el.textContent = formatCurrency(n || 0);
+                }
+                scheduleFinanceStatFit();
+            }
+
+            let financeStatFitFrame = null;
+
+            function fitFinanceStatText(element, options = {}) {
+                if (!element) return;
+
+                const {
+                    maxSize = 22,
+                    minSize = 9,
+                    mobileMaxSize = 18,
+                    mobileMinSize = 9
+                } = options;
+
+                const isMobile = window.matchMedia("(max-width: 768px)").matches;
+                const max = isMobile ? mobileMaxSize : maxSize;
+                const min = isMobile ? mobileMinSize : minSize;
+
+                const statInfo = element.closest(".stat-info");
+                if (!statInfo) return;
+
+                const available = statInfo.clientWidth;
+                if (available <= 0) return;
+
+                element.style.fontSize = `${max}px`;
+                element.style.whiteSpace = "nowrap";
+                element.style.lineHeight = "1.15";
+                element.style.wordBreak = "";
+                element.style.overflowWrap = "";
+
+                let size = max;
+                while (element.scrollWidth > available && size > min) {
+                    size -= 1;
+                    element.style.fontSize = `${size}px`;
+                }
+
+                if (element.scrollWidth > available) {
+                    element.style.whiteSpace = "normal";
+                    element.style.wordBreak = "break-word";
+                    element.style.overflowWrap = "anywhere";
+
+                    const lineHeight = parseFloat(window.getComputedStyle(element).lineHeight) || size * 1.15;
+                    const maxHeight = lineHeight * 2.4;
+                    while (element.scrollHeight > maxHeight && size > min) {
+                        size -= 1;
+                        element.style.fontSize = `${size}px`;
+                    }
+                }
+            }
+
+            function fitFinanceStatCards() {
+                const grid = document.querySelector(".stats-grid");
+                if (!grid) return;
+                grid.querySelectorAll(".stat-val").forEach((el) => {
+                    fitFinanceStatText(el, {
+                        maxSize: 22,
+                        minSize: 9,
+                        mobileMaxSize: 18,
+                        mobileMinSize: 9
+                    });
+                });
+            }
+
+            function scheduleFinanceStatFit() {
+                if (financeStatFitFrame) {
+                    cancelAnimationFrame(financeStatFitFrame);
+                }
+                financeStatFitFrame = requestAnimationFrame(() => {
+                    financeStatFitFrame = null;
+                    fitFinanceStatCards();
+                });
+            }
+
+            function initFinanceStatCardFit() {
+                const grid = document.querySelector(".stats-grid");
+                if (!grid || grid.dataset.fitBound === "1") return;
+                grid.dataset.fitBound = "1";
+                window.addEventListener("resize", scheduleFinanceStatFit);
+                if (window.ResizeObserver) {
+                    const observer = new ResizeObserver(() => scheduleFinanceStatFit());
+                    observer.observe(grid);
+                    grid.querySelectorAll(".stat-card").forEach((card) => observer.observe(card));
+                }
+            }
+
+            function categoryLabel(cat) {
+                const map = {
+                    operational: "Operational",
+                    personnel: "Personnel",
+                    program: "Program",
+                    administrative: "Administrative",
+                    capital: "Capital",
+                    maintenance: "Maintenance",
+                    utilities: "Utilities",
+                };
+                return map[cat] || cat;
+            }
+
+            function quarterLabel(q) {
+                const map = { q1: "Q1", q2: "Q2", q3: "Q3", q4: "Q4" };
+                return map[q] || q;
+            }
+
+            function showToast(msg) {
+                const toast = document.getElementById("toast");
+                document.getElementById("toastMsg").textContent = msg;
+                toast.classList.add("show");
+                clearTimeout(showToast.timer);
+                showToast.timer = setTimeout(() => {
+                    toast.classList.remove("show");
+                }, 2500);
+            }
+
+            function getReportTitle(type) {
+                return type === "budget"
+                    ? "Budget Allocations Report"
+                    : type === "expense"
+                      ? "Expense Tracking Report"
+                      : "Budget vs Expense Variance Model";
+            }
+
+            function getReportFilename(type, ext) {
+                return `RDOMMS_${type.toUpperCase()}_Ledger_${new Date().toISOString().slice(0, 10)}.${ext}`;
+            }
+
+            function downloadBlob(blob, filename) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                URL.revokeObjectURL(url);
+            }
+
+            function buildWordDocumentHTML(type) {
+                const reportTitle = getReportTitle(type);
+                const tableHTML =
+                    document.getElementById("reportTable").outerHTML;
+
+                return `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>RDO|MMS Financial Statement</title>
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 11pt; color: #111827; }
+        h1 { color: #2d5016; font-size: 18pt; font-weight: bold; margin-bottom: 5pt; }
+        p { font-size: 10pt; color: #555; margin: 0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15pt; }
+        th { background-color: #2d5016; color: #ffffff; font-size: 10pt; font-weight: bold; padding: 8pt; border: 1px solid #2d5016; text-align: left; }
+        td { padding: 8pt; border: 1px solid #dee2e6; font-size: 10pt; vertical-align: top; }
+        .num { text-align: right; font-weight: bold; }
+        .meta-table { width: 100%; border-collapse: collapse; margin-bottom: 15pt; }
+        .meta-table td { border: none; background-color: #f8fafc; padding: 6pt; font-size: 10pt; }
+        .badge, .pill-light { display: inline-block; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>RDO|MMS Financial Compilation Statement</h1>
+    <p style="margin-bottom: 15pt;">Resource Allocation & Progress Monitoring Management System</p>
+
+    <table class="meta-table">
+        <tr>
+            <td style="width: 33%;"><strong>Report Compiled:</strong> ${reportTitle}</td>
+            <td style="width: 33%;"><strong>Generation Date:</strong> ${new Date().toLocaleDateString("en-GB")}</td>
+            <td style="width: 33%;"><strong>Security Level:</strong> Restricted Admin</td>
+        </tr>
+    </table>
+
+    ${tableHTML}
+
+    <p style="margin-top: 35pt; font-size: 8pt; color: #888; text-align: center;">
+        CONFIDENTIAL FINANCIAL STATEMENT • RDO|MMS INTERNAL AUDIT UTILITY
+    </p>
+</body>
+</html>`;
+            }
+
+            // MAIN DASHBOARD UPDATER
+            function updateDashboard() {
+                const type = reportType.value;
+                const dept = filterDept.value;
+                const year = filterYear.value;
+                const quarter = filterQuarter.value;
+                const status = filterStatus.value;
+
+                // Filter budget raw allocations
+                const activeBudgets = budgets.filter((b) => {
+                    if (dept !== "all" && normalizeDepartmentKey(b.department) !== dept) return false;
+                    if (year !== "all" && b.fiscalYear !== year) return false;
+                    if (quarter !== "all" && b.quarter !== quarter)
+                        return false;
+                    if (status !== "all" && b.status !== status) return false;
+                    return true;
+                });
+
+                // Filter expense logs
+                const activeExpenses = expenses.filter((e) => {
+                    if (dept !== "all" && normalizeDepartmentKey(e.department) !== dept) return false;
+                    if (year !== "all" && e.fiscalYear !== year) return false;
+                    if (quarter !== "all" && e.quarter !== quarter)
+                        return false;
+                    if (status !== "all" && e.status !== status) return false;
+                    return true;
+                });
+
+                // RENDER METRIC KPI CARDS
+                const totalAllocated = activeBudgets.reduce(
+                    (sum, b) => sum + (Number(b.amount) || 0),
+                    0,
+                );
+                const totalSpent = activeExpenses.reduce(
+                    (sum, e) => sum + (Number(e.amount) || 0),
+                    0,
+                );
+
+                if (type === "budget") {
+                    statVariance.style.color = "";
+                    lblAllocated.textContent = "Total Allocated";
+                    setCurrencyStat(statAllocated, totalAllocated);
+
+                    const approvedVal = activeBudgets
+                        .filter((b) => b.status === "approved")
+                        .reduce((sum, b) => sum + (Number(b.amount) || 0), 0);
+                    lblSpent.textContent = "Approved Allocations";
+                    setCurrencyStat(statSpent, approvedVal);
+
+                    const pendingVal = activeBudgets
+                        .filter((b) => b.status === "pending")
+                        .reduce((sum, b) => sum + (Number(b.amount) || 0), 0);
+                    lblVariance.textContent = "Pending Decisions";
+                    setCurrencyStat(statVariance, pendingVal);
+
+                    const count = activeBudgets.length;
+                    lblUtilization.textContent = "Active Log Records";
+                    statUtilization.style.color = "";
+                    statUtilization.textContent = `${count} records`;
+                } else if (type === "expense") {
+                    statVariance.style.color = "";
+                    lblAllocated.textContent = "Accumulated Spent";
+                    setCurrencyStat(statAllocated, totalSpent);
+
+                    const approvedVal = activeExpenses
+                        .filter((e) => e.status === "approved")
+                        .reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
+                    lblSpent.textContent = "Approved Expenses";
+                    setCurrencyStat(statSpent, approvedVal);
+
+                    const pendingVal = activeExpenses
+                        .filter((e) => e.status === "pending")
+                        .reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
+                    lblVariance.textContent = "Pending Approvals";
+                    setCurrencyStat(statVariance, pendingVal);
+
+                    // Find matches in total budget allocated (all approved allocations for context)
+                    const count = activeExpenses.length;
+                    lblUtilization.textContent = "Active Expense Logs";
+                    statUtilization.style.color = "";
+                    statUtilization.textContent = `${count} transactions`;
+                } else if (type === "variance") {
+                    lblAllocated.textContent = "Allocated Budget";
+                    setCurrencyStat(statAllocated, totalAllocated);
+
+                    lblSpent.textContent = "Actual Expense Spent";
+                    setCurrencyStat(statSpent, totalSpent);
+
+                    const diff = totalAllocated - totalSpent;
+                    lblVariance.textContent = "Net Financial Balance";
+                    setCurrencyStat(statVariance, diff);
+                    if (diff < 0) {
+                        statVariance.style.color = "var(--danger-red)";
+                    } else {
+                        statVariance.style.color = "var(--success-green)";
+                    }
+
+                    const rate =
+                        totalAllocated > 0
+                            ? ((totalSpent / totalAllocated) * 100).toFixed(1)
+                            : "0.0";
+                    lblUtilization.textContent = "Budget Burn Rate";
+                    statUtilization.style.color = "";
+                    statUtilization.textContent = `${rate}%`;
+                }
+
+                scheduleFinanceStatFit();
+
+                // UPDATE RENDERED VISUALIZATIONS AND LEDGER TABLE
+                try {
+                    renderVisualizationChart(activeBudgets, activeExpenses);
+                } catch (error) {
+                    console.warn("Visualization render failed:", error);
+                }
+
+                try {
+                    renderLedgerTable(activeBudgets, activeExpenses);
+                } catch (error) {
+                    console.warn("Ledger render failed:", error);
+                }
+            }
+
+            // VISUALIZATION CHART GENERATOR (Chart.js)
+            function renderVisualizationChart(activeBudgets, activeExpenses) {
+                const ctx = document
+                    .getElementById("financeChart")
+                    .getContext("2d");
+                const type = reportType.value;
+
+                if (chartInstance) {
+                    chartInstance.destroy();
+                }
+
+                let chartTitleText = "";
+                let dataObj = {};
+
+                if (type === "budget") {
+                    chartTitleText =
+                        "Budget Allocation Distribution by Department";
+                    document.getElementById("chartTitle").textContent =
+                        chartTitleText;
+
+                    const slugs = departmentSlugs();
+                    slugs.forEach((slug) => (dataObj[slug] = 0));
+                    activeBudgets.forEach((b) => {
+                        const key = normalizeDepartmentKey(b.department);
+                        if (dataObj[key] !== undefined)
+                            dataObj[key] += Number(b.amount) || 0;
+                    });
+
+                    chartInstance = new Chart(ctx, {
+                        type: "doughnut",
+                        data: {
+                            labels: slugs.map((slug) =>
+                                window.RDOMMSDepartments
+                                    ? RDOMMSDepartments.getLabel(slug)
+                                    : slug,
+                            ),
+                            datasets: [
+                                {
+                                    data: Object.values(dataObj),
+                                    backgroundColor: [
+                                        "#2d5016",
+                                        "#4a7c28",
+                                        "#6dbd6d",
+                                        "#16a34a",
+                                        "#2563eb",
+                                        "#f59e0b",
+                                        "#dc2626",
+                                        "#475569",
+                                    ],
+                                    borderWidth: 2,
+                                },
+                            ],
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: "right",
+                                    labels: {
+                                        boxWidth: 12,
+                                        font: { family: "Inter", size: 11 },
+                                    },
+                                },
+                            },
+                        },
+                    });
+                } else if (type === "expense") {
+                    chartTitleText =
+                        "Expense Utilization Distribution by Category";
+                    document.getElementById("chartTitle").textContent =
+                        chartTitleText;
+
+                    const categories = [
+                        "operational",
+                        "personnel",
+                        "program",
+                        "administrative",
+                        "capital",
+                        "maintenance",
+                        "utilities",
+                    ];
+                    categories.forEach((c) => (dataObj[categoryLabel(c)] = 0));
+                    activeExpenses.forEach((e) => {
+                        const label = categoryLabel(e.category);
+                        if (dataObj[label] !== undefined)
+                            dataObj[label] += Number(e.amount) || 0;
+                    });
+
+                    chartInstance = new Chart(ctx, {
+                        type: "pie",
+                        data: {
+                            labels: Object.keys(dataObj),
+                            datasets: [
+                                {
+                                    data: Object.values(dataObj),
+                                    backgroundColor: [
+                                        "#4a7c28",
+                                        "#f59e0b",
+                                        "#2563eb",
+                                        "#dc2626",
+                                        "#16a34a",
+                                        "#64748b",
+                                        "#7c3aed",
+                                    ],
+                                    borderWidth: 2,
+                                },
+                            ],
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: "right",
+                                    labels: {
+                                        boxWidth: 12,
+                                        font: { family: "Inter", size: 11 },
+                                    },
+                                },
+                            },
+                        },
+                    });
+                } else if (type === "variance") {
+                    chartTitleText = "Budget vs Spent Variance Overview";
+                    document.getElementById("chartTitle").textContent =
+                        chartTitleText;
+
+                    let deptBudgets = {};
+                    let deptExpenses = {};
+                    const slugs = departmentSlugs();
+                    slugs.forEach((slug) => {
+                        deptBudgets[slug] = 0;
+                        deptExpenses[slug] = 0;
+                    });
+
+                    activeBudgets.forEach((b) => {
+                        const key = normalizeDepartmentKey(b.department);
+                        if (deptBudgets[key] !== undefined)
+                            deptBudgets[key] += Number(b.amount) || 0;
+                    });
+                    activeExpenses.forEach((e) => {
+                        const key = normalizeDepartmentKey(e.department);
+                        if (deptExpenses[key] !== undefined)
+                            deptExpenses[key] += Number(e.amount) || 0;
+                    });
+
+                    chartInstance = new Chart(ctx, {
+                        type: "bar",
+                        data: {
+                            labels: departmentLabels(),
+                            datasets: [
+                                {
+                                    label: "Allocated Budget",
+                                    data: slugs.map(
+                                        (slug) => deptBudgets[slug],
+                                    ),
+                                    backgroundColor: "rgba(74, 124, 40, 0.85)",
+                                    borderColor: "#2d5016",
+                                    borderWidth: 1.5,
+                                },
+                                {
+                                    label: "Actual Spent",
+                                    data: slugs.map(
+                                        (slug) => deptExpenses[slug],
+                                    ),
+                                    backgroundColor: "rgba(220, 38, 38, 0.85)",
+                                    borderColor: "#991b1b",
+                                    borderWidth: 1.5,
+                                },
+                            ],
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        font: { family: "Inter", size: 10 },
+                                    },
+                                },
+                                x: {
+                                    ticks: {
+                                        font: { family: "Inter", size: 9 },
+                                    },
+                                },
+                            },
+                            plugins: {
+                                legend: {
+                                    position: "top",
+                                    labels: {
+                                        boxWidth: 12,
+                                        font: { family: "Inter", size: 11 },
+                                    },
+                                },
+                            },
+                        },
+                    });
+                }
+            }
+
+            // LEDGER TABLE RENDERER
+            function renderLedgerTable(activeBudgets, activeExpenses) {
+                const type = reportType.value;
+
+                if (type === "budget") {
+                    tableHeadingTitle.textContent = "Budget Allocation Ledger";
+                    tableSubtitle.textContent =
+                        "Granular listing of departmental budget allocations";
+
+                    tableHead.innerHTML = `
+            <tr>
+                <th>Department</th>
+                <th>Quarter</th>
+                <th>Year</th>
+                <th style="text-align: right;">Amount</th>
+                <th>Assigned Station</th>
+                <th>Description</th>
+                <th>Status</th>
+            </tr>
+        `;
+
+                    if (activeBudgets.length === 0) {
+                        tableBody.innerHTML = "";
+                        reportEmptyState.style.display = "block";
+                        return;
+                    }
+
+                    reportEmptyState.style.display = "none";
+                    tableBody.innerHTML = activeBudgets
+                        .map(
+                            (b) => `
+            <tr>
+                <td><strong>${formatDepartment(b.department)}</strong></td>
+                <td><span class="pill-light">${quarterLabel(b.quarter)}</span></td>
+                <td>${b.fiscalYear}</td>
+                <td class="num">${formatCurrencyHtml(b.amount)}</td>
+                <td>${b.station === "all" || !b.station ? "All Stations" : b.station.toUpperCase()}</td>
+                <td style="font-size: 0.8rem; color:var(--text-secondary);">${b.description || "—"}</td>
+                <td><span class="badge badge-${b.status}">${b.status}</span></td>
+            </tr>
+        `,
+                        )
+                        .join("");
+                } else if (type === "expense") {
+                    tableHeadingTitle.textContent =
+                        "Expense Transaction Ledger";
+                    tableSubtitle.textContent =
+                        "Transaction registry of operational outlays";
+
+                    tableHead.innerHTML = `
+            <tr>
+                <th>Date</th>
+                <th>Category</th>
+                <th>Department</th>
+                <th>Quarter</th>
+                <th>Year</th>
+                <th style="text-align: right;">Amount</th>
+                <th>Station</th>
+                <th>Description</th>
+                <th>Status</th>
+            </tr>
+        `;
+
+                    if (activeExpenses.length === 0) {
+                        tableBody.innerHTML = "";
+                        reportEmptyState.style.display = "block";
+                        return;
+                    }
+
+                    reportEmptyState.style.display = "none";
+                    tableBody.innerHTML = activeExpenses
+                        .map(
+                            (e) => `
+            <tr>
+                <td><strong>${e.date}</strong></td>
+                <td><span class="pill-light">${categoryLabel(e.category)}</span></td>
+                <td>${formatDepartment(e.department)}</td>
+                <td>${quarterLabel(e.quarter) || "—"}</td>
+                <td>${e.fiscalYear || "—"}</td>
+                <td class="num">${formatCurrencyHtml(e.amount)}</td>
+                <td>${e.station === "all" || !e.station ? "All Stations" : e.station.toUpperCase()}</td>
+                <td style="font-size: 0.8rem; color:var(--text-secondary);">${e.description || "—"}</td>
+                <td><span class="badge badge-${e.status}">${e.status}</span></td>
+            </tr>
+        `,
+                        )
+                        .join("");
+                } else if (type === "variance") {
+                    tableHeadingTitle.textContent = "Budget Variance Matrix";
+                    tableSubtitle.textContent =
+                        "Analysis matrix comparing budget allocations against operational costs";
+
+                    tableHead.innerHTML = `
+            <tr>
+                <th>Department</th>
+                <th style="text-align: right;">Allocated Budget</th>
+                <th style="text-align: right;">Actual Spent</th>
+                <th style="text-align: right;">Financial Variance</th>
+                <th style="text-align: right;">Utilization Rate</th>
+            </tr>
+        `;
+
+                    // Calculate variance matrix dynamically by department
+                    const matrix = departmentSlugs().map((slug) => {
+                        const allocated = activeBudgets
+                            .filter(
+                                (b) =>
+                                    normalizeDepartmentKey(b.department) === slug,
+                            )
+                            .reduce((s, b) => s + (Number(b.amount) || 0), 0);
+                        const spent = activeExpenses
+                            .filter(
+                                (e) =>
+                                    normalizeDepartmentKey(e.department) === slug,
+                            )
+                            .reduce((s, e) => s + (Number(e.amount) || 0), 0);
+                        const diff = allocated - spent;
+                        const rate =
+                            allocated > 0
+                                ? ((spent / allocated) * 100).toFixed(1)
+                                : "0.0";
+                        const label = window.RDOMMSDepartments
+                            ? RDOMMSDepartments.getLabel(slug)
+                            : slug;
+                        return {
+                            department: label,
+                            allocated,
+                            spent,
+                            diff,
+                            rate,
+                        };
+                    }).filter((item) => item.allocated > 0 || item.spent > 0);
+
+                    if (matrix.length === 0) {
+                        tableBody.innerHTML = "";
+                        reportEmptyState.style.display = "block";
+                        return;
+                    }
+
+                    reportEmptyState.style.display = "none";
+                    tableBody.innerHTML = matrix
+                        .map((row) => {
+                            const varianceColor =
+                                row.diff < 0
+                                    ? "color: var(--danger-red);"
+                                    : "color: var(--success-green);";
+                            return `
+                <tr>
+                    <td><strong>${row.department}</strong></td>
+                    <td class="num">${formatCurrencyHtml(row.allocated)}</td>
+                    <td class="num">${formatCurrencyHtml(row.spent)}</td>
+                    <td class="num" style="${varianceColor}">${formatCurrencyHtml(row.diff)}</td>
+                    <td class="num" style="font-weight: 800; color: var(--primary-green);">${row.rate}%</td>
+                </tr>
+            `;
+                        })
+                        .join("");
+                }
+            }
+
+            // ---------------- EXPORT MODULES ----------------
+
+            // 1. PDF COMPILER
+            function exportToPDF() {
+                const type = reportType.value;
+                const dept = filterDept.value;
+                const year = filterYear.value;
+                const quarter = filterQuarter.value;
+                const status = filterStatus.value;
+
+                const reportTitle =
+                    type === "budget"
+                        ? "Budget Allocations Report"
+                        : type === "expense"
+                          ? "Expense Tracking Report"
+                          : "Budget vs Expense Variance Model";
+
+                const tableHTML =
+                    document.getElementById("reportTable").outerHTML;
+
+                const printWindow = window.open("", "_blank");
+                if (!printWindow) {
+                    showToast("Please allow popups to open PDF.");
+                    return;
+                }
+
+                const htmlContent = `
+        <html>
+        <head>
+            <title>RDO|MMS - Financial Compilation</title>
+            <style>
+                body { font-family: 'Inter', Arial, sans-serif; color: #111827; padding: 25px; line-height: 1.5; }
+                .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #2d5016; padding-bottom: 12px; margin-bottom: 25px; }
+                .header h1 { font-size: 22px; font-weight: 800; color: #2d5016; margin: 0; }
+                .header p { font-size: 11px; color: #6b7280; margin: 2px 0 0 0; }
+                .meta-summary { display: flex; justify-content: space-between; background: #f8fafc; border: 1.5px solid #dee2e6; border-radius: 8px; padding: 12px 15px; margin-bottom: 25px; font-size: 12px; }
+                .meta-summary div { display: flex; flex-direction: column; }
+                .meta-summary span { font-weight: bold; color: #111827; margin-top: 2px; }
+                .meta-summary label { color: #6b7280; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; }
+                table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 15px; }
+                th { background: #f1f5f9; color: #475569; text-transform: uppercase; font-size: 9px; font-weight: 800; letter-spacing: 0.05em; padding: 10px; border-bottom: 2px solid #cbd5e1; text-align: left; }
+                td { padding: 9px 10px; border-bottom: 1px solid #e2e8f0; vertical-align: middle; }
+                .num { text-align: right; font-family: monospace; font-weight: bold; }
+                .badge { display: inline-block; padding: 2px 6px; border-radius: 99px; font-size: 9px; font-weight: bold; text-transform: uppercase; }
+                .badge-approved { background: #ecfdf5; color: #16a34a; }
+                .badge-pending { background: #fff7ed; color: #f59e0b; }
+                .badge-rejected { background: #fef2f2; color: #dc2626; }
+                .pill-light { background: #f1f5f9; padding: 2px 5px; border-radius: 4px; font-size: 10px; font-weight: bold; }
+                @media print { body { padding: 0; } }
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <div>
+                    <h1>RDO|MMS Financial Compilation</h1>
+                    <p>Resource Allocation & Progress Monitoring Management System</p>
+                </div>
+                <div style="text-align: right; font-size: 11px;">
+                    <p style="font-weight: 800; color: #2d5016; font-size: 13px;">OFFICIAL STATEMENT</p>
+                    <p>Issued: ${new Date().toLocaleDateString("en-GB")} ${new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}</p>
+                </div>
+            </div>
+
+            <div class="meta-summary">
+                <div>
+                    <label>Report Compilation</label>
+                    <span>${reportTitle}</span>
+                </div>
+                <div>
+                    <label>Filters Applied</label>
+                    <span>Dept: ${dept.toUpperCase()} • Year: ${year} • Qtr: ${quarter.toUpperCase()}</span>
+                </div>
+                <div>
+                    <label>Classification</label>
+                    <span>Confidential - Admin Only</span>
+                </div>
+            </div>
+
+            ${tableHTML}
+
+            <div style="margin-top: 50px; border-top: 1px dashed #cbd5e1; padding-top: 15px; text-align: center; font-size: 9px; color: #94a3b8;">
+                This document was compiled automatically by RDO|MMS Reporting Systems.
+            </div>
+
+            <script>
+                window.onload = function() {
+                    setTimeout(function() {
+                        window.print();
+                        window.close();
+                    }, 250);
+                }
+            <\/script>
+        </body>
+        </html>
+    `;
+
+                printWindow.document.write(htmlContent);
+                printWindow.document.close();
+                showToast("PDF report preview generated");
+            }
+
+            // 2. EXCEL SPREADSHEET COMPILE
+            function exportToExcel() {
+                const type = reportType.value;
+                const table = document.getElementById("reportTable");
+
+                if (typeof XLSX === "undefined") {
+                    showToast("Excel export library failed to load");
+                    return;
+                }
+
+                const workbook = XLSX.utils.table_to_book(table, {
+                    sheet: `${type.toUpperCase()} Ledger`.slice(0, 31),
+                });
+                const sheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[sheetName];
+
+                const range = XLSX.utils.decode_range(worksheet["!ref"]);
+                const columnWidths = [];
+                for (let col = range.s.c; col <= range.e.c; col++) {
+                    let maxLength = 12;
+                    for (let row = range.s.r; row <= range.e.r; row++) {
+                        const cell =
+                            worksheet[
+                                XLSX.utils.encode_cell({
+                                    r: row,
+                                    c: col,
+                                })
+                            ];
+                        const value = cell ? String(cell.v ?? "") : "";
+                        maxLength = Math.max(maxLength, value.length + 2);
+                    }
+                    columnWidths.push({ wch: Math.min(maxLength, 40) });
+                }
+                worksheet["!cols"] = columnWidths;
+
+                XLSX.writeFile(workbook, getReportFilename(type, "xlsx"));
+                showToast("Excel file ready (.xlsx)");
+            }
+
+            // 3. WORD DOCUMENT GENERATOR
+            function exportToWord() {
+                const type = reportType.value;
+
+                if (
+                    typeof htmlDocx === "undefined" ||
+                    typeof htmlDocx.asBlob !== "function"
+                ) {
+                    showToast("Word export library failed to load");
+                    return;
+                }
+
+                const blob = htmlDocx.asBlob(buildWordDocumentHTML(type), {
+                    orientation: "landscape",
+                    margins: {
+                        top: 720,
+                        right: 720,
+                        bottom: 720,
+                        left: 720,
+                        header: 720,
+                        footer: 720,
+                        gutter: 0,
+                    },
+                });
+
+                downloadBlob(blob, getReportFilename(type, "docx"));
+                showToast("Word file ready (.docx)");
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,5 @@
+# Redirect legacy document HTML pages to PHP
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule ^project-documents\.html$ project-documents.php [R=301,L,QSA]
+</IfModule>

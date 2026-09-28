@@ -1,0 +1,5 @@
+# Redirect legacy Notifications HTML pages to PHP entry points
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule ^(system-alerts|approval-requests|messages)\.html$ $1.php [R=301,L,QSA]
+</IfModule>

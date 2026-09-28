@@ -1,0 +1,3266 @@
+{
+    "meta": {
+        "app": "RDOMMS",
+        "version": "2.0.0",
+        "created_at": "2026-06-11T20:30:58+00:00",
+        "backup_type": "manual",
+        "tables": [
+            "organizations",
+            "departments",
+            "roles",
+            "users",
+            "system_settings",
+            "projects",
+            "budget_allocations",
+            "expenses",
+            "beneficiaries",
+            "service_tracking",
+            "monthly_plans",
+            "quarterly_plans",
+            "annual_plans",
+            "targets",
+            "progress_updates",
+            "project_documents",
+            "planning_evidence",
+            "notifications",
+            "approval_requests",
+            "notification_threads",
+            "notification_messages",
+            "activity_logs",
+            "scheduled_reports",
+            "report_history",
+            "user_notification_preferences",
+            "app_storage"
+        ]
+    },
+    "data": {
+        "organizations": [
+            {
+                "id": 1,
+                "org_id": "ORG001",
+                "name": "Rural Development Organization",
+                "registration_no": null,
+                "email": "info@rdo.or.tz",
+                "phone": "+255 22 123456",
+                "website": "https:\/\/rdo.or.tz",
+                "address": "Dodoma, Tanzania",
+                "mission": "Empowering rural communities through sustainable development initiatives.",
+                "logo_url": "uploads\/organization\/org_logo_6a2b0381a90488.96231541.png",
+                "created_at": "2026-06-02 20:46:41"
+            }
+        ],
+        "departments": [
+            {
+                "id": 1,
+                "name": "Administration Department",
+                "description": "Handles overall administration",
+                "organization_id": null,
+                "created_at": "2026-06-02 20:46:41"
+            },
+            {
+                "id": 2,
+                "name": "Finance & Accounting Department",
+                "description": "Manages financial operations",
+                "organization_id": null,
+                "created_at": "2026-06-02 20:46:41"
+            },
+            {
+                "id": 3,
+                "name": "Human Resources Department",
+                "description": "Oversees HR activities",
+                "organization_id": null,
+                "created_at": "2026-06-02 20:46:41"
+            },
+            {
+                "id": 4,
+                "name": "Monitoring & Evaluation Department",
+                "description": "Tracks project progress",
+                "organization_id": null,
+                "created_at": "2026-06-02 20:46:41"
+            },
+            {
+                "id": 5,
+                "name": "Community Development Department",
+                "description": "Community engagement",
+                "organization_id": null,
+                "created_at": "2026-06-02 20:46:41"
+            },
+            {
+                "id": 6,
+                "name": "Agriculture & Livestock Department",
+                "description": "Agricultural projects",
+                "organization_id": null,
+                "created_at": "2026-06-02 20:46:41"
+            },
+            {
+                "id": 7,
+                "name": "Education & Vocational Training Department",
+                "description": "Education initiatives",
+                "organization_id": null,
+                "created_at": "2026-06-02 20:46:41"
+            },
+            {
+                "id": 8,
+                "name": "Water Department",
+                "description": "Water projects",
+                "organization_id": null,
+                "created_at": "2026-06-02 20:46:41"
+            },
+            {
+                "id": 9,
+                "name": "Health Department",
+                "description": "Health initiatives",
+                "organization_id": null,
+                "created_at": "2026-06-02 20:46:41"
+            },
+            {
+                "id": 10,
+                "name": "Procurement & Supplies Department",
+                "description": "Procurement management",
+                "organization_id": null,
+                "created_at": "2026-06-02 20:46:41"
+            }
+        ],
+        "roles": [
+            {
+                "id": 1,
+                "role_id": "R001",
+                "name": "Admin",
+                "type": "admin",
+                "description": "Full system access",
+                "permissions": "{\"users\": true, \"finance\": true, \"reports\": true, \"planning\": true, \"projects\": true}",
+                "created_at": "2026-06-02 20:46:41"
+            },
+            {
+                "id": 2,
+                "role_id": "R002",
+                "name": "Field Officer",
+                "type": "custom",
+                "description": "Field operations access",
+                "permissions": "{\"users\": false, \"finance\": false, \"reports\": true, \"planning\": false, \"projects\": true}",
+                "created_at": "2026-06-02 20:46:41"
+            },
+            {
+                "id": 3,
+                "role_id": "R003",
+                "name": "Head of Department",
+                "type": "admin",
+                "description": "Department oversight",
+                "permissions": "{\"users\": false, \"finance\": false, \"reports\": true, \"planning\": true, \"projects\": true}",
+                "created_at": "2026-06-02 20:46:41"
+            },
+            {
+                "id": 4,
+                "role_id": "R004",
+                "name": "Staff",
+                "type": "custom",
+                "description": "Standard access",
+                "permissions": "{\"users\": false, \"finance\": false, \"reports\": false, \"planning\": false, \"projects\": true}",
+                "created_at": "2026-06-02 20:46:41"
+            },
+            {
+                "id": 5,
+                "role_id": "R005",
+                "name": "Accountant",
+                "type": "custom",
+                "description": "Financial access",
+                "permissions": "{\"users\": false, \"finance\": true, \"reports\": true, \"planning\": false, \"projects\": false}",
+                "created_at": "2026-06-02 20:46:41"
+            }
+        ],
+        "users": [
+            {
+                "id": 66,
+                "user_id": "USR1781201609112",
+                "fullname": "MWINUKA JUNIOR",
+                "email": "mwinuka@gmail.com",
+                "password": "$2y$10$8tR5yk.LwbTYF1kIuhD3leZ4AqRsOfy2dR0U9q\/8dU\/ZQLkL9UN3G",
+                "role": "admin",
+                "department": "administration",
+                "organization": "rdo_mdabulo",
+                "phone": null,
+                "employee_id": null,
+                "status": "active",
+                "profile_picture": "uploads\/profile-pictures\/profile_6a2afac96ceac8.22661014.jpg",
+                "created_at": "2026-06-11 21:13:29",
+                "updated_at": "2026-06-11 21:13:29"
+            },
+            {
+                "id": 67,
+                "user_id": "USR001",
+                "fullname": "System Administrator",
+                "email": "ffilipatali@yahoo.com",
+                "password": "$2y$10$ZWHCkX1GIkrkoREdKPY4tev.6HFiEr9PkjQEIQ06QnhnDUWxoKoz6",
+                "role": "admin",
+                "department": "administration",
+                "organization": "rdo_mdabulo",
+                "phone": null,
+                "employee_id": null,
+                "status": "active",
+                "profile_picture": null,
+                "created_at": "2026-06-10 21:17:25",
+                "updated_at": "2026-06-11 21:21:43"
+            },
+            {
+                "id": 68,
+                "user_id": "USR1781114986590",
+                "fullname": "DANIELLY KIHONGOLE",
+                "email": "daniellykihongole@gmail.com",
+                "password": "$2y$10$8c4In.4gyStvYjx0khcqd.LY8Dln89HcLkVC9jdOhY\/crZ\/rOvPgO",
+                "role": "staff",
+                "department": "vocational_training_center",
+                "organization": "rdo_mdabulo",
+                "phone": null,
+                "employee_id": null,
+                "status": "active",
+                "profile_picture": "uploads\/profile-pictures\/profile_6a29a86ae34364.07560055.jpg",
+                "created_at": "2026-06-10 21:09:47",
+                "updated_at": "2026-06-10 21:09:47"
+            },
+            {
+                "id": 69,
+                "user_id": "USR1781071390644",
+                "fullname": "LUTHER ELIA MWINUKA",
+                "email": "mwinukajunior96@gmail.com",
+                "password": "$2y$10$R5VOp3gSerrntbiSQCg\/bufGN\/BHXPu0rrCM261rRzGay7IXUlAN.",
+                "role": "head_of_organization_center",
+                "department": "orphanage_support",
+                "organization": "rdo_mafinga",
+                "phone": null,
+                "employee_id": null,
+                "status": "active",
+                "profile_picture": "uploads\/profile-pictures\/profile_6a28fe1e2296d1.50453207.jpg",
+                "created_at": "2026-06-10 09:03:10",
+                "updated_at": "2026-06-10 09:03:10"
+            }
+        ],
+        "system_settings": [
+            {
+                "id": 1,
+                "setting_key": "app_name",
+                "setting_value": "RDOMMS",
+                "setting_type": "text",
+                "updated_at": "2026-06-11 21:44:46"
+            },
+            {
+                "id": 2,
+                "setting_key": "app_version",
+                "setting_value": "2.0.0",
+                "setting_type": "text",
+                "updated_at": "2026-06-02 20:46:41"
+            },
+            {
+                "id": 3,
+                "setting_key": "default_language",
+                "setting_value": "sw",
+                "setting_type": "text",
+                "updated_at": "2026-06-11 21:44:46"
+            },
+            {
+                "id": 4,
+                "setting_key": "date_format",
+                "setting_value": "MM\/DD\/YYYY",
+                "setting_type": "text",
+                "updated_at": "2026-06-11 21:44:46"
+            },
+            {
+                "id": 5,
+                "setting_key": "timezone",
+                "setting_value": "EAT",
+                "setting_type": "text",
+                "updated_at": "2026-06-11 21:44:46"
+            },
+            {
+                "id": 6,
+                "setting_key": "smtp_enabled",
+                "setting_value": "1",
+                "setting_type": "text",
+                "updated_at": "2026-06-10 09:26:01"
+            },
+            {
+                "id": 7,
+                "setting_key": "smtp_host",
+                "setting_value": "smtp.gmail.com",
+                "setting_type": "text",
+                "updated_at": "2026-06-10 09:26:01"
+            },
+            {
+                "id": 8,
+                "setting_key": "smtp_port",
+                "setting_value": "587",
+                "setting_type": "text",
+                "updated_at": "2026-06-10 09:26:01"
+            },
+            {
+                "id": 9,
+                "setting_key": "smtp_encryption",
+                "setting_value": "tls",
+                "setting_type": "text",
+                "updated_at": "2026-06-10 09:26:01"
+            },
+            {
+                "id": 10,
+                "setting_key": "smtp_username",
+                "setting_value": "mwinukajunior96@gmail.com",
+                "setting_type": "text",
+                "updated_at": "2026-06-10 09:26:01"
+            },
+            {
+                "id": 11,
+                "setting_key": "from_email",
+                "setting_value": "mwinukajunior96@gmail.com",
+                "setting_type": "text",
+                "updated_at": "2026-06-10 09:26:01"
+            },
+            {
+                "id": 12,
+                "setting_key": "from_name",
+                "setting_value": "RDO MMS",
+                "setting_type": "text",
+                "updated_at": "2026-06-10 09:26:01"
+            },
+            {
+                "id": 13,
+                "setting_key": "app_base_url",
+                "setting_value": "http:\/\/localhost\/RDOMMS",
+                "setting_type": "text",
+                "updated_at": "2026-06-10 09:26:01"
+            },
+            {
+                "id": 14,
+                "setting_key": "smtp_password",
+                "setting_value": "bnmlrdoasdjobxha",
+                "setting_type": "text",
+                "updated_at": "2026-06-10 09:26:01"
+            },
+            {
+                "id": 15,
+                "setting_key": "items_per_page",
+                "setting_value": "15",
+                "setting_type": "text",
+                "updated_at": "2026-06-11 21:44:46"
+            },
+            {
+                "id": 16,
+                "setting_key": "theme",
+                "setting_value": "light",
+                "setting_type": "text",
+                "updated_at": "2026-06-11 21:44:46"
+            },
+            {
+                "id": 17,
+                "setting_key": "maintenance_mode",
+                "setting_value": "0",
+                "setting_type": "text",
+                "updated_at": "2026-06-11 21:44:46"
+            },
+            {
+                "id": 18,
+                "setting_key": "allow_registration",
+                "setting_value": "1",
+                "setting_type": "text",
+                "updated_at": "2026-06-11 21:44:46"
+            },
+            {
+                "id": 19,
+                "setting_key": "notification_preferences",
+                "setting_value": "{\"channels\":{\"email\":true,\"in_app\":true,\"sms\":false},\"alerts\":{\"project_status\":true,\"budget_threshold\":true,\"user_role\":true,\"system_maintenance\":true,\"approval_requests\":true,\"system_alerts\":true},\"digest\":{\"enabled\":false,\"frequency\":\"daily\"}}",
+                "setting_type": "json",
+                "updated_at": "2026-06-11 21:56:23"
+            },
+            {
+                "id": 20,
+                "setting_key": "backup_settings",
+                "setting_value": "{\"auto_enabled\":false,\"auto_frequency\":\"weekly\",\"retention_count\":10,\"last_auto_backup\":null}",
+                "setting_type": "json",
+                "updated_at": "2026-06-11 23:30:58"
+            }
+        ],
+        "projects": [
+            {
+                "id": 64,
+                "project_id": "PRJ1781171328334",
+                "name": "BATIKI MAKING TRAINING",
+                "description": "To train students on how to make batiki",
+                "organization": "RDO Mdabulo",
+                "district": "Kilolo District",
+                "location": "Mdabulo",
+                "sector": "Orphanage Support",
+                "start_date": "2026-06-12",
+                "end_date": "2026-06-14",
+                "budget": "450000.00",
+                "funding_source": "Community Contribution",
+                "donor_name": "RDO-UTAWALA",
+                "beneficiaries": 320,
+                "progress": 0,
+                "status": "ongoing",
+                "team": "[\"LUTHER ELIA MWINUKA\"]",
+                "created_by": null,
+                "created_at": "2026-06-11 09:48:49",
+                "updated_at": null
+            },
+            {
+                "id": 65,
+                "project_id": "PRJ1781118648442",
+                "name": "active group Investment",
+                "description": "mkonge",
+                "organization": "RDO Mdabulo",
+                "district": "Mufindi District",
+                "location": "Luhunga ",
+                "sector": "Administration",
+                "start_date": "2026-01-01",
+                "end_date": "2026-12-31",
+                "budget": "345000000.00",
+                "funding_source": "Government â€“ Local",
+                "donor_name": "Government",
+                "beneficiaries": 2300,
+                "progress": 100,
+                "status": "completed",
+                "team": "[\"DANIELLY KIHONGOLE\"]",
+                "created_by": null,
+                "created_at": "2026-06-10 19:10:48",
+                "updated_at": "2026-06-10 22:11:39"
+            }
+        ],
+        "budget_allocations": [
+            {
+                "id": 1,
+                "allocation_id": "ALLOC1780430358290",
+                "department": "orphanage_support",
+                "quarter": "q1",
+                "fiscal_year": "2026",
+                "amount": "229999999998.00",
+                "station": "rdo_mdabulo",
+                "description": "Operational expenses",
+                "status": "approved",
+                "approved_by": 2,
+                "approved_at": "2026-06-02 22:59:52",
+                "created_by": 2,
+                "created_at": "2026-06-02 22:59:18",
+                "updated_at": "2026-06-02 22:59:52"
+            },
+            {
+                "id": 2,
+                "allocation_id": "ALLOC1780458341283",
+                "department": "Water Department",
+                "quarter": "q1",
+                "fiscal_year": "2026",
+                "amount": "4567000000.00",
+                "station": "",
+                "description": "All Operations",
+                "status": "approved",
+                "approved_by": 8,
+                "approved_at": "2026-06-03 06:46:01",
+                "created_by": 8,
+                "created_at": "2026-06-03 06:45:41",
+                "updated_at": "2026-06-03 06:46:01"
+            },
+            {
+                "id": 3,
+                "allocation_id": "ALLOC1781083829997",
+                "department": "Administration Department",
+                "quarter": "q2",
+                "fiscal_year": "2026",
+                "amount": "234000000000.00",
+                "station": "",
+                "description": "All Operations",
+                "status": "approved",
+                "approved_by": 50,
+                "approved_at": "2026-06-10 22:31:22",
+                "created_by": 45,
+                "created_at": "2026-06-10 12:30:29",
+                "updated_at": "2026-06-10 22:31:22"
+            }
+        ],
+        "expenses": [
+            {
+                "id": 1,
+                "expense_id": "EXP1781115641487",
+                "expense_date": "2026-06-10",
+                "category": "operational",
+                "department": "finance",
+                "quarter": "q2",
+                "fiscal_year": "2026",
+                "amount": "150000.00",
+                "station": "",
+                "description": "DB smoke test expense",
+                "reference": null,
+                "status": "approved",
+                "approved_by": 50,
+                "approved_at": "2026-06-10 22:28:01",
+                "created_by": 50,
+                "created_at": "2026-06-10 21:20:41"
+            }
+        ],
+        "beneficiaries": [
+            {
+                "id": 1,
+                "beneficiary_id": "BEN1781192626187",
+                "fullname": "LAZARO MWINUKA",
+                "beneficiary_code": "BEN-202606117625",
+                "gender": "male",
+                "age": 24,
+                "category": "university",
+                "group_count": 34,
+                "status": "active",
+                "phone": "+255767630105",
+                "national_id": null,
+                "location": "MPANGA TAZARA",
+                "district": "MUFINDI",
+                "ward": "KIYOWELA",
+                "household_size": null,
+                "registered_date": "2026-06-11",
+                "assigned_officer": null,
+                "services_needed": "Schooling support",
+                "notes": "Nill",
+                "attachments": 0,
+                "registered_by": 56,
+                "created_at": "2026-06-11 18:43:46",
+                "updated_at": "2026-06-11 18:43:46"
+            }
+        ],
+        "service_tracking": [
+            {
+                "id": 1,
+                "service_id": "SRV1781195233145",
+                "beneficiary_id": 1,
+                "service_type": "education-support",
+                "service_date": "2026-06-11",
+                "quantity": 20,
+                "unit": "books",
+                "provider": "Upendo Ginga",
+                "location": "MAKUNGU",
+                "reference": "1234567",
+                "description": "Nill",
+                "created_by": 56,
+                "created_at": "2026-06-11 19:27:13"
+            }
+        ],
+        "monthly_plans": [
+            {
+                "id": 6,
+                "plan_id": "2026-June",
+                "month": "June",
+                "year": "2026",
+                "staff_name": "System Administrator",
+                "department": "vocational_training_center",
+                "station": "rdo_mafinga",
+                "activities": "[{\"week\": \"Week 1\", \"budget\": 0, \"output\": \"\", \"status\": \"planned\", \"activity\": \"\", \"resources\": \"\", \"responsible\": \"\", \"participants\": \"\"}]",
+                "total_budget": "0.00",
+                "approval_status": "",
+                "submitted_at": null,
+                "objective": "",
+                "notes": "",
+                "reject_reason": null,
+                "approved_by": null,
+                "rejected_by": null,
+                "created_by": null,
+                "saved_at": "2026-06-11 11:21:49"
+            }
+        ],
+        "quarterly_plans": [
+            {
+                "id": 6,
+                "plan_id": "QP1780504206155",
+                "quarter": "Q2",
+                "year": "2026",
+                "staff_name": "DANIELLY KIHONGOLE",
+                "department": "Orphans Department",
+                "station": "rdo_mdabulo",
+                "activities": "\"\\\"\\\\\\\"\\\\\\\\\\\\\\\"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"[{\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"month\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"April\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\", \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"budget\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\": 4498000, \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"equipment\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"VFAA VTA KILI,MO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\", \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"activities\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"KILIMO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\", \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"participants\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"WANAIDARA WOTE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"}, {\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"month\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"May\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\", \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"budget\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\": 99998000, \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"equipment\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"VIFAA VYA UFUNDISHAJI\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\", \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"activities\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"UFUNDISHAJI\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\", \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"participants\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"WANAFUNZI NA WALIMU\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"}, {\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"month\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"June\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\", \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"budget\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\": 1967000, \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"equipment\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"MITIHANI\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\", \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"activities\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"USIMAMIZI MITIHANI\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\", \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"participants\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"WALIMU WOTE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"}]\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"\\\\\\\\\\\\\\\"\\\\\\\"\\\"\"",
+                "total_budget": "106463000.00",
+                "approval_status": "rejected",
+                "submitted_at": "2026-06-03 16:30:06",
+                "objective": null,
+                "notes": null,
+                "reject_reason": null,
+                "approved_by": null,
+                "rejected_by": null,
+                "created_by": null,
+                "saved_at": null
+            },
+            {
+                "id": 7,
+                "plan_id": "2026-Q2",
+                "quarter": "Q2",
+                "year": "2026",
+                "staff_name": "System Administrator",
+                "department": "orphanage_support",
+                "station": "rdo_mafinga",
+                "activities": "[{\"month\": \"April\", \"budget\": 0, \"equipment\": \"\", \"activities\": \"\", \"participants\": \"\"}, {\"month\": \"May\", \"budget\": 0, \"equipment\": \"\", \"activities\": \"\", \"participants\": \"\"}, {\"month\": \"June\", \"budget\": 0, \"equipment\": \"\", \"activities\": \"\", \"participants\": \"\"}]",
+                "total_budget": "0.00",
+                "approval_status": "",
+                "submitted_at": null,
+                "objective": "",
+                "notes": "",
+                "reject_reason": null,
+                "approved_by": null,
+                "rejected_by": null,
+                "created_by": 56,
+                "saved_at": "2026-06-11 11:26:20"
+            },
+            {
+                "id": 8,
+                "plan_id": "2026-Q3",
+                "quarter": "Q3",
+                "year": "2026",
+                "staff_name": "System Administrator",
+                "department": "",
+                "station": "",
+                "activities": "[{\"month\": \"July\", \"budget\": 0, \"equipment\": \"\", \"activities\": \"\", \"participants\": \"\"}, {\"month\": \"August\", \"budget\": 0, \"equipment\": \"\", \"activities\": \"\", \"participants\": \"\"}, {\"month\": \"September\", \"budget\": 0, \"equipment\": \"\", \"activities\": \"\", \"participants\": \"\"}]",
+                "total_budget": "0.00",
+                "approval_status": "",
+                "submitted_at": null,
+                "objective": "",
+                "notes": "",
+                "reject_reason": null,
+                "approved_by": null,
+                "rejected_by": null,
+                "created_by": 56,
+                "saved_at": "2026-06-11 11:22:07"
+            },
+            {
+                "id": 9,
+                "plan_id": "2026-Q4",
+                "quarter": "Q4",
+                "year": "2026",
+                "staff_name": "System Administrator",
+                "department": "",
+                "station": "",
+                "activities": "[{\"month\": \"October\", \"budget\": 0, \"equipment\": \"\", \"activities\": \"\", \"participants\": \"\"}, {\"month\": \"November\", \"budget\": 0, \"equipment\": \"\", \"activities\": \"\", \"participants\": \"\"}, {\"month\": \"December\", \"budget\": 0, \"equipment\": \"\", \"activities\": \"\", \"participants\": \"\"}]",
+                "total_budget": "0.00",
+                "approval_status": "",
+                "submitted_at": null,
+                "objective": "",
+                "notes": "",
+                "reject_reason": null,
+                "approved_by": null,
+                "rejected_by": null,
+                "created_by": 56,
+                "saved_at": "2026-06-11 11:22:09"
+            },
+            {
+                "id": 10,
+                "plan_id": "2026-Q1",
+                "quarter": "Q1",
+                "year": "2026",
+                "staff_name": "System Administrator",
+                "department": "",
+                "station": "",
+                "activities": "[{\"month\": \"January\", \"budget\": 0, \"equipment\": \"\", \"activities\": \"\", \"participants\": \"\"}, {\"month\": \"February\", \"budget\": 0, \"equipment\": \"\", \"activities\": \"\", \"participants\": \"\"}, {\"month\": \"March\", \"budget\": 0, \"equipment\": \"\", \"activities\": \"\", \"participants\": \"\"}]",
+                "total_budget": "0.00",
+                "approval_status": "",
+                "submitted_at": null,
+                "objective": "",
+                "notes": "",
+                "reject_reason": null,
+                "approved_by": null,
+                "rejected_by": null,
+                "created_by": 56,
+                "saved_at": "2026-06-11 11:22:11"
+            },
+            {
+                "id": 11,
+                "plan_id": "2027-Q4",
+                "quarter": "Q4",
+                "year": "2027",
+                "staff_name": "System Administrator",
+                "department": "",
+                "station": "",
+                "activities": "[{\"month\": \"October\", \"budget\": 0, \"equipment\": \"\", \"activities\": \"\", \"participants\": \"\"}, {\"month\": \"November\", \"budget\": 0, \"equipment\": \"\", \"activities\": \"\", \"participants\": \"\"}, {\"month\": \"December\", \"budget\": 0, \"equipment\": \"\", \"activities\": \"\", \"participants\": \"\"}]",
+                "total_budget": "0.00",
+                "approval_status": "",
+                "submitted_at": null,
+                "objective": "",
+                "notes": "",
+                "reject_reason": null,
+                "approved_by": null,
+                "rejected_by": null,
+                "created_by": 56,
+                "saved_at": "2026-06-11 11:25:38"
+            }
+        ],
+        "annual_plans": [],
+        "targets": [],
+        "progress_updates": [],
+        "project_documents": [
+            {
+                "id": 1,
+                "document_id": "pdoc-1781171399613",
+                "title": "MCHANGANUO WA GHARAMA",
+                "category": "project-evidence",
+                "project_name": "BATIKI MAKING TRAINING",
+                "department": null,
+                "owner": "LUTHER MWINUKA",
+                "document_date": "2026-06-11",
+                "status": "ready",
+                "notes": "Nill",
+                "files": "[{\"id\": \"file-1781171389301\", \"name\": \"fomu_cheti_kuzaliwa.docx\", \"size\": 17999, \"type\": \"application\/vnd.openxmlformats-officedocument.wordprocessingml.document\", \"dataUrl\": \"data:application\/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,UEsDBBQABgAIAAAAIQAykW9XZgEAAKUFAAATAAgCW0NvbnRlbnRfVHlwZXNdLnhtbCCiBAIooAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC0lMtqwzAQRfeF\/oPRtthKuiilxMmij2UbaPoBijRORPVCo7z+vuM4MaUkMTTJxiDP3HvPCDGD0dqabAkRtXcl6xc9loGTXmk3K9nX5C1\/ZBkm4ZQw3kHJNoBsNLy9GUw2ATAjtcOSzVMKT5yjnIMVWPgAjiqVj1YkOsYZD0J+ixnw+17vgUvvEriUp9qDDQcvUImFSdnrmn43JBEMsuy5aayzSiZCMFqKRHW+dOpPSr5LKEi57cG5DnhHDYwfTKgrxwN2ug+6mqgVZGMR07uw1MVXPiquvFxYUhanbQ5w+qrSElp97Rail4BId25N0Vas0G7Pf5TDLewUIikvD9Jad0Jg2hjAyxM0vt3xkBIJrgGwc+5EWMH082oUv8w7QSrKnYipgctjtNadEInWADTf\/tkcW5tTkdQ5jj4grZX4j7H3e6NW5zRwgJj06VfXJpL12fNBvZIUqAPZfLtkhz8AAAD\/\/wMAUEsDBBQABgAIAAAAIQAekRq37wAAAE4CAAALAAgCX3JlbHMvLnJlbHMgogQCKKAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAArJLBasMwDEDvg\/2D0b1R2sEYo04vY9DbGNkHCFtJTBPb2GrX\/v082NgCXelhR8vS05PQenOcRnXglF3wGpZVDYq9Cdb5XsNb+7x4AJWFvKUxeNZw4gyb5vZm\/cojSSnKg4tZFYrPGgaR+IiYzcAT5SpE9uWnC2kiKc\/UYySzo55xVdf3mH4zoJkx1dZqSFt7B6o9Rb6GHbrOGX4KZj+xlzMtkI\/C3rJdxFTqk7gyjWop9SwabDAvJZyRYqwKGvC80ep6o7+nxYmFLAmhCYkv+3xmXBJa\/ueK5hk\/Nu8hWbRf4W8bnF1B8wEAAP\/\/AwBQSwMEFAAGAAgAAAAhADmS11oIFAAAtgYCABEAAAB3b3JkL2RvY3VtZW50LnhtbOxdXXPayNK+f6ve\/0Bxlb3YRTMjjSTXSU7pc+PNcZJKspuqvZNBNooBUZKIE\/+Qc3\/+2vklZ0YfILBAIDDWyJ1UWSCYZtTTT\/czrVHPP\/75YzrpffejOAhnr\/voN6nf82fDcBTMbl\/3\/\/zi\/qr1e3HizUbeJJz5r\/s\/\/bj\/zzf\/\/3\/\/uL8YhcPF1J8lPSZiFl\/cz4ev++MkmV8MBvFw7E+9+LdpMIzCOLxJfhuG00F4cxMM\/cF9GI0GWEJS+moehUM\/jtnvWd7suxf3c3HDH\/tJG0XePWvMBcqD4diLEv\/HSgY6WIgy0AfaY0G4gSB2hRg9FkUOFkUHvFePBMmNBLFePZKkNJNUcXG0mST8WJLaTBJ5LElrJumROU0fG3g492fsw5swmnoJexvdDqZedLeY\/8oEz70kuA4mQfKTyZRoIcYLZncNesRaLSVMyehgCepgGo78CRkVUsLX\/UU0u8jb\/7psz7t+kbXPD8sW\/mS\/n2U\/pw\/8H8kkToq20T66y5rbuWNJtTaI\/AnTYziLx8F86R2mTaWxD8eFkO+7FPB9Oim+dz9He0Jtm2uzs2FYCdyn+\/nYTSdZz3dLRNIeo8lFLFvs04X13yx6MmUWvPrhRqopKRft6XwKAfiRADr09wwWhQwtlzEYrtDN5QR7wqqQk40KlxOsFIv29IGbnSkJGC0OEoFJ0Q9+4M1LsuJRMhofJq4YowFv6yXe2IuXoMkk3uzpCAqJckliZmCTcLj0Z1ymf5jSlKXAn9PSGM5vjwPq71G4mK+kBcdJu1y57HtOng6QlQO+7ITi4zrzeezNmSefDi8ub2dh5F1PWI8YfHsMgb10BPhfZsj8kL70f6Tnuf3kL24m\/MVo0eMusf+GkcDrcPSTH5PrSX74GOUvvvbuuZfRiYL67GXyc85+cPTD6w\/yL5isf4x5pu\/COfvKd4+ZFe\/rxOct4ofXfTl9MfeGrK3EXw\/DSchiibdIwkzQxL9Jmra9DpMknDZtHQW348Y\/HcziYOS\/Pa75X82aDx6p\/3pi+ZPJlZeOXa5RNnYobb0xcsVlV3+eyS5JY+\/+FYZ3RU8l2Ugb3QRRnHwKuRD+duLl71YfWuFkMeWTkuLz4kT6lVn41mTTkuW7v7J3aNWHpSH+HgUj\/vKWHZmMrOupWS6\/W3wlidinbDI0+sQES9SRKU7lp6c+RvykSRFRVXYSyRdzL\/Iu2a\/Kikskm5LsLKOMCT+r5v8KAV\/K7ZdocX48HoEMDoU2NvS\/NNrKzzf0X6gi\/5Vh9jdXzbAGosNjEIpMxWHKa4jRcusmKC23b4DTVXOuwLIe4vGoEDWc+F60Ca\/UeieT9R4kw82BRbRqaFfIYxGgZuirJZTAWSUivZqlYeR2MF+3ZYRUU7XsdVvGOrJMgrQlGOrxkZ20\/RtvMUk2LH+e\/fK34VKXjKH7UX4N2YeRG86SmH3Bi4cBi8Qfw\/mcuT0ueWww97d2Zhiv3qZC4odCNJaLMxaXVjo3yH9rsOzQEv5r17Jfp3zmoow48F73jSjwJnv28zr7a8XpMbWkopNu+u\/wy2Ej++Zfi2TsR3fM2HvhbBLM\/F7sR98ZP4h7r8wgSsa9T\/5tECdROrf6JTWHTEKmjtxAssPSjzy2FsWUTAM5HEc7PF8Ta8m\/XrKWZ7OLTCFLDVSSnEo0AskBkvOcJAcTpGfXs3Eaq5WnFa36NF394JFMCauui9np7KyATKkS51xfn+ferBj\/3LMAgcrV\/AQEStvNn6rZUdkgKgWUYV8hYQ\/6RDXZ0XSNE6UTB8Ts34kDopgUCBdnSpE7PVemQJ+dt87Vnz3jovfFMD5dukbvb6N39eXDlw+9Qe\/q64cr0\/jjspb4NPZ0MnFs5BB3tyG01tOloePxDx3n0kj6r6lLK7du4tLK7Ru4tFXzxi7N0VzFySPy4S4tM7tjXFqFhD1cmoQMQ9INbg7g0vbpwbpLK\/ukP4KZ15t4vXf33uzBu9jufXbgEqeqBFzW41IciKlERjIiBkBsT4iVQMVvkBR2MY98nufw+296jbClpAkuwNaLj3lYVyXZkTayoADIY2KelwTNIp5CAZVdi3iKTF2EpJpEEADsJBGPH7Kmy17XK7Y8l1Wxqqsu3j1YMJeFuN56om0YDmN5ym5LBrdzQFz\/8y4MYSYLcT1PFmmyhjQX8t8wk4WI1wqiLblYNxC\/wSwmIOdRGN44Ecdldu3xnLG\/z4kXJbmOKjv8dIjdGRKZrDW8buu\/Mxu1rfcwOYcgngdxKtmy6QJLPl0Q762H8UO6uNmhDdj+99\/\/aSz6WShMC116WZ9XU7\/dHnwfYwNrE8Xa7g6ytrWozA+ZmOUV1LvkkptHlmFKqlXj5iGtB5Oc9t9NcG2J6M5uS4ZJzimmCV+8yB+3PERu7b2gEWP7aPwUdbrZuZF4t3jwJsH9C5v+Qw5\/3xAs0PRf1ySDSLDgE3L4QG9bsRqNuqZCtJpnCQCQTVnHlTdmobs394B+tIwOvhJ3QN6G8TxI2JiISggH74Jv7P8vcF8IiGGeMMQWki2LjyzEoUN6sN3BbccWP2RNl72uV2z5SVTDkQixa1g8ZHeB\/rbd7VBNURyE7N2WDG6nKcv6Gky8nyJzX0iCtmUkIAkKkaobXFdGhu7qKgQdSIICC2wDIIlkK4gicZ8YFCiMX92FQKlaMhZdS+mKOxIvk9xCIrd75FbVTZtQ1eoDuW1\/IldRsW1QxO0RErlA4UWm8JQgx3GBwlf257TB\/v1wLOqdZ1ikCyMBFL6y\/5CfBgqfx1LZ0IlOamoyAYU\/CYXfgS3ITwO5LbZCkSWVmMICUqAw\/mfiBTeQhwNHI3gQl2WdKobr9CGIny0Pxw9VW1lJtqxjRSKnH4sn2cpqcyyyS11eW3lvINikaldjpk\/YpOpZN6ki+X4uG6flfPOfzdPVe1fJpR88cpMqauiybmJRy93CJlUHN99kEB3fpEo2kK1ZCLabaMblc1soLOQEm1SZa5tUmYZp1NKYxt4NO5Zh2XUP8bT4dmKa84KJEGRcKEaSgtQnYOwvwo2V\/VBazPudNw0mAa\/pbXrXDXenkquGGsBZAU6Byg+oCGkGhXogz3yrQYbbeBD40sBHXdUwodzdOSIjlLtr02jASpq2jMTLXEkjpzlQCMGduglHVddSoLqWEIvhCXUcXba4PUL2Cki8yIvhFVmRMGzMA+uFnoiqVJktOBqhqQoh1EaqZveBqkAmDoJ4Cx6kNbFNdNMSFpAiPdHmTa+9CB5qg1QcjMTaSLwLEgaNxSSIx2G3xuTV+0vbaFiAGFJ13eO\/CEmWQxVI1YmQqsNEMTHSargRpOqA5bee5euW7dpyTdIZWP4pyEz3Ss8ZM28eMm4WQB4PeEy+gMdRDUlKs0jAYw7pwXaUNcMW5PEgwnPoKTrVdVWGahrHB\/B8N4Fjox7M3jsX9WRsW7qiOAAyAWbvvFAfQmnRCZi9Q2wXefZuYGw5LiQNT3CnwXuAWSzE8yLBK1MLUUXcilfnBtYx8XwXtmAWC5EuTSshA6tKKhwAuU8PDkzlpitQYMlGW4aj9zmYLiC9AHSk2CBKw4asQVWbFhTTU2RVs4j6BKkeKKZX27aJ\/4BieiX\/U+1+oJje3qhdmyTquo0NKzsLxfR2GDIU0xOxmB5RXUk3HV4GHmjHPj1YZ\/m5LRQWcoJietZaMb0r4+oJi+mxsXdcy6zhnHCXBHJHrZ89WYTYtl5zvw\/c2B5plo1ielfeFIrpQZai4MOWpTFGzNsCzg7pwT3cNIHA9xSApBZSbUPcpX9QTO9Zb0LsdTVwOwhGYsdIQDE9CMHdoLdUdW0qW0BvRVjjK7umYWhU1Nw8ZK+AxBd5WFvCVDfFXeMLxfTaTVWqzBYcjdhURdJdS0J5TASqApk4COLPC0hT17Gj1NBRCOJQTA9ScTASTzQSUEyvMkZDqq57\/NfRZVWyxQ235wbcgW5vDVv8kDVd9rpeseVUnaMbrp0uMoZUHbB8gVm+TG0Ly7a4Tw1DMb1nJDFQTA94zIZDkajqmIpaExqBx5yEx+zCFuTxIMJnEV4i2HFsACQU06tvDVGvWdQj2EKOJu72cecG2TFRjx+ypste1yu2vMZYcRXXMaGY3hYMQ2wXZrW8yS3UgcfEoJieCGgUB1iKoioUOxDPYRYLka4NgEREcYnlwvIwKKZXdVFQTA\/SC7XNxaUjsmpiTaJQNLsFxfSoTnQqa09QYQiK6dW2beI\/oJheyf9Uux8xiukp6Xe3lMd7dBrT6m8XhaqOL6anuqaluwr\/qoh5RCimd3DzTQbR8WJ6im5j3cKwD1dbiunZ68X0vn64Mo0\/Lnuv1shM6+dtJ9TLnTcVauJ3ukvvxFL\/E1pCLNTTM2AHT2UH0wfv4YWawptf1q6bh8HNSS3\/W1ztQVxXcQhCmiruPXMF0mJbmjcmtWLeSZAw0Qxb03dbMpDaLe6qNvRs1FsVKxCVvenVfTi99r6J+lQulAGD2wdF8CaUYmxBUfxnXs2AOX0CbAEHQZKCsK2KuzmWSAWyxgsma9ax8gHi0qoZFNdoC8FNwkRUWDRlt7ByvnPsFimyIZtwl0qIZ2+IrWFiEWf3YEEeETh8692OpckUYXFXJEN9PCCOzYYD6uO1ZSQ6UB8P8tTA5IuQamuurdMacghM\/iRMfge2IE8NHDebrWFdQdRQAJDw1N1LIIJHPHUHicXu0RFLx5rj8rbg\/Q7pwXaAbccWP2RNl72uV2z5EUnbkm3s1oSqFiQWCw1Fb\/0yrLT0OZtUC4Vz2eJqIAMJ7CwzeU22XSLBNluV\/Tkt0zFm994MEpDAO59kJK68u4blp1RJ4iuZN53L5kOcuXeFKFERJcRx+CpSMbUsq\/8SCek52GdG1R4rHmHbti3rCarkQ82H2rZQ8+HF1nygWv7M\/NpZhYGp4jRS9KqSD0iX029nv3dkyQeMHUXXhd34BUo+HNx8ky10vOQDlamFHEvcVS1LXD8L1c9tobCQ5g\/zpq7WnzGr80cfvVvfjHzvLrOlohiEc9F7a3y57P19+d74+4NxZbI3n99+NWpZTmPvJ0kyUXRcUxW1td6PanBfc0vzxl5OzMyZYsuEqufZbPrbcKlJf5b4UX4N3fN9K+fFF+z9tt0NbQWoQgjP3wNCAaGqbVNLMmBR\/\/FYTB\/In3i9t16ynsDeD5SMSFZlGAGULw+UBBuaa2hn2SzyjGFToBsflzNvHCTet+DuoDsgeyJdJVV2A0h\/eUhHqiFRUznLnQZAeiXSpz5fHJgE8fi+Odb5IRO4vLL6MSvnO21dMiVaUzkEZvziOzSRWIjpuLZEdtukcL5pCdDzL9Z7g9YczH5sASbrXQQXJa5NZIE3smxdiC\/jzBr7G3PwmmD+rN3dsopiOG7\/Iwtlpb9bPHiT4DASBXo\/Xu9vw3jO5qoT4Q3+1fswCW6CISPj4awX3vTMIErGO4rtrv5uxEzIpXUxZkrElrHtQlrsjM7l\/Sg46IH3PfEJGbAO4lO1XdlQ3K4ls\/aH3ybYNrD033\/\/Z3ss44fse8vfq1dU2TmakuLqJrcvyCCBQ2iFQ8DYsmQi8baQQTpNPMbbPchWbEEGqYvgQogQpNviriBtNe\/9S5iCT6VeC\/r8YVnv39v+yGG31P3Va\/82TvUaf\/X+0jZ6A6E0\/9GLg3koUJZ6165Xq78b1AMScZ2c6EsqkdB5tlWARFyGPkjEAT73TpSrkmXIaeVOSMSdOxFHTNsiLq3Z9w4SceAQzhiwXVnHmuG8WIdw+nhMtnuQrdiCRFwXwUVkwzBUzT4HuLoGo+oJPX+CSqjJPCStzjsVCkHfYN0d1XZHUrIiqfzOm4KJn1Hf994kCAXy4ZD6BrK\/vOvuGIYjn6UW8MuYSVf7s3fMJQvl04KZN17Ei0N82p5+BFL0HfQjKsG2qUKK\/llS9MiwTAfVFb2BFD04hDPeszNVXZVk68U6hNOHZHm7B9mKLUjRdxFcsmUrpkVqymucBlwvg5+bXrQQi6BDFvOc2n4XhLPbUPw8pkg6F\/\/Re5G0fZV4wut70HsXfGP\/166DR516ogTpzU6uZXAMrJsUHrE\/6+1sWNkL+NwPn6pLWEv35d5+eM60ITGxRFQX0oZVmAKHsHsMn+p+pKGbpkK6FrD3dwinj8fKdg+yFVuQNuwiuCjWZEot2Pi3sj\/H4swNpwfdLn\/W3sIyTtD2Yemh2PsWiF+TUSSVQ\/7znNr+K+jCOmWRND4D+z6rfd8IX\/nn1Sfz068IVi\/DhCZfZGRRzbEcfomQ3j+TH4H0PuBz79tvkiIbhg6rgp8jvS9rOlYxhfR+FabAIewewydyCIojuSxokxfrEE4fj+l2D7IVW5De7yQbxoqJTSzuHkzPCKPqCefHgG+e8yDWwuC5J1glzi2TfcHUPr0Pp9fextpDEXMsGPIrEFHy5VmOjomu1kwhhKNrkF8BfHYCn7JhYst2ula4eH\/4PWd+hWKCVdmsWU0D+RVwCGdMuCrEcGX6ch3C6eOxut2DbMUW5Fc6CS5kupRKZ1mb3DUYVU82jRE8cw0rVrZpe7wYLcQvZChU5cg48e68a280hn18IECL9\/AQNQ3VwU4f0lWQrgJ8tg6fkqmpitq5dPL+8DtBuoofriePdSvLpmJSmueoTqnb\/Osl3T6BFrNLfWQw1MTIJfukMzb6X3dRpUF6+ouK\/WHycWkldb1N+3T7+SGHGtKlNFE35vFNI1pmyPNbBjUOwXDOzksZYFOErt5miF695x5g9W7se8yDMG1KvIzYxU0YJqW3t4skfStlP8ecENdJ7pdUnJ8ehcPfo2DEZQcz\/2OQDFkvCU0\/HRTXnb68Dkc\/0xesyWLKEPnmfwAAAP\/\/AwBQSwMEFAAGAAgAAAAhALO+ix0FAQAAtgMAABwACAF3b3JkL19yZWxzL2RvY3VtZW50LnhtbC5yZWxzIKIEASigAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAArJPNasMwEITvhb6D2HstO21DCZFzKYFcW\/cBZHv9Q\/VjpE1av31FShKHBtODjjNiZ76F1XrzrRU7oPO9NQKyJAWGprJ1b1oBH8X24QWYJ2lqqaxBASN62OT3d+s3VJLCkO\/6wbOQYryAjmhYce6rDrX0iR3QhJfGOi0pSNfyQVafskW+SNMld9MMyK8y2a4W4Hb1I7BiHPA\/2bZp+gpfbbXXaOhGBfdIFDbzIVO6FknAyUlCFvDbCIuoCDQqnAIc9Vx9FrPe7HWJLmx8IThbcxDLmBAUZvECcJS\/ZjbH8ByTobGGClmqCcfZmoN4ignxheX7n5OcmCcQfvXb8h8AAAD\/\/wMAUEsDBBQABgAIAAAAIQC29GeY0gYAAMkgAAAVAAAAd29yZC90aGVtZS90aGVtZTEueG1s7FlLixtHEL4H8h+Guct6zehhrDXSSPJr1zbetYOPvVJrpq2eadHd2rUwhmCfcgkEnJBDDLnlEEIMMcTkkh9jsEmcH5HqHkkzLfXEj12DCbuCVT++qv66qrq6NHPh4v2YOkeYC8KSjls9V3EdnIzYmCRhx719MCy1XEdIlIwRZQnuuAss3Is7n392AZ2XEY6xA\/KJOI86biTl7Hy5LEYwjMQ5NsMJzE0Yj5GELg\/LY46OQW9My7VKpVGOEUlcJ0ExqL0xmZARdg6USndnpXxA4V8ihRoYUb6vVGNDQmPH06r6EgsRUO4cIdpxYZ0xOz7A96XrUCQkTHTciv5zyzsXymshKgtkc3JD\/beUWwqMpzUtx8PDtaDn+V6ju9avAVRu4wbNQWPQWOvTADQawU5TLqbOZi3wltgcKG1adPeb\/XrVwOf017fwXV99DLwGpU1vCz8cBpkNc6C06W\/h\/V671zf1a1DabGzhm5Vu32saeA2KKEmmW+iK36gHq92uIRNGL1vhbd8bNmtLeIYq56IrlU9kUazF6B7jQwBo5yJJEkcuZniCRoALECWHnDi7JIwg8GYoYQKGK7XKsFKH\/+rj6Zb2KDqPUU46HRqJrSHFxxEjTmay414FrW4O8urFi5ePnr989PvLx49fPvp1ufa23GWUhHm5Nz9988\/TL52\/f\/vxzZNv7XiRx7\/+5avXf\/z5X+qlQeu7Z6+fP3v1\/dd\/\/fzEAu9ydJiHH5AYC+c6PnZusRg2aFkAH\/L3kziIEMlLdJNQoAQpGQt6ICMDfX2BKLLgeti04x0O6cIGvDS\/ZxDej\/hcEgvwWhQbwD3GaI9x656uqbXyVpgnoX1xPs\/jbiF0ZFs72PDyYD6DuCc2lUGEDZo3KbgchTjB0lFzbIqxRewuIYZd98iIM8Em0rlLnB4iVpMckEMjmjKhyyQGvyxsBMHfhm327jg9Rm3q+\/jIRMLZQNSmElPDjJfQXKLYyhjFNI\/cRTKykdxf8JFhcCHB0yGmzBmMsRA2mRt8YdC9BmnG7vY9uohNJJdkakPuIsbyyD6bBhGKZ1bOJIny2CtiCiGKnJtMWkkw84SoPvgBJYXuvkOw4e63n+3bkIbsAaJm5tx2JDAzz+OCThC2Ke\/y2EixXU6s0dGbh0Zo72JM0TEaY+zcvmLDs5lh84z01QiyymVss81VZMaq6idYQK2kihuLY4kwQnYfh6yAz95iI\/EsUBIjXqT5+tQMmQFcdbE1XuloaqRSwtWhtZO4IWJjf4Vab0bICCvVF\/Z4XXDDf+9yxkDm3gfI4PeWgcT+zrY5QNRYIAuYAwRVhi3dgojh\/kxEHSctNrfKTcxDm7mhvFH0xCR5awW0Ufv4H6\/2gQrj1Q9PLdjTqXfswJNUOkXJZLO+KcJtVjUB42Py6Rc1fTRPbmK4RyzQs5rmrKb539c0Ref5rJI5q2TOKhm7yEeoZLLiRT8CWj3o0Vriwqc+E0LpvlxQvCt02SPg7I+HMKg7Wmj9kGkWQXO5nIELOdJthzP5BZHRfoRmsExVrxCKpepQODMmoHDSw1bdaoLO4z02Tker1dVzTRBAMhuHwms1DmWaTEcbzewB3lq97oX6QeuKgJJ9HxK5xUwSdQuJ5mrwLST0zk6FRdvCoqXUF7LQX0uvwOXkIPVI3PdSRhBuENJj5adUfuXdU\/d0kTHNbdcs22srrqfjaYNELtxMErkwjODy2Bw+ZV+3M5ca9JQptmk0Wx\/D1yqJbOQGmpg95xjOXN0HNSM067gT+MkEzXgG+oTKVIiGSccdyaWhPySzzLiQfSSiFKan0v3HRGLuUBJDrOfdQJOMW7XWVHv8RMm1K5+e5fRX3sl4MsEjWTCSdWEuVWKdPSFYddgcSO9H42PnkM75LQSG8ptVZcAxEXJtzTHhueDOrLiRrpZH0Xjfkh1RRGcRWt4o+WSewnV7TSe3D810c1dmf7mZw1A56cS37tuF1EQuaRZcIOrWtOePj3fJ51hled9glabuzVzXXuW6olvi5BdCjlq2mEFNMbZQy0ZNaqdYEOSWW4dm0R1x2rfBZtSqC2JVV+re1ottdngPIr8P1eqcSqGpwq8WjoLVK8k0E+jRVXa5L505Jx33QcXvekHND0qVlj8oeXWvUmr53Xqp6\/v16sCvVvq92kMwioziqp+uPYQf+3SxfG+vx7fe3cerUvvciMVlpuvgshbW7+6rteJ39w4Byzxo1IbtervXKLXr3WHJ6\/dapXbQ6JX6jaDZH\/YDv9UePnSdIw32uvXAawxapUY1CEpeo6Lot9qlplerdb1mtzXwug+Xtoadr75X5tW8dv4FAAD\/\/wMAUEsDBBQABgAIAAAAIQDSdOSUQgQAAJkMAAARAAAAd29yZC9zZXR0aW5ncy54bWy0V99v2zYQfh+w\/8HQ8xxbsmRnQp2iTuolRbwOU4o9UxJlEeYvkJQdt9j\/viMlWkqTFXG3vsSn++6+Ox2Pd8qbt4+MjvZYaSL4MggvpsEI80KUhG+XwaeH9fgyGGmDeImo4HgZHLEO3l79\/NObQ6qxMWCmR0DBdcqKZVAbI9PJRBc1ZkhfCIk5gJVQDBl4VNsJQ2rXyHEhmESG5IQSc5xE0+k86GjEMmgUTzuKMSOFElpUxrqkoqpIgbsf76FeE7d1uRFFwzA3LuJEYQo5CK5rIrVnY9\/LBmDtSfbfeok9o97uEE5f8boHocqTx2vSsw5SiQJrDQfEqE+Q8D5w\/IzoFPsCYnev6KjAPZw6aZh5ch5B9IxgXuDH8zguO44JeA55SHkez\/zEQ\/rChvPvS2ZAUDZnUUQzn4f9se4DLl2asj6Pzp\/RxPoig2qkTx3ZMlb0PMZ4wNg2GBXFbsiJzytaciI8sv4M9fO0XujqFronuUKqnRldS7MivdtyoVBOIR1o7RF058hlZ\/\/CIdsfJ+JHp7e17YSKWgFKfwUj7bMQbHRIJVYF3GuYh9NpMLFASbSk6LhCxW6rRMPLrEYSOwgumqgygwwES7XElLrZWVCMILdDulWIwdTzmpYOV6ih5gHlmRESjPYISrCIumhFjRQqDFaZRAWwXQtulKDerhS\/C3MNE1TBBe883DztpaydzeDBEYOiPJm3G1Fim1mjyOtPzzq46GEyDPl1IAG7RJESP9jDyMyR4jUkn5HP+B0vPzTaEGB0U\/c\/ZPCtBDC3kT9C+zwcJV5jZBoo0w8K5k5iTYncEKWEuuMltM0PC0aqCisIQKDXNtA+RImDq\/MtRiWs8B8Ut9H4LzCG2zt7gLbcrYQxgt0eZQ21\/h9OcjJsX\/gQKbUX\/hTCeFO47u\/jub8hFh0gURLNX0b+1Wc1D2eLRRe\/i8pSu8T\/UF6yrTtircc1YrkiaLSxa35iLXK1WxHu8RzDrMJDJGtyD47HLaAZonQNRfSAS4258XKDKyfTDVLbnrezUC9qYY58OHHZkYXVbzCeZIseFJJtS3qTMI47T8LNPWFer5s8814cpusAgln3ca9cnfryHFIDR+yu9j1yreJsMR9\/yrpWoiqzbYA3SMq2m\/JtuAwo2dYmtA1g4KmEr0H3kG+jDoscFrWYe0CFfTOw7oReF3ndwG7mdbNeF3td3OsSr0t63dzr5lZXw\/xQMMx30NhetPpKUCoOuLzt8WeqtgjaLombdtZDe4lW0Q1\/Pdqn+BGWDC6JgY9sSUqGHu3OiebWvbOGrSMa88TWYtZYPmWwK99fqSfOrsW\/ysXuoIJAO2ZHlver5aJNnBINY0DCFjJCeewXh4VxWorizq7UuFtbi\/V8FYdRCycnOGnhL+9n0fVlsojG75Jfw3EMn1\/j1WWSjONZfL1YxYvpzSz8u7uI\/n+Kq38AAAD\/\/wMAUEsDBBQABgAIAAAAIQAgzDiC1AMAAEsSAAASAAAAd29yZC9udW1iZXJpbmcueG1sxJbbbqQ2GMfvK\/UdEPeJwRwG0E5WcyCrVNuD1PQBPOAZUGxAxszhGfZi77a3fbY+SW3AMAntCkjU3GCw\/f38x\/4O\/vDxTIl2xKxM82ypm7eGruEsyuM0Oyz1Px7vbzxdKznKYkTyDC\/1Cy71j3c\/\/vDhFGQV3WEmJmqCkZXBqYiWesJ5EQBQRgmmqLylacTyMt\/z2yinIN\/v0wiDU85iAA3TqN8Klke4LAVng7IjKvUWF53H0WKGTsJYAm0QJYhxfO4Z5mSIA3zgDUFwBkj8ITSHKGsyygVS1QBkzwIJVQOSM4\/0Lz\/nziPBIWkxj2QNSd480sCd6NDB8wJnYnCfM4q4+GQHQBF7qoobAS4QT3cpSflFMA1XYVCaPc1QJKw6ArXiyYQFoHmMiRUrSr7UK5YFrf1NZy+lB41923QWmIxbViznA3zmpOTKlo3Zu8Z8m0cVxRmvdw0wTMQ+5lmZpEWXHehcmhhMFOT4vQ04UqLmnQpzZKj9V2rbNsfQA8fIb8+Okkb594mmMeI0JaKzGCPh+ZpKCRUe3C88a2uuNtccmXwUAA4AboRHFgvF8FoGiProlpx0ZFgpTnMqkpP2G2uOzIEvxVwB4moSAlpKh2yk+RWrjHmcTMOpMwLSFnGUoLILmoa4H5kIFNG+IjYORvKoy2eSiadtmtMBL\/TqDIvD6wL1E8uroqelr6M99Cn7JG9PE1htwF8nofJ1Yn5PUCEyOY2Ch0OWM7QjQpEIX01EoFafgHwKR5ZN\/YrPdb\/0n\/ZlT+RLXGkyJep34haIdiVnKOK\/VFR79vUgQkncJgU8YFhcIZnsbC6Mqz3HbM0wepJTJCUr5bLBEQm3MnzLgCvX0IEcoRXh6Wd8xOTxUmA1J7nsWBr\/LMeIHGvmcloQNcMLPc\/frsJmhBzlQCqaRlTACyKK+Xq78SAM3VpDrVGZm42duOPe065zVxGCeUd8FAVODf3959eu\/6dI9RK8b6cXvzHZpJn8Tdm91BewVpKg7FDftq3ml0E7GdSsl+LNXry9tjZraw3fQvyXqeJN256hHvbqobsJ4cbbvIH6b39NVQ9Nd4Z6q1e\/WJmeF5rhuzgO9LwZ6u0rt3d9e+v77+M5QuwM9U6v3lnB8B46b6F+uufY1pyodXv1oetDkeG8d\/Ecx5gTtYtevRne26FpvY\/fO4s5Uev16jdeuFl5i6bk\/N\/qXXtc1IJnVbRVpdVPWVJlAairdBBXdQ2vO33TtkwIofOyJj9IAbW4tp6KNX49YiaqpyymqiJ2G3I11m9MI00N1d+ZlNa0TU2\/+wcAAP\/\/AwBQSwMEFAAGAAgAAAAhAJ77OeslDQAAvoAAAA8AAAB3b3JkL3N0eWxlcy54bWzMnUtz2zgSx+9btd+B5dPuIZFlyXbGNZ4px7E3rrEznsjZnCESkrAhCS0ffsynXwAEJVBNUGwQ9s7FD4r9I4DufwNNUuTPvz4ncfBIs5zx9Pxg\/P7wIKBpyCOWLs8Pvj1cv\/twEOQFSSMS85SeH7zQ\/ODXX\/7+t5+fzvLiJaZ5IABpfpaE5werolifjUZ5uKIJyd\/zNU3FhwueJaQQ\/2bLUUKyH+X6XciTNSnYnMWseBkdHR6eHGhM1ofCFwsW0k88LBOaFsp+lNFYEHmar9g6r2lPfWhPPIvWGQ9pnotOJ3HFSwhLN5jxFIASFmY854viveiMbpFCCfPxoforibeAYxzgCABOQvqMY3zQjJGwNDkswnFONhwWGRy3xhiAqEQhjiZ1O+QvaW6w8qiIVjhc7aORtCUFWZF81SQuYhxxahCrAIt5+MNkUtygHW+AL4n0YRKe3SxTnpF5LEgiKgMRWIECy5\/CP\/KX+pM+q+1yWPQfi1j+IUbtFyHdiIef6IKUcZHLf7P7TP+r\/1O\/rnla5MHTGclDxs4PHlgi1P6FPgVfeUKEOJ7OKMmLi5yR1g9XF2nebhbmcPNIHjIm6VJ8\/kjEyNP03bdZ8yCbTXMWCTLJ3s0upOFIt7n6bfRkvfmv2mun2yJjiPwxq9KY+JQuboXDaDQrxAfnB4fyUGLjt5v7jPFMpKrzg59+0htnNGGfWRTR1NgxXbGIfl\/R9FtOo+32P65VNOgNIS9T8ffk9ES5Is6jq+eQrmXyEp+mJBGH\/iINYrl3ybYHV+b\/rWFjPWZt9itKZAYPxrsI1XwU4kha5EZv25nlTt\/VXqgDTd7qQNO3OtDxWx3o5K0OdPpWB\/rwVgdSmNc8EEsjkYzV\/vAwgLqPY1EjmmMRG5pj0RKaY5EKmmNRAppjCXQ0xxLHaI4lTBGcgoe2KDSCfWKJ9m7u\/jnCjbt\/SnDj7p8B3Lj7E74bd39+d+PuT+du3P3Z2427P1njudVSK7gRMkuLwSpbcF6kvKBBQZ+H00gqWKqs9cOTkx7NvHTSA6bKbHoiHkwLifp\/f4QokbrP54WsvgK+CBZsWWY0H9xwmj7SmK9pQKJI8DwCM1qUmWVEXGI6owua0TSkPgPbHzRmKQ3SMpl7iM01WXpj0TTyPHw10UtS2AQ0KYuVFAnzENQJCTM+vGmceMsPtywfPlYSEnws45h6Yn3xE2KKNbw2UJjhpYHCDK8MFGZ4YWD4zNcQaZqnkdI0TwOmaZ7GrYpPX+OmaZ7GTdM8jZumDR+3B1bEKsWbq45x\/3N3lzGXFyIGt2PGlikRC4Dh040+Zxrck4wsM7JeBfLUcDvW7DP2OB959BI8+JjTNiRf63oVIpei1ywthw9og+ZLXBueJ3lteJ4EtuENl9idWCbLBdpnP\/XMrJwXraJVpF6inZG4rBa0w9VGiuERthXANctybzJox3qI4C9yOSvd6SPzbVs5vGFb1nBZ7WYlr83TSA+tlFct\/aThzy9rmomy7Mdg0jWPY\/5EI3\/EWZHxKtZMyR8pl\/SS\/FWyXpGcqVqpgeg\/1de3MAR3ZD24Q\/cxYakfv129SwiLA38riM8Pd7fBA1\/LMlMOjB\/gR14UPPHG1GcC\/\/Gdzv\/pp4EXoghOXzz19sLT6SEFu2QeJpmKxCNPJLHMZCnzMocq3m\/0Zc5JFvmh3We0uqmjoJ6IM5Ksq0WHB22JvPgk8o+H1ZDi\/ZtkTJ4X8iWqBy8w47RhXs7\/Q8Phqe4LD7ycGfq9LNT5R7XUVdb+cMOXCQ3c8CWC8qaYHmT8euhsAze8sw2cr85exiTPmfUSqjPPV3drnu\/+Di\/+NI\/HPFuUsb8BrIHeRrAGehtCHpdJmvvsseJ57LDi+e6vx5BRPA+n5BTvXxmLvDlDwXx5QsF8uUHBfPlAwbw6YPgdOgZs+G06Bmz4vToVzNMSwID5ijOv07+nqzwGzFecKZivOFMwX3GmYL7ibPIpoIuFWAT7m2IMpK+YM5D+Jpq0oMmaZyR78YS8iumSeDhBWtHuM76QXyfhaXUTtwekPEcde1xsVzhfTv5O596aJlk+2+XhjCiJY849nVvbTjjKsnnv2j6zhxVNhpfR9zEJ6YrHEc0sfbLbinp5tiahPk0PLvf1Ou15y5arIpitNmf7TczJ4V7LumBvmO0\/YNuYnxx1mN3RiJVJ3VD4ZYqTSX9jFdEN4+l+4+1KomF53NMSHvNkv+V2ldywPO1pCY\/5oael0mnDsksPn0j2ozUQTrviZ1PjWYLvtCuKNsath+0KpI1lWwiedkVRQyrBRRjKqwXQO\/00Y7fvJx67PUZFdgpGTnZKb13ZEV0C+0ofmZzZMUlTHW9z9wTI+2oR3Stz\/lHy6rx944JT\/y913YiFU5rToJUz6X\/hqpFl7OPYO93YEb3zjh3ROwHZEb0ykdUclZLslN65yY7onaTsCHS2gjMCLltBe1y2gvYu2QpSXLLVgFWAHdF7OWBHoIUKEWihDlgp2BEooQJzJ6FCClqoEIEWKkSghQoXYDihQnucUKG9i1AhxUWokIIWKkSghQoRaKFCBFqoEIEWquPa3mruJFRIQQsVItBChQi0UNV6cYBQoT1OqNDeRaiQ4iJUSEELFSLQQoUItFAhAi1UiEALFSJQQgXmTkKFFLRQIQItVIhAC7X6qqG7UKE9TqjQ3kWokOIiVEhBCxUi0EKFCLRQIQItVIhACxUiUEIF5k5ChRS0UCECLVSIQAtVXSwcIFRojxMqtHcRKqS4CBVS0EKFCLRQIQItVIhACxUi0EKFCJRQgbmTUCEFLVSIQAsVIrriU1+itN1mP8af9bTesd\/\/0pVu1Ffzq9wmatIfVbfKzur\/XYSPnP8IWr94OFH1Rj8Im8eMq1PUlsvqJlfdEoG68Pn7Zfc3fEz6wIcu6e9CqGumAD7tawnOqUy7Qt60BEXetCvSTUuw6px2ZV\/TEkyD066kq3RZ35QipiNg3JVmDOOxxbwrWxvmcIi7crRhCEe4KzMbhnCAu\/KxYXgcyOS8a33cc5xONveXAkJXOBqEUzuhKyyhr+p0DIXR12l2Ql\/v2Ql93WgnoPxpxeAda0ehPWxHubkaygzraneh2glYV0OCk6sBxt3VEOXsaohyczVMjFhXQwLW1e7J2U5wcjXAuLsaopxdDVFuroZTGdbVkIB1NSRgXT1wQrZi3F0NUc6uhig3V8PFHdbVkIB1NSRgXQ0JTq4GGHdXQ5SzqyHKzdWgSka7GhKwroYErKshwcnVAOPuaohydjVEdblanUVpuBrlYcMctwgzDHETsmGIS86GoUO1ZFg7VksGwbFagr6qfY6rlkyn2Ql9vWcn9HWjnYDypxWDd6wdhfawHeXmaly11OZqd6HaCVhX46olq6tx1VKnq3HVUqercdWS3dW4aqnN1bhqqc3V7snZTnByNa5a6nQ1rlrqdDWuWrK7GlcttbkaVy21uRpXLbW5euCEbMW4uxpXLXW6Glct2V2Nq5baXI2rltpcjauW2lyNq5asrsZVS52uxlVLna7GVUt2V+OqpTZX46qlNlfjqqU2V+OqJaurcdVSp6tx1VKnq3HV0p0wYR4eATVLSFYE\/p4X95nkq4IMfzjhtzSjOY8faRT47eotqpejp8brryRbvc9P7F+IMZNPQDe+rhRVT4DVQLXjTbR5TZU0li0J9Ku79GbVYH25tjqiMtxzqA1cXyseA\/z25VbqCNvIqnfQ2tkeWr0JTP7i1XOQbh\/jel8lkNFmB\/3us1CGcL3L0dXp9KO+lpr\/WW+d6CDO\/7yULw8zthmvI3Pp8JG1w\/qI1g5vPV\/t1\/B7\/yGp4wM9JEc69ZpDUm0bOCQT65Doy+qvPSS1XzuGZHw9\/XSq874xJPrqfWNI1LaBQzK1Dok+4msPiRp5MCRMGbHLXP22xMzArh9bu64j8rW7Xvuvl0AGdrZ6SWBbZ7XYXruzdSd6hf7+zoYr0dtQP6fQMq3o541vvjCrnja+OwyWh5JbxkTPFfvGxN7uQi5uOtqsFj+d82G1PrI6rbfXinlc+UD8cZNGAvCkXw1ZtTR6JhVKfH5J4\/iOVHvztX3XmC6K6tPxoXo8zc7n8+pJq1b7TC3JrYBRszHVv91xUr17Rd8rZl1+yHVny3CrGxeHjjRWsNXtd7uNqbbaolIvz00haoFtp5Djllm12oZMLWGZCyfO5A67I1k9DBkuterttlbOq+hQ6d410Ulfbb8bv9sCVVlsP95pSM88s02qm3Jg9zjbT\/aETYsi23Li4fHJ5LJeodYb5XsdqmhAJspNB671u5i2N43udqTlbU2DU47u4CPNiouYLWXlUfWnFIOWhxlbK7W5RkDdKfUsGmt\/1MuOqmwl3FR\/bNpeiiF7PdU3HNKhJdCi3R7VO1TPbd822tYtb\/4zlqU68TSWpXUp5BSYV9UrqexxCd+C9VcPS92l1qhsvIELeM+w\/GvE5G6DdrujP++KSHM0\/r8BWf+V\/\/I\/AAAA\/\/8DAFBLAwQUAAYACAAAACEAOwr9lk8BAAD6AwAAFAAAAHdvcmQvd2ViU2V0dGluZ3MueG1snNJRb8IgEADg9yX7Dw3vSnVqTGP1ZVmy520\/AOHaEoFrAFf994NaXRdfZC\/laHtfjjs2u5NW2TdYJ9GUZDbNSQaGo5CmLsnX59tkTTLnmRFMoYGSnMGR3fb5adMVHew\/wPvwp8uCYlyheUka79uCUscb0MxNsQUTPlZoNfNha2uqmT0c2wlH3TIv91JJf6bzPF+RgbGPKFhVksMr8qMG4\/t8akEFEY1rZOuuWveI1qEVrUUOzoXzaHXxNJPmxswWd5CW3KLDyk\/DYYaKeiqkz\/I+0uoXWKYB8ztgxeGUZqwHg4bMsSNFmrO6OVKMnP8VMwLEMYmYv1zriEtMH1lOeNGkcdcZ0ZjLPGuYa\/6KlUoTFyPxcsEU8sPYhLSmLW\/gWccZal681wYt26sghVuZhYuV9XB8hvnEpQ\/h1L+PbRmCSsUgdI1ufwAAAP\/\/AwBQSwMEFAAGAAgAAAAhAJILgpBJAgAAOgkAABIAAAB3b3JkL2ZvbnRUYWJsZS54bWzcle1u2jAUhv9P2j1E\/l9iQqAUNVRrV6RJ01RN3QUYxyFW\/RHZhsDd79hJIBVDIpM2aQsiOXl9zhP79QncP+yliHbMWK5VhsYjjCKmqM652mTox+vqZo4i64jKidCKZejALHpYfvxwXy8KrZyNoF7ZhaQZKp2rFnFsackksSNdMQWDhTaSOLg1m1gS87atbqiWFXF8zQV3hzjBeIZajLmGoouCU\/ZZ061kyoX62DABRK1sySvb0epraLU2eWU0ZdbCmqVoeJJwdcSM0zOQ5NRoqws3gsW0MwooKB\/jEElxAkyHAZIzwIyy\/TDGvGXEUNnn8HwYZ3bk8LzH+b3J9AD5dhAimXTz8Bdf3mPZ3OXlMFy3R7GvJY6UxJbviYUYRkx7xKbBhKZvfSYbZtr0CDxIv4eSLr5slDZkLYAEXRlBY0UB7M+wP\/4SQrYPurelDQrhA3Bt2b65Ub1QRALolUtmo2+sjr5rSVRIqIjSlo0hZ0fABuwNm+EJnuIUvglEKYp9Ii2JsczDmkTcyAWRXBw61QRuGKi4o2Wn74jhfjHNkOUbGNjaNc7QM8Y4eV6tUKOMM\/QEyu18+tgqiX9WOO5aZXJUsFdo4ITbccOhgXPMgWfGjRNnjrzoquLK\/tIJf0w7yAl1pRNk6\/QgIzx\/Dis\/GdFf5DsjOuWyEfhuMsyITzAtcaEhHqEh0tAYzWdIQ9iaW\/sPNcQTEXxtePSVb0p3wY8VvBStEyH6w36kZ37A\/1aS3v5NPy464X8i\/lMn2sAufwIAAP\/\/AwBQSwMEFAAGAAgAAAAhAEW1eppSAQAAgwIAABEACAFkb2NQcm9wcy9jb3JlLnhtbCCiBAEooAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIySXW+CMBSG75fsP5DeQwsmzhDA7MtsmS7LBnHZXdMetRktTduJ\/vsBKmrmxS7Lec7T9xyajDey9NZgrKhUisKAIA8Uq7hQyxQV+cQfIc86qjgtKwUp2oJF4+z6KmE6ZpWBN1NpME6A9RqTsjHTKVo5p2OMLVuBpDZoCNUUF5WR1DVHs8Sasm+6BBwRMsQSHOXUUdwKfd0b0V7JWa\/UP6bsBJxhKEGCchaHQYiPrAMj7cWGrnJCSuG2Gi6ih2JPb6zowbqug3rQoU3+EH\/Oph\/dqL5Q7a4YoCzhLGYGqKtMVihfUQk8wScf2wWW1LpZs+uFAH63zaZF\/vT47s3mz6\/Fy22C\/xJtk4G1aP9WFnVEf0z2o+9uAO41kePdgIfKfHD\/kE9QFpFo6JOhH4Y5uYmjQUzIVxvurP8olPsA\/zeOzo0HQdYlPn822S8AAAD\/\/wMAUEsDBBQABgAIAAAAIQB6sAQtdgEAAMgCAAAQAAgBZG9jUHJvcHMvYXBwLnhtbCCiBAEooAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJxSy07DMBC8I\/EPUe6tkwqVgrauUCvEgZfUlJ4tZ5NYOLZlu1X792wIhCBu5LQ76x3PTAyrU6uTI\/qgrFmm+TRLEzTSlsrUy3RX3E8WaRKiMKXQ1uAyPWNIV\/zyAl69deijwpAQhQnLtInR3TIWZIOtCFMaG5pU1rciUutrZqtKSdxYeWjRRDbLsjnDU0RTYjlxA2HaM94e439JSys7feGtODvi41Bg67SIyJ+7TQ1sAKCwUehCtcivCB4aeBU1Bj4D1hewt74MPF\/cAOtLWDfCCxkpPJ5niwzYCIA757SSIlKu\/ElJb4OtYvLyKTbpCICNjwAZ2KI8eBXPnKjGLTwqQwro4r4gaV7UXrjmS9\/QwVYKjWuyziuhAwL7AWBtWycM0bGhIr73sHOF3XRRfK38Bkcu9yo2WyckSchn8+ux39EItoRiSQYGDQMAD\/Q\/vO4uoF1TY\/l95u+gS\/Ctf5g8n08z+j4j+8bI+PBi+AcAAAD\/\/wMAUEsBAi0AFAAGAAgAAAAhADKRb1dmAQAApQUAABMAAAAAAAAAAAAAAAAAAAAAAFtDb250ZW50X1R5cGVzXS54bWxQSwECLQAUAAYACAAAACEAHpEat+8AAABOAgAACwAAAAAAAAAAAAAAAACfAwAAX3JlbHMvLnJlbHNQSwECLQAUAAYACAAAACEAOZLXWggUAAC2BgIAEQAAAAAAAAAAAAAAAAC\/BgAAd29yZC9kb2N1bWVudC54bWxQSwECLQAUAAYACAAAACEAs76LHQUBAAC2AwAAHAAAAAAAAAAAAAAAAAD2GgAAd29yZC9fcmVscy9kb2N1bWVudC54bWwucmVsc1BLAQItABQABgAIAAAAIQC29GeY0gYAAMkgAAAVAAAAAAAAAAAAAAAAAD0dAAB3b3JkL3RoZW1lL3RoZW1lMS54bWxQSwECLQAUAAYACAAAACEA0nTklEIEAACZDAAAEQAAAAAAAAAAAAAAAABCJAAAd29yZC9zZXR0aW5ncy54bWxQSwECLQAUAAYACAAAACEAIMw4gtQDAABLEgAAEgAAAAAAAAAAAAAAAACzKAAAd29yZC9udW1iZXJpbmcueG1sUEsBAi0AFAAGAAgAAAAhAJ77OeslDQAAvoAAAA8AAAAAAAAAAAAAAAAAtywAAHdvcmQvc3R5bGVzLnhtbFBLAQItABQABgAIAAAAIQA7Cv2WTwEAAPoDAAAUAAAAAAAAAAAAAAAAAAk6AAB3b3JkL3dlYlNldHRpbmdzLnhtbFBLAQItABQABgAIAAAAIQCSC4KQSQIAADoJAAASAAAAAAAAAAAAAAAAAIo7AAB3b3JkL2ZvbnRUYWJsZS54bWxQSwECLQAUAAYACAAAACEARbV6mlIBAACDAgAAEQAAAAAAAAAAAAAAAAADPgAAZG9jUHJvcHMvY29yZS54bWxQSwECLQAUAAYACAAAACEAerAELXYBAADIAgAAEAAAAAAAAAAAAAAAAACMQAAAZG9jUHJvcHMvYXBwLnhtbFBLBQYAAAAADAAMAAEDAAA4QwAAAAA=\"}]",
+                "created_by": 56,
+                "created_at": "2026-06-11 12:49:59",
+                "updated_at": "2026-06-11 12:49:59"
+            }
+        ],
+        "planning_evidence": [],
+        "notifications": [
+            {
+                "id": 2,
+                "notification_id": "al_7lovx7b4mpxuadcg",
+                "title": "plans should be submitted tommorrow",
+                "message": "No for any failure",
+                "severity": "",
+                "module": "Users",
+                "category": "system_alert",
+                "user_id": null,
+                "is_read": 1,
+                "created_at": "2026-06-03 09:03:44"
+            },
+            {
+                "id": 3,
+                "notification_id": "ALR1781201122314",
+                "title": "Wakuu wa idara wote kesho tuna kikao cha pamoja",
+                "message": "",
+                "severity": "danger",
+                "module": "System",
+                "category": "system_alert",
+                "user_id": 56,
+                "is_read": 0,
+                "created_at": "2026-06-11 21:05:22"
+            }
+        ],
+        "approval_requests": [
+            {
+                "id": 1,
+                "request_id": "REQ1781201183560",
+                "title": "Ombi la approval ya bajeti",
+                "request_type": "Budget Approval",
+                "module": "Users",
+                "priority": "low",
+                "requester": "JUMA ALLY",
+                "description": "nill",
+                "status": "approved",
+                "reject_reason": null,
+                "created_by": 56,
+                "resolved_by": 56,
+                "resolved_at": "2026-06-11 21:06:48",
+                "created_at": "2026-06-11 21:06:23",
+                "updated_at": "2026-06-11 21:06:48"
+            }
+        ],
+        "notification_threads": [],
+        "notification_messages": [],
+        "activity_logs": [
+            {
+                "id": 427,
+                "user_id": null,
+                "action": "Viewed Activity Log",
+                "module": "System",
+                "severity": "info",
+                "details": "Opened activity log page",
+                "ip_address": null,
+                "created_at": null
+            },
+            {
+                "id": 428,
+                "user_id": 66,
+                "action": "Updated user",
+                "module": "Users",
+                "severity": "info",
+                "details": "Updated user ID: USR001",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 21:21:43"
+            },
+            {
+                "id": 429,
+                "user_id": 66,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User MWINUKA JUNIOR logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 21:16:02"
+            },
+            {
+                "id": 430,
+                "user_id": 65,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User MWINUKA JUNIOR logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 21:15:24"
+            },
+            {
+                "id": 431,
+                "user_id": 58,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User MWINUKA JUNIOR logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 21:13:55"
+            },
+            {
+                "id": 432,
+                "user_id": 56,
+                "action": "Created user",
+                "module": "Users",
+                "severity": "success",
+                "details": "Created user: mwinuka@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 21:13:29"
+            },
+            {
+                "id": 433,
+                "user_id": 56,
+                "action": "Approved request",
+                "module": "Approvals",
+                "severity": "success",
+                "details": "Request ID: REQ1781201183560",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 21:06:48"
+            },
+            {
+                "id": 434,
+                "user_id": 56,
+                "action": "Submitted approval request",
+                "module": "Approvals",
+                "severity": "info",
+                "details": "Request: Ombi la approval ya bajeti",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 21:06:23"
+            },
+            {
+                "id": 435,
+                "user_id": 56,
+                "action": "Created system alert",
+                "module": "Notifications",
+                "severity": "warning",
+                "details": "Alert: Wakuu wa idara wote kesho tuna kikao cha pamoja",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 21:05:22"
+            },
+            {
+                "id": 436,
+                "user_id": 56,
+                "action": "Recorded service delivery",
+                "module": "Service Tracking",
+                "severity": "success",
+                "details": "Recorded service: education-support",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 19:27:13"
+            },
+            {
+                "id": 437,
+                "user_id": 56,
+                "action": "Created beneficiary",
+                "module": "Beneficiaries",
+                "severity": "success",
+                "details": "Created beneficiary: LAZARO MWINUKA",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 18:43:46"
+            },
+            {
+                "id": 438,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 14:26:20"
+            },
+            {
+                "id": 439,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2027-Q4",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 14:25:39"
+            },
+            {
+                "id": 440,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2027-Q4",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 14:22:18"
+            },
+            {
+                "id": 441,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q1",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 14:22:11"
+            },
+            {
+                "id": 442,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q4",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 14:22:09"
+            },
+            {
+                "id": 443,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q3",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 14:22:07"
+            },
+            {
+                "id": 444,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 14:22:06"
+            },
+            {
+                "id": 445,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 14:22:01"
+            },
+            {
+                "id": 446,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "monthly plan 2026-June",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 14:21:49"
+            },
+            {
+                "id": 447,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "monthly plan 2026-June",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 14:21:30"
+            },
+            {
+                "id": 448,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 14:21:07"
+            },
+            {
+                "id": 449,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 14:20:58"
+            },
+            {
+                "id": 450,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 14:20:43"
+            },
+            {
+                "id": 451,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 14:07:57"
+            },
+            {
+                "id": 452,
+                "user_id": 56,
+                "action": "submit_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 14:04:44"
+            },
+            {
+                "id": 453,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 14:04:41"
+            },
+            {
+                "id": 454,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 14:03:09"
+            },
+            {
+                "id": 455,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 14:02:54"
+            },
+            {
+                "id": 456,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 14:00:25"
+            },
+            {
+                "id": 457,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "monthly plan 2026-June",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 14:00:18"
+            },
+            {
+                "id": 458,
+                "user_id": 56,
+                "action": "submit_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 13:59:16"
+            },
+            {
+                "id": 459,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 13:59:14"
+            },
+            {
+                "id": 460,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 13:59:11"
+            },
+            {
+                "id": 461,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 13:59:08"
+            },
+            {
+                "id": 462,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 13:59:05"
+            },
+            {
+                "id": 463,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 13:59:03"
+            },
+            {
+                "id": 464,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 13:59:00"
+            },
+            {
+                "id": 465,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 13:58:56"
+            },
+            {
+                "id": 466,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 13:58:47"
+            },
+            {
+                "id": 467,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 13:58:44"
+            },
+            {
+                "id": 468,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 13:58:38"
+            },
+            {
+                "id": 469,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 13:58:35"
+            },
+            {
+                "id": 470,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 13:58:33"
+            },
+            {
+                "id": 471,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 13:58:21"
+            },
+            {
+                "id": 472,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 13:58:16"
+            },
+            {
+                "id": 473,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 13:58:11"
+            },
+            {
+                "id": 474,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 13:58:07"
+            },
+            {
+                "id": 475,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 13:58:06"
+            },
+            {
+                "id": 476,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 13:58:03"
+            },
+            {
+                "id": 477,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 13:58:00"
+            },
+            {
+                "id": 478,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 13:57:56"
+            },
+            {
+                "id": 479,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 13:57:55"
+            },
+            {
+                "id": 480,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 13:55:56"
+            },
+            {
+                "id": 481,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 13:55:53"
+            },
+            {
+                "id": 482,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 13:55:50"
+            },
+            {
+                "id": 483,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 13:55:49"
+            },
+            {
+                "id": 484,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 13:55:47"
+            },
+            {
+                "id": 485,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 13:55:44"
+            },
+            {
+                "id": 486,
+                "user_id": 56,
+                "action": "save_plan",
+                "module": "planning",
+                "severity": "info",
+                "details": "quarterly plan 2026-Q2",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 13:55:29"
+            },
+            {
+                "id": 487,
+                "user_id": 56,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User System Administrator logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 13:55:04"
+            },
+            {
+                "id": 488,
+                "user_id": 56,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User System Administrator logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 13:25:04"
+            },
+            {
+                "id": 489,
+                "user_id": 56,
+                "action": "save_project_document",
+                "module": "documents",
+                "severity": "info",
+                "details": "Saved document pdoc-1781171399613",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 12:49:59"
+            },
+            {
+                "id": 490,
+                "user_id": 56,
+                "action": "Created project",
+                "module": "Projects",
+                "severity": "success",
+                "details": "Created project: BATIKI MAKING TRAINING",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 12:48:49"
+            },
+            {
+                "id": 491,
+                "user_id": 56,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User System Administrator logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 09:42:43"
+            },
+            {
+                "id": 492,
+                "user_id": 51,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User System Administrator logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 08:43:09"
+            },
+            {
+                "id": 493,
+                "user_id": 50,
+                "action": "Approved budget allocation",
+                "module": "Finance",
+                "severity": "success",
+                "details": "Approved allocation ID: ALLOC1781083829997",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 22:31:22"
+            },
+            {
+                "id": 494,
+                "user_id": 50,
+                "action": "Approved expense",
+                "module": "Finance",
+                "severity": "success",
+                "details": "Approved expense ID: EXP1781115641487",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 22:28:01"
+            },
+            {
+                "id": 495,
+                "user_id": 50,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User System Administrator logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 22:18:40"
+            },
+            {
+                "id": 496,
+                "user_id": 50,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User System Administrator logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 22:17:30"
+            },
+            {
+                "id": 497,
+                "user_id": 50,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User System Administrator logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 22:16:39"
+            },
+            {
+                "id": 498,
+                "user_id": 50,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User System Administrator logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 22:15:53"
+            },
+            {
+                "id": 499,
+                "user_id": 50,
+                "action": "Updated project",
+                "module": "Projects",
+                "severity": "info",
+                "details": "Updated project ID: PRJ1781118648442",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 22:11:39"
+            },
+            {
+                "id": 500,
+                "user_id": 50,
+                "action": "Updated project",
+                "module": "Projects",
+                "severity": "info",
+                "details": "Updated project ID: PRJ1781118648442",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 22:11:09"
+            },
+            {
+                "id": 501,
+                "user_id": 50,
+                "action": "Created project",
+                "module": "Projects",
+                "severity": "success",
+                "details": "Created project: active group Investment",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 22:10:48"
+            },
+            {
+                "id": 502,
+                "user_id": 50,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User System Administrator logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 22:08:54"
+            },
+            {
+                "id": 503,
+                "user_id": 50,
+                "action": "Created expense",
+                "module": "Finance",
+                "severity": "success",
+                "details": "Created expense for finance: 150000",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 21:20:41"
+            },
+            {
+                "id": 504,
+                "user_id": 50,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User System Administrator logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 21:20:41"
+            },
+            {
+                "id": 505,
+                "user_id": 50,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User System Administrator logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 21:19:35"
+            },
+            {
+                "id": 506,
+                "user_id": 49,
+                "action": "User logged out",
+                "module": "Auth",
+                "severity": "info",
+                "details": "User logged out",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 21:12:39"
+            },
+            {
+                "id": 507,
+                "user_id": 49,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User DANIELLY KIHONGOLE logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 21:09:53"
+            },
+            {
+                "id": 508,
+                "user_id": null,
+                "action": "New user registered",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User daniellykihongole@gmail.com registered",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 21:09:47"
+            },
+            {
+                "id": 509,
+                "user_id": 48,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User LUTHER ELIA MWINUKA logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 20:39:53"
+            },
+            {
+                "id": 510,
+                "user_id": 46,
+                "action": "Created project",
+                "module": "Projects",
+                "severity": "success",
+                "details": "Created project: SCHOOLDISTRIBUTION AT MPANGA WARD",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 20:38:03"
+            },
+            {
+                "id": 511,
+                "user_id": 0,
+                "action": "Password reset link sent",
+                "module": "auth",
+                "severity": "info",
+                "details": "Reset email dispatched to luthermwinuka960@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 16:53:31"
+            },
+            {
+                "id": 512,
+                "user_id": 46,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User LUTHER ELIA MWINUKA logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 16:51:09"
+            },
+            {
+                "id": 513,
+                "user_id": 47,
+                "action": "User logged out",
+                "module": "Auth",
+                "severity": "info",
+                "details": "User logged out",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 16:50:44"
+            },
+            {
+                "id": 514,
+                "user_id": 47,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User RAMADHANI JUMA logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 16:50:26"
+            },
+            {
+                "id": 515,
+                "user_id": 0,
+                "action": "Password reset link sent",
+                "module": "auth",
+                "severity": "info",
+                "details": "Reset email dispatched to luthermwinuka960@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 16:47:47"
+            },
+            {
+                "id": 516,
+                "user_id": null,
+                "action": "New user registered",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User luthermwinuka960@gmail.com registered",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 16:47:29"
+            },
+            {
+                "id": 517,
+                "user_id": 46,
+                "action": "User logged out",
+                "module": "Auth",
+                "severity": "info",
+                "details": "User logged out",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 16:45:18"
+            },
+            {
+                "id": 518,
+                "user_id": 46,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User LUTHER ELIA MWINUKA logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 13:05:43"
+            },
+            {
+                "id": 519,
+                "user_id": null,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Unknown email: ffilipatali@yahoo.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 13:05:30"
+            },
+            {
+                "id": 520,
+                "user_id": null,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Unknown email: ffilipatali@yahoo.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 13:05:25"
+            },
+            {
+                "id": 521,
+                "user_id": 35,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User LUTHER ELIA MWINUKA logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 12:59:03"
+            },
+            {
+                "id": 522,
+                "user_id": 0,
+                "action": "Password reset link sent",
+                "module": "auth",
+                "severity": "info",
+                "details": "Reset email dispatched to mwinukajunior96@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 12:57:13"
+            },
+            {
+                "id": 523,
+                "user_id": 0,
+                "action": "Password reset link sent",
+                "module": "auth",
+                "severity": "info",
+                "details": "Reset email dispatched to mwinukajunior96@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 12:56:52"
+            },
+            {
+                "id": 524,
+                "user_id": 35,
+                "action": "User logged out",
+                "module": "Auth",
+                "severity": "info",
+                "details": "User logged out",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 12:56:24"
+            },
+            {
+                "id": 525,
+                "user_id": 35,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User LUTHER ELIA MWINUKA logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 12:35:39"
+            },
+            {
+                "id": 526,
+                "user_id": 45,
+                "action": "User logged out",
+                "module": "Auth",
+                "severity": "info",
+                "details": "User logged out",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 12:31:02"
+            },
+            {
+                "id": 527,
+                "user_id": 45,
+                "action": "Created budget allocation",
+                "module": "Finance",
+                "severity": "success",
+                "details": "Created allocation for Administration Department: 234000000000",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 12:30:29"
+            },
+            {
+                "id": 528,
+                "user_id": 45,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User miriamu chissi logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 12:29:35"
+            },
+            {
+                "id": 529,
+                "user_id": null,
+                "action": "New user registered",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User miriamuchissi@gmail.com registered",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 12:29:12"
+            },
+            {
+                "id": 530,
+                "user_id": 35,
+                "action": "User logged out",
+                "module": "Auth",
+                "severity": "info",
+                "details": "User logged out",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 12:26:48"
+            },
+            {
+                "id": 531,
+                "user_id": 35,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User LUTHER ELIA MWINUKA logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 12:26:23"
+            },
+            {
+                "id": 532,
+                "user_id": 35,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User LUTHER ELIA MWINUKA logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 09:52:44"
+            },
+            {
+                "id": 533,
+                "user_id": 34,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User LUTHER ELIA MWINUKA logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 09:38:14"
+            },
+            {
+                "id": 534,
+                "user_id": 34,
+                "action": "User logged out",
+                "module": "Auth",
+                "severity": "info",
+                "details": "User logged out",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 09:36:31"
+            },
+            {
+                "id": 535,
+                "user_id": 34,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User LUTHER ELIA MWINUKA logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 09:36:18"
+            },
+            {
+                "id": 536,
+                "user_id": 34,
+                "action": "User logged out",
+                "module": "Auth",
+                "severity": "info",
+                "details": "User logged out",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 09:36:06"
+            },
+            {
+                "id": 537,
+                "user_id": 34,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User LUTHER ELIA MWINUKA logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 09:34:57"
+            },
+            {
+                "id": 538,
+                "user_id": 27,
+                "action": "User logged out",
+                "module": "Auth",
+                "severity": "info",
+                "details": "User logged out",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 09:33:54"
+            },
+            {
+                "id": 539,
+                "user_id": 27,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User System Administrator logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 09:28:48"
+            },
+            {
+                "id": 540,
+                "user_id": 27,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Wrong password for: ffilipatali@yahoo.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 09:28:35"
+            },
+            {
+                "id": 541,
+                "user_id": 34,
+                "action": "User logged out",
+                "module": "Auth",
+                "severity": "info",
+                "details": "User logged out",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 09:27:58"
+            },
+            {
+                "id": 542,
+                "user_id": 34,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User LUTHER ELIA MWINUKA logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 09:21:53"
+            },
+            {
+                "id": 543,
+                "user_id": 27,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User System Administrator logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 09:18:41"
+            },
+            {
+                "id": 544,
+                "user_id": 0,
+                "action": "Password reset link sent",
+                "module": "auth",
+                "severity": "info",
+                "details": "Reset email dispatched to mwinukajunior96@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 09:04:41"
+            },
+            {
+                "id": 545,
+                "user_id": 0,
+                "action": "Password reset link sent",
+                "module": "auth",
+                "severity": "info",
+                "details": "Reset email dispatched to mwinukajunior96@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 09:04:02"
+            },
+            {
+                "id": 546,
+                "user_id": 0,
+                "action": "Password reset link sent",
+                "module": "auth",
+                "severity": "info",
+                "details": "Reset email dispatched to mwinukajunior96@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 09:03:26"
+            },
+            {
+                "id": 547,
+                "user_id": null,
+                "action": "New user registered",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User mwinukajunior96@gmail.com registered",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 09:03:10"
+            },
+            {
+                "id": 548,
+                "user_id": 0,
+                "action": "Password reset link sent",
+                "module": "auth",
+                "severity": "info",
+                "details": "Reset email dispatched to admin@rdomms.org",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 08:56:45"
+            },
+            {
+                "id": 549,
+                "user_id": null,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Unknown email: eliamwinuka@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-10 08:52:32"
+            },
+            {
+                "id": 550,
+                "user_id": 33,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User LUTHER MWINUKA logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-09 22:16:28"
+            },
+            {
+                "id": 551,
+                "user_id": null,
+                "action": "New user registered",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User mwinuka@gmail.com registered",
+                "ip_address": "::1",
+                "created_at": "2026-06-09 22:16:16"
+            },
+            {
+                "id": 552,
+                "user_id": null,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Unknown email: mwinukajunior980@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-09 22:14:33"
+            },
+            {
+                "id": 553,
+                "user_id": 25,
+                "action": "User logged out",
+                "module": "Auth",
+                "severity": "info",
+                "details": "User logged out",
+                "ip_address": "::1",
+                "created_at": "2026-06-09 22:14:16"
+            },
+            {
+                "id": 554,
+                "user_id": 25,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User ZAITUNI NYUNZA logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-09 22:13:51"
+            },
+            {
+                "id": 555,
+                "user_id": 25,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User ZAITUNI NYUNZA logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-08 19:39:01"
+            },
+            {
+                "id": 556,
+                "user_id": null,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Unknown email: zubeda@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-08 19:38:53"
+            },
+            {
+                "id": 557,
+                "user_id": 32,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Wrong password for: upendoginga@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-08 19:38:44"
+            },
+            {
+                "id": 558,
+                "user_id": 32,
+                "action": "Updated project",
+                "module": "Projects",
+                "severity": "info",
+                "details": "Updated project ID: PRJ1780468453658",
+                "ip_address": "::1",
+                "created_at": "2026-06-07 23:55:31"
+            },
+            {
+                "id": 559,
+                "user_id": 32,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User UPENDO GINGA logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-07 23:54:54"
+            },
+            {
+                "id": 560,
+                "user_id": 32,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User UPENDO GINGA logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-06 10:59:14"
+            },
+            {
+                "id": 561,
+                "user_id": 32,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User UPENDO GINGA logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-06 09:11:31"
+            },
+            {
+                "id": 562,
+                "user_id": 32,
+                "action": "User logged out",
+                "module": "Auth",
+                "severity": "info",
+                "details": "User logged out",
+                "ip_address": "::1",
+                "created_at": "2026-06-05 12:20:10"
+            },
+            {
+                "id": 563,
+                "user_id": 32,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User UPENDO GINGA logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-05 12:19:49"
+            },
+            {
+                "id": 564,
+                "user_id": 32,
+                "action": "User logged out",
+                "module": "Auth",
+                "severity": "info",
+                "details": "User logged out",
+                "ip_address": "::1",
+                "created_at": "2026-06-05 12:18:42"
+            },
+            {
+                "id": 565,
+                "user_id": 32,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User UPENDO GINGA logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-05 12:17:55"
+            },
+            {
+                "id": 566,
+                "user_id": null,
+                "action": "New user registered",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User upendoginga@gmail.com registered",
+                "ip_address": "::1",
+                "created_at": "2026-06-05 12:17:48"
+            },
+            {
+                "id": 567,
+                "user_id": 26,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Wrong password for: mwinukajunior@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-05 12:15:44"
+            },
+            {
+                "id": 568,
+                "user_id": null,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Unknown email: mwinukajunior96@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-05 12:15:28"
+            },
+            {
+                "id": 569,
+                "user_id": 26,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Wrong password for: mwinukajunior@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-05 12:15:21"
+            },
+            {
+                "id": 570,
+                "user_id": null,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Unknown email: root",
+                "ip_address": "::1",
+                "created_at": "2026-06-05 12:14:53"
+            },
+            {
+                "id": 571,
+                "user_id": null,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Unknown email: root",
+                "ip_address": "::1",
+                "created_at": "2026-06-05 12:14:53"
+            },
+            {
+                "id": 572,
+                "user_id": null,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Unknown email: root",
+                "ip_address": "::1",
+                "created_at": "2026-06-05 12:14:53"
+            },
+            {
+                "id": 573,
+                "user_id": null,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Unknown email: root",
+                "ip_address": "::1",
+                "created_at": "2026-06-05 12:14:52"
+            },
+            {
+                "id": 574,
+                "user_id": null,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Unknown email: root",
+                "ip_address": "::1",
+                "created_at": "2026-06-05 12:14:52"
+            },
+            {
+                "id": 575,
+                "user_id": null,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Unknown email: mwinukajunior96@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-05 12:14:52"
+            },
+            {
+                "id": 576,
+                "user_id": null,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Unknown email: mwinukajunior96@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-05 12:14:52"
+            },
+            {
+                "id": 577,
+                "user_id": null,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Unknown email: mwinukajunior96@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-05 12:14:51"
+            },
+            {
+                "id": 578,
+                "user_id": null,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Unknown email: mwinukajunior96@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-05 12:14:50"
+            },
+            {
+                "id": 579,
+                "user_id": 26,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Wrong password for: mwinukajunior@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-05 12:14:31"
+            },
+            {
+                "id": 580,
+                "user_id": null,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Unknown email: zubeda@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-05 12:14:23"
+            },
+            {
+                "id": 581,
+                "user_id": null,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Unknown email: mwinukajunior980@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-05 12:14:17"
+            },
+            {
+                "id": 582,
+                "user_id": 30,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User RASHID ALLY logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-04 23:26:03"
+            },
+            {
+                "id": 583,
+                "user_id": 19,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User RASHID ALLY logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-04 23:22:29"
+            },
+            {
+                "id": 584,
+                "user_id": null,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Unknown email: zubeda@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-04 23:22:14"
+            },
+            {
+                "id": 585,
+                "user_id": null,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Unknown email: mwinukajunior980@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-04 23:22:02"
+            },
+            {
+                "id": 586,
+                "user_id": null,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Unknown email: mwinukajunior980@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-04 23:22:02"
+            },
+            {
+                "id": 587,
+                "user_id": null,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Unknown email: zubeda@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-04 23:21:59"
+            },
+            {
+                "id": 588,
+                "user_id": null,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Unknown email: mwinuka@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-04 23:21:39"
+            },
+            {
+                "id": 589,
+                "user_id": null,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Unknown email: mwinukajunior980@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-04 23:21:33"
+            },
+            {
+                "id": 590,
+                "user_id": 20,
+                "action": "User logged out",
+                "module": "Auth",
+                "severity": "info",
+                "details": "User logged out",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 19:35:48"
+            },
+            {
+                "id": 591,
+                "user_id": 20,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User Danielly kihongole logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 19:34:25"
+            },
+            {
+                "id": 592,
+                "user_id": 20,
+                "action": "User logged out",
+                "module": "Auth",
+                "severity": "info",
+                "details": "User logged out",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 19:33:55"
+            },
+            {
+                "id": 593,
+                "user_id": 20,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User Danielly kihongole logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 19:27:32"
+            },
+            {
+                "id": 594,
+                "user_id": 20,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User Danielly kihongole logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 12:37:00"
+            },
+            {
+                "id": 595,
+                "user_id": 4,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User ZAITUNI NYUNZA logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 12:35:06"
+            },
+            {
+                "id": 596,
+                "user_id": 8,
+                "action": "User logged out",
+                "module": "Auth",
+                "severity": "info",
+                "details": "User logged out",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 12:34:44"
+            },
+            {
+                "id": 597,
+                "user_id": 8,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User Danielly kihongole logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 12:34:16"
+            },
+            {
+                "id": 598,
+                "user_id": 5,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Wrong password for: mwinukajunior@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 12:34:01"
+            },
+            {
+                "id": 599,
+                "user_id": 5,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User luther mwinuka logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 12:02:40"
+            },
+            {
+                "id": 600,
+                "user_id": 5,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User luther mwinuka logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 10:21:19"
+            },
+            {
+                "id": 601,
+                "user_id": 5,
+                "action": "User logged out",
+                "module": "Auth",
+                "severity": "info",
+                "details": "User logged out",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 10:16:27"
+            },
+            {
+                "id": 602,
+                "user_id": 5,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User luther mwinuka logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 10:11:29"
+            },
+            {
+                "id": 603,
+                "user_id": null,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Unknown email: mwinukajunior96@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 10:10:40"
+            },
+            {
+                "id": 604,
+                "user_id": 5,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User luther mwinuka logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 09:46:25"
+            },
+            {
+                "id": 605,
+                "user_id": 10,
+                "action": "User logged out",
+                "module": "Auth",
+                "severity": "info",
+                "details": "User logged out",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 09:46:06"
+            },
+            {
+                "id": 606,
+                "user_id": null,
+                "action": "Viewed Activity Log",
+                "module": "System",
+                "severity": "info",
+                "details": "Opened activity log page",
+                "ip_address": null,
+                "created_at": null
+            },
+            {
+                "id": 607,
+                "user_id": 9,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User RASHID ALLY logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 08:38:42"
+            },
+            {
+                "id": 608,
+                "user_id": null,
+                "action": "New user registered",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User rashidyally@gmail.com registered",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 08:38:36"
+            },
+            {
+                "id": 609,
+                "user_id": null,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Unknown email: allyally@yahoo.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 08:36:48"
+            },
+            {
+                "id": 610,
+                "user_id": null,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Unknown email: mwinukajunior96@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 08:36:40"
+            },
+            {
+                "id": 611,
+                "user_id": null,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Unknown email: eliamwinuka@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 08:36:33"
+            },
+            {
+                "id": 612,
+                "user_id": 7,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Wrong password for: mwinukajunior890@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 08:36:26"
+            },
+            {
+                "id": 613,
+                "user_id": 4,
+                "action": "User logged out",
+                "module": "Auth",
+                "severity": "info",
+                "details": "User logged out",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 08:36:12"
+            },
+            {
+                "id": 614,
+                "user_id": 4,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User ZAITUNI NYUNZA logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 08:35:55"
+            },
+            {
+                "id": 615,
+                "user_id": 8,
+                "action": "User logged out",
+                "module": "Auth",
+                "severity": "info",
+                "details": "User logged out",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 08:35:39"
+            },
+            {
+                "id": 616,
+                "user_id": 8,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User Danielly kihongole logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 08:31:35"
+            },
+            {
+                "id": 617,
+                "user_id": 8,
+                "action": "User logged out",
+                "module": "Auth",
+                "severity": "info",
+                "details": "User logged out",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 06:47:09"
+            },
+            {
+                "id": 618,
+                "user_id": 8,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User Danielly kihongole logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 06:46:58"
+            },
+            {
+                "id": 619,
+                "user_id": 8,
+                "action": "User logged out",
+                "module": "Auth",
+                "severity": "info",
+                "details": "User logged out",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 06:46:41"
+            },
+            {
+                "id": 620,
+                "user_id": 8,
+                "action": "Approved budget allocation",
+                "module": "Finance",
+                "severity": "success",
+                "details": "Approved allocation ID: ALLOC1780458341283",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 06:46:01"
+            },
+            {
+                "id": 621,
+                "user_id": 8,
+                "action": "Created budget allocation",
+                "module": "Finance",
+                "severity": "success",
+                "details": "Created allocation for Water Department: 4567000000",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 06:45:41"
+            },
+            {
+                "id": 622,
+                "user_id": 8,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User Danielly kihongole logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 06:44:46"
+            },
+            {
+                "id": 623,
+                "user_id": null,
+                "action": "New user registered",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User danielykihongole@gmail.com registered",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 06:44:39"
+            },
+            {
+                "id": 624,
+                "user_id": 4,
+                "action": "User logged out",
+                "module": "Auth",
+                "severity": "info",
+                "details": "User logged out",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 06:43:04"
+            },
+            {
+                "id": 625,
+                "user_id": 4,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User ZAITUNI NYUNZA logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 06:42:25"
+            },
+            {
+                "id": 626,
+                "user_id": 7,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Wrong password for: mwinukajunior890@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 06:42:18"
+            },
+            {
+                "id": 627,
+                "user_id": 7,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Wrong password for: mwinukajunior890@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 06:42:02"
+            },
+            {
+                "id": 628,
+                "user_id": null,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Unknown email: root",
+                "ip_address": "::1",
+                "created_at": "2026-06-02 20:46:49"
+            },
+            {
+                "id": 629,
+                "user_id": null,
+                "action": "New user registered",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User mwinukajunior@gmail.com registered",
+                "ip_address": "::1",
+                "created_at": "2026-06-02 20:47:41"
+            },
+            {
+                "id": 630,
+                "user_id": 2,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User luther mwinuka logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-02 20:47:47"
+            },
+            {
+                "id": 631,
+                "user_id": 2,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User luther mwinuka logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-02 21:22:33"
+            },
+            {
+                "id": 632,
+                "user_id": 2,
+                "action": "Created project",
+                "module": "Projects",
+                "severity": "success",
+                "details": "Created project: SCHOOLDISTRIBUTION AT MPANGA WARD",
+                "ip_address": "::1",
+                "created_at": "2026-06-02 21:24:24"
+            },
+            {
+                "id": 633,
+                "user_id": 2,
+                "action": "User logged out",
+                "module": "Auth",
+                "severity": "info",
+                "details": "User logged out",
+                "ip_address": "::1",
+                "created_at": "2026-06-02 21:27:08"
+            },
+            {
+                "id": 634,
+                "user_id": 2,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User luther mwinuka logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-02 21:28:33"
+            },
+            {
+                "id": 635,
+                "user_id": 2,
+                "action": "Created budget allocation",
+                "module": "Finance",
+                "severity": "success",
+                "details": "Created allocation for orphanage_support: 229999999998",
+                "ip_address": "::1",
+                "created_at": "2026-06-02 22:59:18"
+            },
+            {
+                "id": 636,
+                "user_id": 2,
+                "action": "Approved budget allocation",
+                "module": "Finance",
+                "severity": "success",
+                "details": "Approved allocation ID: ALLOC1780430358290",
+                "ip_address": "::1",
+                "created_at": "2026-06-02 22:59:52"
+            },
+            {
+                "id": 637,
+                "user_id": 2,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User luther mwinuka logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 06:23:59"
+            },
+            {
+                "id": 638,
+                "user_id": 2,
+                "action": "Updated project",
+                "module": "Projects",
+                "severity": "info",
+                "details": "Updated project ID: PRJ1780424664557",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 06:25:13"
+            },
+            {
+                "id": 639,
+                "user_id": 2,
+                "action": "User logged out",
+                "module": "Auth",
+                "severity": "info",
+                "details": "User logged out",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 06:38:01"
+            },
+            {
+                "id": 640,
+                "user_id": null,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Unknown email: jumally@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 06:38:13"
+            },
+            {
+                "id": 641,
+                "user_id": null,
+                "action": "Failed login attempt",
+                "module": "Auth",
+                "severity": "warning",
+                "details": "Unknown email: mwinukajunior96@gmail.com",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 06:38:21"
+            },
+            {
+                "id": 642,
+                "user_id": null,
+                "action": "New user registered",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User nyunza@gmail.com registered",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 06:39:46"
+            },
+            {
+                "id": 643,
+                "user_id": 3,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User ZAITUNI NYUNZA logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 06:39:52"
+            },
+            {
+                "id": 644,
+                "user_id": null,
+                "action": "Created User",
+                "module": "Users",
+                "severity": "success",
+                "details": "Created user Abdallah Juma (mwinukajunior890@gmail.com)",
+                "ip_address": null,
+                "created_at": null
+            },
+            {
+                "id": 645,
+                "user_id": 9,
+                "action": "User logged out",
+                "module": "Auth",
+                "severity": "info",
+                "details": "User logged out",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 08:43:36"
+            },
+            {
+                "id": 646,
+                "user_id": null,
+                "action": "New user registered",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User allyally@gmail.com registered",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 08:45:23"
+            },
+            {
+                "id": 647,
+                "user_id": 10,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User ALLY ALLY logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 08:45:29"
+            },
+            {
+                "id": 648,
+                "user_id": 10,
+                "action": "User logged out",
+                "module": "Auth",
+                "severity": "info",
+                "details": "User logged out",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 08:45:55"
+            },
+            {
+                "id": 649,
+                "user_id": 10,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User ALLY ALLY logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 08:46:05"
+            },
+            {
+                "id": 650,
+                "user_id": 10,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User ALLY ALLY logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 09:31:42"
+            },
+            {
+                "id": 651,
+                "user_id": 10,
+                "action": "Created project",
+                "module": "Projects",
+                "severity": "success",
+                "details": "Created project: active group Investment",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 09:34:13"
+            },
+            {
+                "id": 652,
+                "user_id": 10,
+                "action": "Updated project",
+                "module": "Projects",
+                "severity": "info",
+                "details": "Updated project ID: PRJ1780424664557",
+                "ip_address": "::1",
+                "created_at": "2026-06-03 09:34:51"
+            },
+            {
+                "id": 653,
+                "user_id": null,
+                "action": "Approved Request",
+                "module": "Procurement",
+                "severity": "success",
+                "details": "Approved: Purchase 5 laptops for field officers",
+                "ip_address": null,
+                "created_at": null
+            },
+            {
+                "id": 654,
+                "user_id": null,
+                "action": "Approved Request",
+                "module": "Projects",
+                "severity": "success",
+                "details": "Approved: Extend RDO Kilolo agriculture project deadline",
+                "ip_address": null,
+                "created_at": null
+            },
+            {
+                "id": 655,
+                "user_id": null,
+                "action": "Approved Request",
+                "module": "Users",
+                "severity": "success",
+                "details": "Approved: Promote Daniel Moshi to Head of Department",
+                "ip_address": null,
+                "created_at": null
+            },
+            {
+                "id": 656,
+                "user_id": 66,
+                "action": "Updated general settings",
+                "module": "System",
+                "severity": "info",
+                "details": "General system preferences were updated",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 21:44:46"
+            },
+            {
+                "id": 657,
+                "user_id": 66,
+                "action": "Updated organization profile",
+                "module": "System",
+                "severity": "info",
+                "details": "Organization profile updated: Rural Development Organization",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 21:50:41"
+            },
+            {
+                "id": 658,
+                "user_id": 66,
+                "action": "User logged in",
+                "module": "Auth",
+                "severity": "success",
+                "details": "User MWINUKA JUNIOR logged in successfully",
+                "ip_address": "::1",
+                "created_at": "2026-06-11 23:20:36"
+            }
+        ],
+        "scheduled_reports": [],
+        "report_history": [
+            {
+                "id": 107,
+                "report_id": "1781173991432",
+                "report_type": "beneficiaries",
+                "title": "Beneficiary Coverage Report",
+                "generated_at": "2026-06-11 10:33:11",
+                "period": "2026-05-31 to 2026-06-29",
+                "created_at": null
+            },
+            {
+                "id": 108,
+                "report_id": "106",
+                "report_type": "users",
+                "title": "Users & Access Report",
+                "generated_at": "2026-06-10 17:38:45",
+                "period": "2026-05-31 to 2026-06-29",
+                "created_at": null
+            },
+            {
+                "id": 109,
+                "report_id": "105",
+                "report_type": "planning",
+                "title": "Planning & Delivery Report",
+                "generated_at": "2026-06-11 06:59:53",
+                "period": "2026-05-31 to 2026-06-29",
+                "created_at": null
+            },
+            {
+                "id": 110,
+                "report_id": "104",
+                "report_type": "planning",
+                "title": "Planning & Delivery Report",
+                "generated_at": "2026-06-11 07:00:06",
+                "period": "2026-05-31 to 2026-06-29",
+                "created_at": null
+            },
+            {
+                "id": 111,
+                "report_id": "RPT1781182390296",
+                "report_type": "projects",
+                "title": "Project Portfolio Report",
+                "generated_at": "2026-06-11 15:53:10",
+                "period": "2026-06-11 to 2026-06-30",
+                "created_at": "2026-06-11 15:53:10"
+            },
+            {
+                "id": 112,
+                "report_id": "RPT1781184677815",
+                "report_type": "finance",
+                "title": "Finance Summary Report",
+                "generated_at": "2026-06-11 16:31:17",
+                "period": "2026-06-10 to 2026-06-15",
+                "created_at": "2026-06-11 16:31:17"
+            },
+            {
+                "id": 113,
+                "report_id": "RPT1781184710478",
+                "report_type": "projects",
+                "title": "Project Portfolio Report",
+                "generated_at": "2026-06-11 16:31:50",
+                "period": "2026-01-01 to 2026-06-11",
+                "created_at": "2026-06-11 16:31:50"
+            },
+            {
+                "id": 114,
+                "report_id": "RPT1781184740585",
+                "report_type": "projects",
+                "title": "Project Portfolio Report",
+                "generated_at": "2026-06-11 16:32:20",
+                "period": "2026-06-10 to 2026-06-14",
+                "created_at": "2026-06-11 16:32:20"
+            },
+            {
+                "id": 115,
+                "report_id": "RPT1781184903944",
+                "report_type": "projects",
+                "title": "Project Portfolio Report",
+                "generated_at": "2026-06-11 16:35:03",
+                "period": "2026-06-02 to 2026-06-11",
+                "created_at": "2026-06-11 16:35:03"
+            }
+        ],
+        "user_notification_preferences": [],
+        "app_storage": [
+            {
+                "id": 5,
+                "storage_key": "beneficiaries_v2",
+                "payload": "[{\"id\":\"seed-1\",\"fullName\":\"Asha Juma\",\"beneficiaryCode\":\"BEN-2026-001\",\"category\":\"women\",\"groupCount\":\"\",\"status\":\"active\",\"phone\":\"0761 234 567\",\"location\":\"Mafinga Ward, Iringa\",\"registeredDate\":\"2026-05-19\",\"updatedAt\":\"2026-05-22T09:00:00Z\"}]",
+                "updated_by": 56,
+                "created_at": "2026-06-03 08:46:55",
+                "updated_at": "2026-06-11 18:43:54"
+            },
+            {
+                "id": 15,
+                "storage_key": "system_settings_cache",
+                "payload": "{\"app_name\":\"RDOMMS\",\"app_version\":\"2.0.0\",\"language\":\"sw\",\"default_language\":\"sw\",\"date_format\":\"MM\/DD\/YYYY\",\"dateFormat\":\"MM\/DD\/YYYY\",\"timezone\":\"EAT\",\"items_per_page\":15,\"itemsPerPage\":15,\"theme\":\"light\",\"maintenance_mode\":false,\"allow_registration\":true,\"organization\":[]}",
+                "updated_by": 66,
+                "created_at": "2026-06-11 21:44:31",
+                "updated_at": "2026-06-11 23:29:22"
+            },
+            {
+                "id": 11,
+                "storage_key": "planning_migrated_progress",
+                "payload": "1",
+                "updated_by": 56,
+                "created_at": "2026-06-11 11:34:53",
+                "updated_at": "2026-06-11 11:34:53"
+            },
+            {
+                "id": 12,
+                "storage_key": "planning_migrated_quarterly",
+                "payload": "1",
+                "updated_by": 56,
+                "created_at": "2026-06-11 13:55:28",
+                "updated_at": "2026-06-11 13:55:28"
+            },
+            {
+                "id": 13,
+                "storage_key": "planning_migrated_monthly",
+                "payload": "1",
+                "updated_by": 56,
+                "created_at": "2026-06-11 14:00:17",
+                "updated_at": "2026-06-11 14:00:17"
+            },
+            {
+                "id": 3,
+                "storage_key": "org_profile",
+                "payload": "{\"name\":\"Rural Development Organization (RDO)\",\"regNo\":\"RDO\/2023\/123\",\"email\":\"contact@rdo.org\",\"phone\":\"+255 22 123456\",\"website\":\"https:\/\/rdo.tz\",\"address\":\"Dodoma, Tanzania\",\"mission\":\"Promote sustainable rural development through community-led initiatives.\",\"logo\":\"\"}",
+                "updated_by": 2,
+                "created_at": "2026-06-02 21:00:16",
+                "updated_at": "2026-06-02 21:00:16"
+            },
+            {
+                "id": 4,
+                "storage_key": "monthlyPlanDrafts",
+                "payload": "{\"2026-June\":{\"id\":\"2026-June\",\"month\":\"June\",\"year\":2026,\"department\":\"vocational_training_center\",\"station\":\"rdo_mafinga\",\"staffName\":\"System Administrator\",\"objective\":\"MIGAO VIJIJINI\",\"status\":\"approved\",\"notes\":\"\",\"risks\":\"\",\"activities\":[{\"week\":\"Week 1\",\"activity\":\"KILIMO CHA UMWAGILIAJI\",\"resources\":\"MAZAO BORA\",\"participants\":\"WOTE \",\"budget\":780000,\"status\":\"in_progress\",\"output\":\"MAZAO BORA\",\"responsible\":\"WOTE \"},{\"week\":\"Week 2\",\"activity\":\"KILIMO\",\"resources\":\"\",\"participants\":\"\",\"budget\":0,\"status\":\"planned\",\"output\":\"\",\"responsible\":\"\"}],\"total_budget\":780000,\"approval_status\":\"approved\",\"saved_at\":\"2026-06-11T06:43:51.975Z\"}}",
+                "updated_by": 56,
+                "created_at": "2026-06-02 21:03:58",
+                "updated_at": "2026-06-11 09:43:52"
+            },
+            {
+                "id": 14,
+                "storage_key": "general_settings",
+                "payload": "{\"language\":\"en\",\"dateFormat\":\"DD\/MM\/YYYY\",\"timezone\":\"EAT\",\"itemsPerPage\":10,\"theme\":\"light\"}",
+                "updated_by": 66,
+                "created_at": "2026-06-11 21:32:11",
+                "updated_at": "2026-06-11 21:32:11"
+            },
+            {
+                "id": 6,
+                "storage_key": "approval_requests",
+                "payload": "[{\"id\":\"req_tz5o3nx0mpxozx42\",\"title\":\"Purchase 5 laptops for field officers\",\"type\":\"Asset Purchase\",\"module\":\"Procurement\",\"priority\":\"high\",\"requester\":\"John Mwamba\",\"desc\":\"New field officers joining in June require laptops for data collection.\",\"status\":\"approved\",\"createdAt\":\"2026-06-03T04:35:38.978Z\",\"resolvedAt\":\"2026-06-03T06:35:43.928Z\"},{\"id\":\"req_ihvhhj21mpxozx42\",\"title\":\"Extend RDO Kilolo agriculture project deadline\",\"type\":\"Project Extension\",\"module\":\"Projects\",\"priority\":\"medium\",\"requester\":\"Amina Salehe\",\"desc\":\"Rains delayed field activities by 3 weeks. Requesting 1-month extension.\",\"status\":\"approved\",\"createdAt\":\"2026-06-03T05:35:38.978Z\",\"resolvedAt\":\"2026-06-03T06:35:46.965Z\"},{\"id\":\"req_s0nhkp9dmpxozx42\",\"title\":\"Annual leave — 10 working days\",\"type\":\"Leave Request\",\"module\":\"HR\",\"priority\":\"low\",\"requester\":\"Peter Kileo\",\"desc\":\"Annual leave from 2 June to 13 June 2026.\",\"status\":\"approved\",\"createdAt\":\"2026-06-02T06:35:38.978Z\",\"resolvedAt\":\"2026-06-02T18:35:38.978Z\"}]",
+                "updated_by": 10,
+                "created_at": "2026-06-03 09:35:39",
+                "updated_at": "2026-06-03 09:36:03"
+            },
+            {
+                "id": 7,
+                "storage_key": "quarterlyPlanDrafts",
+                "payload": "{\"Q1\":[],\"Q2\":[],\"2026-Q2\":{\"id\":\"2026-Q2\",\"year\":2026,\"quarter\":\"Q2\",\"department\":\"\",\"station\":\"\",\"staffName\":\"System Administrator\",\"status\":\"draft\",\"activities\":[{\"month\":\"April\",\"activities\":\"\",\"equipment\":\"\",\"participants\":\"\",\"budget\":0},{\"month\":\"May\",\"activities\":\"\",\"equipment\":\"\",\"participants\":\"\",\"budget\":0},{\"month\":\"June\",\"activities\":\"\",\"equipment\":\"\",\"participants\":\"\",\"budget\":0}],\"totalBudget\":0,\"approval_status\":\"draft\",\"saved_at\":\"2026-06-11T06:48:19.509Z\"}}",
+                "updated_by": 56,
+                "created_at": "2026-06-03 19:27:46",
+                "updated_at": "2026-06-11 09:48:19"
+            },
+            {
+                "id": 8,
+                "storage_key": "roles",
+                "payload": "[{\"_id\":\"r_admin\",\"name\":\"Admin\",\"type\":\"admin\",\"desc\":\"Full system administration access\",\"permissions\":{\"projects\":true,\"planning\":true,\"finance\":true,\"reports\":true,\"users\":true}},{\"_id\":\"r_field_officer\",\"name\":\"Field Officer\",\"type\":\"custom\",\"desc\":\"Data collection and project updates\",\"permissions\":{\"projects\":true,\"planning\":false,\"finance\":false,\"reports\":true,\"users\":false}},{\"_id\":\"r_head_of_department\",\"name\":\"Head of Department\",\"type\":\"admin\",\"desc\":\"Supervises departmental workflows and approvals\",\"permissions\":{\"projects\":true,\"planning\":true,\"finance\":false,\"reports\":true,\"users\":false}},{\"_id\":\"r_staff\",\"name\":\"Staff\",\"type\":\"custom\",\"desc\":\"Standard operational access\",\"permissions\":{\"projects\":true,\"planning\":false,\"finance\":false,\"reports\":false,\"users\":false}},{\"_id\":\"r_human_resource_manager\",\"name\":\"Human Resource Manager\",\"type\":\"admin\",\"desc\":\"Manages HR operations and staff records\",\"permissions\":{\"projects\":false,\"planning\":false,\"finance\":false,\"reports\":true,\"users\":true}},{\"_id\":\"r_head_of_organization_center\",\"name\":\"Head of the Center\",\"type\":\"admin\",\"desc\":\"Oversees center-level planning and performance\",\"permissions\":{\"projects\":true,\"planning\":true,\"finance\":true,\"reports\":true,\"users\":true}},{\"_id\":\"r_accountant\",\"name\":\"Accountant\",\"type\":\"custom\",\"desc\":\"Financial operations and reports\",\"permissions\":{\"projects\":false,\"planning\":false,\"finance\":true,\"reports\":true,\"users\":false}}]",
+                "updated_by": 66,
+                "created_at": "2026-06-10 21:19:52",
+                "updated_at": "2026-06-11 21:22:33"
+            },
+            {
+                "id": 9,
+                "storage_key": "system_logs",
+                "payload": "[{\"timestamp\":\"2026-06-10T05:44:04.809Z\",\"action\":\"User \\\"admin\\\" logged in successfully\",\"user\":\"admin@rdo.org\"},{\"timestamp\":\"2026-06-09T05:44:04.810Z\",\"action\":\"Project \\\"Water Access Initiative\\\" status updated to ongoing\",\"user\":\"field_officer\"},{\"timestamp\":\"2026-06-11T04:44:04.810Z\",\"action\":\"General settings were modified\",\"user\":\"system\"},{\"timestamp\":\"2026-06-11T05:44:04.810Z\",\"action\":\"Notification preferences updated\",\"user\":\"admin\"}]",
+                "updated_by": 51,
+                "created_at": "2026-06-11 08:44:04",
+                "updated_at": "2026-06-11 08:44:04"
+            },
+            {
+                "id": 10,
+                "storage_key": "annualPlanDrafts",
+                "payload": "{\"2026\":{\"id\":\"2026\",\"year\":2026,\"department\":\"\",\"station\":\"\",\"staffName\":\"System Administrator\",\"status\":\"draft\",\"activities\":[{\"month\":\"January\",\"activities\":\"\",\"equipment\":\"\",\"participants\":\"\",\"budget\":0},{\"month\":\"February\",\"activities\":\"\",\"equipment\":\"\",\"participants\":\"\",\"budget\":0},{\"month\":\"March\",\"activities\":\"\",\"equipment\":\"\",\"participants\":\"\",\"budget\":0},{\"month\":\"April\",\"activities\":\"\",\"equipment\":\"\",\"participants\":\"\",\"budget\":0},{\"month\":\"May\",\"activities\":\"\",\"equipment\":\"\",\"participants\":\"\",\"budget\":0},{\"month\":\"June\",\"activities\":\"\",\"equipment\":\"\",\"participants\":\"\",\"budget\":0},{\"month\":\"July\",\"activities\":\"\",\"equipment\":\"\",\"participants\":\"\",\"budget\":0},{\"month\":\"August\",\"activities\":\"\",\"equipment\":\"\",\"participants\":\"\",\"budget\":0},{\"month\":\"September\",\"activities\":\"\",\"equipment\":\"\",\"participants\":\"\",\"budget\":0},{\"month\":\"October\",\"activities\":\"\",\"equipment\":\"\",\"participants\":\"\",\"budget\":0},{\"month\":\"November\",\"activities\":\"\",\"equipment\":\"\",\"participants\":\"\",\"budget\":0},{\"month\":\"December\",\"activities\":\"\",\"equipment\":\"\",\"participants\":\"\",\"budget\":0}],\"totalBudget\":0,\"approval_status\":\"draft\",\"saved_at\":\"2026-06-11T08:35:16.395Z\"}}",
+                "updated_by": 56,
+                "created_at": "2026-06-11 09:49:57",
+                "updated_at": "2026-06-11 11:35:16"
+            }
+        ]
+    }
+}

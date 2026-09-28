@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Variance Analysis | RDO|MMS</title>
+<meta name="description" content="Compare budget allocations against actual spending in RDO|MMS.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+<link rel="stylesheet" href="../assets/css/rdomms-icons-offline.css">
+<link rel="stylesheet" href="../assets/css/rdomms-session-countdown.css?v=4">
+<link rel="stylesheet" href="../assets/css/project-nav.css?v=4">
+<link rel="stylesheet" href="../assets/css/planning-pages.css">
+<link rel="stylesheet" href="../assets/css/variance-analysis-workspace.css?v=5">
+<link rel="stylesheet" href="../assets/css/rdomms-toast.css">
+<link rel="stylesheet" href="../assets/css/rdomms-currency.css">
+<script src="../assets/js/rdomms-security.js"></script>
+<script src="../assets/js/localStorage-service.js"></script>
+<script src="../assets/js/number-format.js"></script>
+<script src="../assets/js/rdomms-departments.js"></script>
+<script src="../assets/js/rdomms-organizations.js"></script>
+<script src="../assets/js/rdomms-dates.js"></script>
+<script src="../assets/vendor/chart.umd.min.js"></script>
+<script src="../assets/vendor/html2pdf.bundle.min.js"></script>
+<script src="../assets/vendor/sheetjs/xlsx.full.min.js"></script>
+<script src="../assets/js/rdomms-export.js"></script>
+</head>
+<body class="planning-page va-variance">
+
+<nav id="rdomms-reports-nav" data-active="variance-analysis"></nav>
+
+<div class="page-shell">
+  <div class="layout-grid">
+    <section class="panel">
+      <div class="panel-header">
+        <h2 class="panel-title"><i class="fas fa-chart-line"></i> Variance Analysis</h2>
+        <p class="panel-subtitle">Compare approved budgets against committed spending. Filter by period, department, station, and analysis view — same workflow as All Plans.</p>
+      </div>
+
+      <div class="section-body">
+        <div class="summary-grid" aria-live="polite">
+          <div class="summary-card">
+            <div class="k">Total budget</div>
+            <div class="v stat-value-wrap"><div class="stat-value" id="statBudget">TSH 0</div></div>
+            <div class="s" id="statBudgetHint">Approved allocations</div>
+          </div>
+          <div class="summary-card">
+            <div class="k">Actual spent</div>
+            <div class="v stat-value-wrap"><div class="stat-value" id="statActual">TSH 0</div></div>
+            <div class="s" id="statActualHint">Committed expenses</div>
+          </div>
+          <div class="summary-card">
+            <div class="k">Net variance</div>
+            <div class="v stat-value-wrap"><div class="stat-value" id="statVariance">TSH 0</div></div>
+            <div class="s">Budget minus actual</div>
+          </div>
+          <div class="summary-card">
+            <div class="k">Utilization</div>
+            <div class="v stat-value-wrap"><div class="stat-value" id="statUtil">0%</div></div>
+            <div class="s">Actual % of budget</div>
+          </div>
+        </div>
+
+        <div class="va-note" role="note">
+          <i class="fas fa-circle-info" aria-hidden="true"></i>
+          <div>
+            <strong>Quick guide</strong>
+            <p>Choose a period preset or set dates, pick scope filters, then click <strong>Apply filters</strong>. Switch tabs for Department, Project, Planning, or Targets. Search narrows the table only.</p>
+          </div>
+        </div>
+
+        <div class="va-presets" id="datePresets" aria-label="Quick period presets">
+          <button type="button" class="preset-btn is-active" data-preset="this-year">This year</button>
+          <button type="button" class="preset-btn" data-preset="this-month">This month</button>
+          <button type="button" class="preset-btn" data-preset="last-month">Last month</button>
+          <button type="button" class="preset-btn" data-preset="ytd">Year to date</button>
+        </div>
+
+        <div class="toolbar">
+          <div class="filters-inline">
+            <input id="filterSearch" type="search" placeholder="Search department, project, target…">
+            <select id="filterDept" data-rdomms-department data-empty-label="All departments" aria-label="Filter by department"></select>
+            <select id="filterStation" data-rdomms-organization data-empty-label="All stations" aria-label="Filter by station"></select>
+            <select id="filterQuarter" aria-label="Filter by quarter">
+              <option value="">All quarters</option>
+              <option value="q1">Q1</option>
+              <option value="q2">Q2</option>
+              <option value="q3">Q3</option>
+              <option value="q4">Q4</option>
+            </select>
+            <select id="filterYear" aria-label="Filter by fiscal year"></select>
+            <input type="date" id="startDate" aria-label="Start date">
+            <input type="date" id="endDate" aria-label="End date">
+          </div>
+          <div class="btn-row">
+            <button type="button" class="action-btn ghost" id="btnReset"><i class="fas fa-rotate-left"></i> Reset</button>
+            <button type="button" class="action-btn primary" id="btnApply"><i class="fas fa-check"></i> Apply filters</button>
+            <button type="button" class="action-btn secondary" id="btnRefresh" title="Reload live data"><i class="fas fa-sync-alt"></i> Refresh</button>
+            <select id="exportFormat" class="export-format-select" title="Export format" aria-label="Export format">
+              <option value="pdf" selected>PDF</option>
+              <option value="word">Word</option>
+              <option value="excel">Excel</option>
+            </select>
+            <button type="button" class="action-btn secondary" id="btnExport"><i class="fas fa-file-export"></i> Export</button>
+          </div>
+        </div>
+
+        <div class="active-filters" id="activeFiltersPreview" aria-live="polite">
+          Set period and filters, then click <strong>Apply filters</strong> to refresh variance data.
+        </div>
+
+        <div class="va-module-strip" aria-label="Related modules">
+          <a href="generate-reports.php" class="va-module-chip"><i class="fas fa-file-chart-column"></i> Report Studio</a>
+          <a href="../finance/budget-allocation.php" class="va-module-chip"><i class="fas fa-coins"></i> <span id="countAllocations">0</span> allocations</a>
+          <a href="../finance/expense-tracking.php" class="va-module-chip"><i class="fas fa-receipt"></i> <span id="countExpenses">0</span> expenses</a>
+          <a href="../projects/all-projects.php" class="va-module-chip"><i class="fas fa-folder-tree"></i> <span id="countProjects">0</span> projects</a>
+          <a href="../planning/targets-indicators.php" class="va-module-chip"><i class="fas fa-bullseye"></i> <span id="countTargets">0</span> targets</a>
+        </div>
+
+        <div class="view-tabs" role="tablist" aria-label="Variance views">
+          <button type="button" class="tab-btn active" data-view="department" role="tab" aria-selected="true"><i class="fas fa-building"></i> Department</button>
+          <button type="button" class="tab-btn" data-view="project" role="tab" aria-selected="false"><i class="fas fa-folder-tree"></i> Project</button>
+          <button type="button" class="tab-btn" data-view="planning" role="tab" aria-selected="false"><i class="fas fa-calendar-check"></i> Planning</button>
+          <button type="button" class="tab-btn" data-view="targets" role="tab" aria-selected="false"><i class="fas fa-bullseye"></i> Targets</button>
+        </div>
+
+        <div class="va-charts">
+          <div class="va-chart-panel">
+            <h3 class="va-chart-title"><i class="fas fa-chart-column"></i> Budget vs actual</h3>
+            <div class="va-chart-box"><canvas id="chartCompare"></canvas></div>
+          </div>
+          <div class="va-chart-panel">
+            <h3 class="va-chart-title"><i class="fas fa-chart-line"></i> Monthly spending</h3>
+            <div class="va-chart-box"><canvas id="chartTrend"></canvas></div>
+          </div>
+        </div>
+
+        <h3 class="va-table-title"><i class="fas fa-table"></i> <span id="tableTitle">Department variance</span></h3>
+        <div class="va-table-wrap">
+          <table class="plan-table data-table">
+            <thead id="tableHead"></thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+        <div id="tableEmptyState" class="empty-row">
+          <i class="fas fa-chart-bar"></i>
+          <div>No variance rows match your filters.</div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="va-loading" id="loadingOverlay" aria-hidden="true">
+  <div class="va-loading-card"><i class="fas fa-spinner fa-spin"></i> Loading variance data…</div>
+</div>
+
+<script src="../assets/js/rdomms-toast.js"></script>
+<script src="../assets/js/variance-analysis.js?v=11"></script>
+<script src="../assets/js/rpn-nav-shared.js?v=2"></script>
+<script src="../assets/js/reports-nav.js?v=5"></script>
+</body>
+</html>

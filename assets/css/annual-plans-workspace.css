@@ -1,0 +1,78 @@
+/* Annual plans — extends shared planning workspace (mp-*) */
+
+.planning-page.ap-annual .mp-context {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.ap-year-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ap-year-pill {
+  min-width: 110px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: var(--pl-green-100, #eaf6ed);
+  border: 1px solid rgba(22, 48, 33, 0.1);
+  text-align: center;
+}
+
+.ap-year-pill #yearPillLabel {
+  display: block;
+  font-weight: 800;
+  color: var(--pl-green-800, #21482d);
+  font-size: 0.92rem;
+}
+
+.ap-year-pill #yearPillMeta {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--pl-text-muted, #5f7168);
+  margin-top: 2px;
+}
+
+.ap-month-cell {
+  font-weight: 800;
+  color: var(--pl-green-900, #163120);
+  white-space: nowrap;
+}
+
+.ap-month-cell small {
+  display: block;
+  margin-top: 3px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--pl-text-muted, #5f7168);
+}
+
+.planning-page.ap-annual .mp-table-wrap {
+  max-height: 520px;
+  overflow: auto;
+}
+
+.planning-page.ap-annual .mp-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+@media (max-width: 960px) {
+  .planning-page.ap-annual .mp-context {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .planning-page.ap-annual .mp-context {
+    grid-template-columns: 1fr;
+  }
+
+  .ap-year-nav {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign Up | RDO|MMS Portal</title>
+
+  <!-- Premium Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Local and CDN FontAwesome for offline and online icon support -->
+  <link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+<link rel="stylesheet" href="../assets/css/rdomms-icons-offline.css">
+<link rel="stylesheet" href="../assets/css/rdomms-session-countdown.css?v=2">
+  
+  <!-- System Toast Stylesheet -->
+  <link rel="stylesheet" href="../assets/css/rdomms-toast.css">
+  <link rel="stylesheet" href="../assets/css/auth-background.css?v=2">
+
+  <style>
+    :root {
+      --primary: #22c55e;
+      --primary-hover: #16a34a;
+      --primary-light: rgba(34, 197, 94, 0.15);
+      --accent: #f59e0b;
+      --accent-hover: #d97706;
+      --dark-green: #062f17;
+      --deep-forest: #041f0f;
+      --glass-bg: rgba(4, 31, 15, 0.55);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --glass-border-focus: rgba(34, 197, 94, 0.4);
+      --text-white: #ffffff;
+      --text-muted: #94a3b8;
+      --danger: #ef4444;
+      --shadow-premium: 0 25px 60px rgba(0, 0, 0, 0.45), 0 0 40px rgba(34, 197, 94, 0.06);
+      --ease-premium: cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    /* ICONS - SIZED APPROPRIATELY TO BE VISIBLE INSIDE TEXT FIELDS */
+    .input-wrap img.input-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px !important;
+      height: 18px !important;
+      pointer-events: none;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    
+    .input-wrap i.input-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 18px !important;
+      color: var(--text-muted);
+      pointer-events: none;
+      transition: color 0.2s;
+    }
+    
+    /* Step heading icons */
+    .step-heading img.input-icon {
+      width: 20px !important;
+      height: 20px !important;
+      margin-right: 6px;
+    }
+    
+    .step-heading i {
+      font-size: 20px !important;
+      margin-right: 6px;
+    }
+    
+    /* Button icons */
+    .btn-action i, .btn-action img.input-icon {
+      font-size: 14px !important;
+      width: 14px !important;
+      height: 14px !important;
+    }
+    
+    /* Checklist item icons */
+    .checklist-item i {
+      font-size: 14px !important;
+      width: 16px;
+    }
+    
+    .checklist-item img.input-icon {
+      width: 14px !important;
+      height: 14px !important;
+    }
+    
+    /* Avatar placeholder icon */
+    .avatar-icon-placeholder img {
+      width: 32px !important;
+      height: 32px !important;
+    }
+    
+    /* Alert icon */
+    .signup-alert img.input-icon {
+      width: 16px !important;
+      height: 16px !important;
+    }
+    
+    /* Focus state - highlight icon */
+    .input-wrap input:focus ~ img.input-icon,
+    .input-wrap select:focus ~ img.input-icon,
+    .input-wrap input:focus ~ i.input-icon,
+    .input-wrap select:focus ~ i.input-icon {
+      opacity: 1;
+      filter: brightness(0) invert(1);
+    }
+    
+    /* Hover effect */
+    .input-wrap:hover img.input-icon,
+    .input-wrap:hover i.input-icon {
+      opacity: 0.9;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Outfit', 'Poppins', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      overflow-x: hidden;
+      color: #0f172a;
+      position: relative;
+    }
+
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-6px) rotate(2deg); }
+    }
+
+    @keyframes progressShine {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(200%); }
+    }
+
+    @keyframes stepPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.45); }
+      50% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
+    }
+
+    @keyframes fieldReveal {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes cardFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+
+    .container {
+      width: 100%;
+      max-width: 750px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Green registration form card */
+    .auth-card {
+      background: linear-gradient(155deg, #062f17 0%, #064e3b 45%, #041f0f 100%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 28px;
+      padding: 50px 40px;
+      box-shadow:
+        0 30px 70px rgba(6, 47, 23, 0.28),
+        0 0 0 1px rgba(34, 197, 94, 0.12);
+      animation: cardFadeIn 0.8s var(--ease-premium), cardFloat 6s ease-in-out 1s infinite;
+      position: relative;
+      overflow: hidden;
+      color: var(--text-white);
+    }
+
+    @keyframes cardFadeIn {
+      from { opacity: 0; transform: translateY(30px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .auth-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.04), transparent);
+      transition: left 1.2s var(--ease-premium);
+      pointer-events: none;
+    }
+
+    .auth-card:hover::after {
+      left: 100%;
+    }
+
+    .back-btn-container { margin-bottom: 20px; }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 600;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .back-link:hover {
+      color: var(--text-white);
+      transform: translateX(-3px);
+    }
+
+    /* Brand details */
+    .brand {
+      text-align: center;
+      margin-bottom: 35px;
+    }
+
+    .brand img {
+      width: 76px;
+      height: 76px;
+      border-radius: 18px;
+      object-fit: cover;
+      margin-bottom: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      animation: logoFloat 4s ease-in-out infinite;
+      transition: transform 0.3s var(--ease-premium);
+    }
+
+    .brand img:hover {
+      transform: scale(1.06) rotate(3deg);
+      animation: none;
+    }
+
+    .brand h1 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--text-white);
+      letter-spacing: -0.025em;
+      margin-bottom: 6px;
+    }
+
+    .brand p {
+      color: var(--text-muted);
+      font-size: 0.925rem;
+      font-weight: 500;
+    }
+
+    /* STEP INDICATOR SYSTEM */
+    .progress-section {
+      margin-bottom: 45px;
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      height: 6px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 25px;
+    }
+
+    .progress-fill-bar {
+      height: 100%;
+      width: 25%;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      border-radius: 10px;
+      transition: width 0.55s cubic-bezier(0.34, 1.2, 0.64, 1);
+      box-shadow: 0 0 14px rgba(34, 197, 94, 0.45);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .progress-fill-bar::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+      animation: progressShine 2.2s linear infinite;
+    }
+
+    .steps-indicators {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .steps-indicators::before {
+      content: '';
+      position: absolute;
+      top: 22px;
+      left: 12%;
+      right: 12%;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.08);
+      z-index: 0;
+    }
+
+    .step-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .step-circle {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1.5px solid var(--glass-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 0.95rem;
+      transition: all 0.3s var(--ease-premium);
+      z-index: 2;
+    }
+
+    .step-node.active .step-circle {
+      background: linear-gradient(135deg, var(--primary), #16a34a);
+      color: var(--deep-forest);
+      transform: scale(1.12);
+      border-color: var(--primary);
+      box-shadow: 0 0 20px rgba(34, 197, 94, 0.45);
+      animation: stepPulse 2s ease-in-out infinite;
+    }
+
+    .step-node.completed .step-circle {
+      background: rgba(34, 197, 94, 0.15);
+      border-color: var(--primary);
+      color: transparent;
+      transform: scale(1);
+      position: relative;
+    }
+
+    .step-node.completed .step-circle::before {
+      content: '✓';
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .step-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: color 0.3s;
+    }
+
+    .step-node.active .step-label {
+      color: var(--primary);
+    }
+
+    .step-node.completed .step-label {
+      color: var(--text-white);
+    }
+
+    /* STEP CONTAINER & FORM */
+    .form-step {
+      display: none;
+      animation: slideStep 0.4s var(--ease-premium) forwards;
+    }
+
+    .form-step.active {
+      display: block;
+    }
+
+    @keyframes slideStep {
+      from { opacity: 0; transform: translateX(28px) scale(0.98); }
+      to { opacity: 1; transform: translateX(0) scale(1); }
+    }
+
+    .form-step.active .form-group,
+    .form-step.active .step-heading,
+    .form-step.active .validation-checklist,
+    .form-step.active .avatar-upload-zone,
+    .form-step.active .step-actions {
+      animation: fieldReveal 0.45s var(--ease-premium) both;
+    }
+
+    .form-step.active .form-group:nth-child(1) { animation-delay: 0.05s; }
+    .form-step.active .form-group:nth-child(2) { animation-delay: 0.1s; }
+    .form-step.active .form-group:nth-child(3) { animation-delay: 0.15s; }
+    .form-step.active .form-group:nth-child(4) { animation-delay: 0.2s; }
+
+    .step-heading {
+      text-align: center;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text-white);
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .full-width {
+      grid-column: span 2;
+    }
+
+    .form-group {
+      margin-bottom: 5px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+      letter-spacing: 0.02em;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-wrap input,
+    .input-wrap select {
+      width: 100%;
+      padding: 14px 16px 14px 44px;
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-white);
+      font-size: 0.95rem;
+      outline: none;
+      font-family: inherit;
+      transition: all 0.3s var(--ease-premium);
+    }
+
+    .input-wrap:hover input,
+    .input-wrap:hover select {
+      border-color: rgba(34, 197, 94, 0.25);
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    .input-wrap select option {
+      background-color: var(--dark-green);
+      color: var(--text-white);
+    }
+
+    .input-wrap input::placeholder {
+      color: rgba(255, 255, 255, 0.25);
+    }
+
+    .input-wrap input:focus,
+    .input-wrap select:focus {
+      background: rgba(255, 255, 255, 0.09);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px var(--primary-light);
+    }
+
+    /* INTERACTIVE PASSWORD CHECKLIST */
+    .validation-checklist {
+      grid-column: span 2;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      padding: 15px 20px;
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: color 0.3s;
+    }
+
+    .checklist-item i {
+      font-size: 14px;
+      transition: transform 0.3s var(--ease-premium);
+    }
+
+    .checklist-item.valid {
+      color: var(--primary);
+    }
+
+    .checklist-item.valid i {
+      transform: scale(1.15);
+    }
+
+    /* PROFILE PHOTO DRAG-DROP AREA */
+    .avatar-upload-zone {
+      grid-column: span 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      padding: 25px;
+      border: 2px dashed rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.01);
+      transition: all 0.3s var(--ease-premium);
+      cursor: pointer;
+    }
+
+    .avatar-upload-zone:hover,
+    .avatar-upload-zone.dragover {
+      background: rgba(34, 197, 94, 0.06);
+      border-color: var(--primary);
+      transform: scale(1.01);
+      box-shadow: 0 0 24px rgba(34, 197, 94, 0.15);
+    }
+
+    .photo-preview-circle {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 3px solid var(--glass-border);
+      background: rgba(255, 255, 255, 0.03);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      transition: border-color 0.3s;
+    }
+
+    .avatar-upload-zone:hover .photo-preview-circle {
+      border-color: var(--primary);
+    }
+
+    .photo-preview-circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    .photo-preview-circle .avatar-icon-placeholder {
+      font-size: 2rem;
+      color: rgba(255, 255, 255, 0.2);
+      transition: color 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .avatar-upload-zone:hover .avatar-icon-placeholder {
+      color: var(--primary);
+    }
+
+    .upload-action-text {
+      text-align: center;
+      font-size: 0.8rem;
+    }
+
+    .upload-action-text strong {
+      color: var(--primary);
+      font-size: 0.85rem;
+    }
+
+    .upload-action-text span {
+      display: block;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .upload-file-input {
+      display: none;
+    }
+
+    /* ACTION BUTTONS */
+    .step-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      margin-top: 35px;
+    }
+
+    .btn-action {
+      padding: 12px 24px;
+      border-radius: 14px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.3s var(--ease-premium);
+      font-family: inherit;
+    }
+
+    .btn-action i, .btn-action img {
+      font-size: 14px;
+    }
+
+    .btn-action.btn-next,
+    .btn-action.btn-submit {
+      background: linear-gradient(135deg, var(--primary), #16a34a);
+      color: var(--deep-forest);
+      box-shadow: 0 10px 25px rgba(34, 197, 94, 0.25);
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-action.btn-next::before,
+    .btn-action.btn-submit::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.22) 50%, transparent 60%);
+      transform: translateX(-100%);
+      transition: transform 0.55s var(--ease-premium);
+    }
+
+    .btn-action.btn-next:hover::before,
+    .btn-action.btn-submit:hover::before {
+      transform: translateX(100%);
+    }
+
+    .btn-action.btn-next:hover,
+    .btn-action.btn-submit:hover {
+      transform: translateY(-3px) scale(1.01);
+      box-shadow: 0 15px 30px rgba(34, 197, 94, 0.4);
+    }
+
+    .btn-action.btn-prev {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-white);
+      border: 1px solid var(--glass-border);
+      min-width: 100px;
+    }
+
+    .btn-action.btn-prev:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .btn-action:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    /* FOOTER & LINKS */
+    .bottom-prompt {
+      text-align: center;
+      margin-top: 35px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .bottom-prompt a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 700;
+      margin-left: 5px;
+      transition: color 0.2s;
+      font-size: 0.8rem;
+    }
+
+    .bottom-prompt a:hover {
+      color: var(--accent);
+    }
+
+    /* ALERT SYSTEM (FORM CONTAINER LEVEL) */
+    .signup-alert {
+      display: none;
+      padding: 12px 16px;
+      border-radius: 14px;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #fca5a5;
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-bottom: 25px;
+      align-items: center;
+      gap: 8px;
+      animation: alertShake 0.4s var(--ease-premium);
+    }
+
+    @keyframes alertShake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    /* RESPONSIVE LAYOUT */
+    @media (max-width: 768px) {
+      body {
+        padding: 15px;
+      }
+      .auth-card {
+        padding: 35px 20px;
+      }
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .full-width {
+        grid-column: span 1;
+      }
+      .step-circle {
+        width: 38px;
+        height: 38px;
+        font-size: 0.85rem;
+      }
+      .step-label {
+        font-size: 0.65rem;
+      }
+      .validation-checklist {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body class="auth-page">
+
+<div class="auth-bg" aria-hidden="true">
+  <div class="auth-bg-image"></div>
+  <div class="auth-bg-overlay"></div>
+  <canvas id="authParticlesCanvas" class="auth-bg-canvas"></canvas>
+</div>
+
+<div class="container">
+  <div class="auth-card">
+    <div class="back-btn-container">
+      <a href="signin.php" class="back-link">
+        <i class="fa-solid fa-arrow-left"></i> Back to Sign In
+      </a>
+    </div>
+    <div class="brand">
+      <img src="../assets/photos/RDO.png" alt="RDO Logo">
+      <h1>Register RDO|MMS</h1>
+      <p>Create a secure portal account to manage operations</p>
+    </div>
+
+    <!-- Alert Panel -->
+    <div class="signup-alert" id="signupAlert">
+      <img src="../assets/icons/Signicon/email.png" class="input-icon" alt="Email Icon">
+      <span id="signupAlertText">There are errors in the form</span>
+    </div>
+
+    <!-- PROGRESS AREA -->
+    <div class="progress-section">
+      <div class="progress-bar-container">
+        <div class="progress-fill-bar" id="progressFill"></div>
+      </div>
+      <div class="steps-indicators">
+        <div class="step-node active" data-step="0">
+          <div class="step-circle">1</div>
+          <span class="step-label">Details</span>
+        </div>
+        <div class="step-node" data-step="1">
+          <div class="step-circle">2</div>
+          <span class="step-label">Security</span>
+        </div>
+        <div class="step-node" data-step="2">
+          <div class="step-circle">3</div>
+          <span class="step-label">Organization</span>
+        </div>
+        <div class="step-node" data-step="3">
+          <div class="step-circle">4</div>
+          <span class="step-label">Avatar</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORM STEPS -->
+    <form id="signupForm" novalidate>
+
+      <!-- STEP 1: BASIC INFORMATION -->
+      <div class="form-step active">
+        <h2 class="step-heading">
+          <img src="../assets/icons/Signicon/register.png" class="input-icon" alt="Register Icon"> Basic Information
+        </h2>
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="fullname">Full Name</label>
+            <div class="input-wrap">
+              <img src="../assets/icons/Signicon/name.png" class="input-icon" alt="Name Icon">
+              <input type="text" id="fullname" placeholder="e.g., John Smith" required>
+            </div>
+          </div>
+          <div class="form-group full-width">
+            <label for="email">Email Address</label>
+            <div class="input-wrap">
+              <img src="../assets/icons/Signicon/email.png" class="input-icon" alt="Email Icon">
+              <input type="email" id="email" placeholder="example@rdomms.org" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-actions">
+          <div></div>
+          <button type="button" class="btn-action btn-next">
+            Continue <img src="../assets/icons/Signicon/role.png" class="input-icon" alt="Arrow Right Icon">
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 2: SECURITY SETUP -->
+      <div class="form-step">
+        <h2 class="step-heading">
+          <img src="../assets/icons/Signicon/password.png" class="input-icon" alt="Security Icon"> Security Setup
+        </h2>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-wrap">
+              <img src="../assets/icons/Signicon/password.png" class="input-icon" alt="Password Icon">
+              <input type="password" id="password" minlength="8" placeholder="Create secure password" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="confirm_password">Confirm Password</label>
+            <div class="input-wrap">
+              <img src="../assets/icons/Signicon/password.png" class="input-icon" alt="Password Icon">
+              <input type="password" id="confirm_password" minlength="8" placeholder="Repeat secure password" required>
+            </div>
+          </div>
+
+          <div class="validation-checklist" id="passwordStatus">
+            <div class="checklist-item" id="req-length">
+              <i class="fa-solid fa-circle-xmark"></i> 8 or more characters
+            </div>
+            <div class="checklist-item" id="req-match">
+              <i class="fa-solid fa-circle-xmark"></i> Passwords match
+            </div>
+          </div>
+        </div>
+
+        <div class="step-actions">
+          <button type="button" class="btn-action btn-prev">
+            <i class="fa-solid fa-arrow-left"></i> Back
+          </button>
+          <button type="button" class="btn-action btn-next">
+            Continue <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 3: ORGANIZATION DETAILS -->
+      <div class="form-step">
+        <h2 class="step-heading">
+          <img src="../assets/icons/Signicon/role.png" class="input-icon" alt="Role Icon"> Role & Department
+        </h2>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="role">System Role</label>
+            <div class="input-wrap">
+              <img src="../assets/icons/Signicon/role.png" class="input-icon" alt="Role Icon">
+              <select class="control" id="role" name="role" required="">
+                <option value="">Select Role</option>
+                <option value="head_of_department">Head of Department</option>
+                <option value="head_of_organization_center">Head of the Center</option>
+                <option value="human_resource_manager">Human Resource Manager</option>
+                <option value="accountant">Accountant</option>
+                <option value="field_officer">Field Officer</option>
+                <option value="staff">Staff</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="department">Department</label>
+            <div class="input-wrap">
+              <img src="../assets/icons/Signicon/dapartment.png" class="input-icon" alt="Department Icon">
+              <select class="control" id="department" name="department" data-rdomms-department data-empty-label="Select Department" required=""></select>
+            </div>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="organization">Organization Center</label>
+            <div class="input-wrap">
+              <img src="../assets/icons/Signicon/organizationselect.png" class="input-icon" alt="Organization Icon">
+              <select class="control" id="organization" name="organization" required="">
+                <option value="">Select organization</option>
+                <option value="rdo_mafinga">RDO Mafinga</option>
+                <option value="rdo_mdabulo">RDO Mdabulo</option>
+                <option value="rdo_ibwanzi">RDO Ibwanzi</option>
+                <option value="rdo_kilolo">RDO Kilolo</option>
+                <option value="rdo_malangali">RDO Malangali</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-actions">
+          <button type="button" class="btn-action btn-prev">
+            <i class="fa-solid fa-arrow-left"></i> Back
+          </button>
+          <button type="button" class="btn-action btn-next">
+            Continue <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 4: PROFILE PHOTO SETUP -->
+      <div class="form-step">
+        <h2 class="step-heading">
+          <img src="../assets/icons/Signicon/profile.png" class="input-icon" alt="Profile Icon"> Profile Picture Setup
+        </h2>
+        
+        <div class="avatar-upload-zone" id="dropzone">
+          <div class="photo-preview-circle">
+            <img id="imagePreview" alt="Profile Preview">
+            <div class="avatar-icon-placeholder" id="placeholderText">
+              <img src="../assets/icons/Signicon/profile.png" style="width:32px;height:32px;" alt="Camera Icon">
+            </div>
+          </div>
+          <div class="upload-action-text">
+            <strong>Click here or drag a photo to upload</strong>
+            <span>Supports JPG, PNG, or GIF format</span>
+          </div>
+          <input type="file" class="upload-file-input" id="profile_image" accept="image/*">
+        </div>
+
+        <p style="font-size:0.85rem;color:#64748b;margin:0 0 0.75rem;line-height:1.5;">
+          After registration, your account stays <strong>pending</strong> until an administrator approves it. You will be able to sign in once approved.
+        </p>
+
+        <div class="step-actions">
+          <button type="button" class="btn-action btn-prev">
+            <i class="fa-solid fa-arrow-left"></i> Back
+          </button>
+          <button type="submit" class="btn-action btn-submit" id="submitBtn">
+            Complete Registration <i class="fa-solid fa-check-double"></i>
+          </button>
+        </div>
+      </div>
+
+    </form>
+
+    <div class="bottom-prompt">
+      Already have an account?
+      <a href="signin.php">Sign In Here</a>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script src="../assets/js/rdomms-system-settings.js"></script>
+<script src="../assets/js/rdomms-security.js"></script>
+<script src="../assets/js/localStorage-service.js"></script>
+<script src="../assets/js/rdomms-departments.js"></script>
+<script src="../assets/js/rdomms-toast.js"></script>
+<script>
+  function showToast(message, type = 'info') {
+    if (window.RDOMMSToast) {
+      RDOMMSToast.show(message, type, { title: type === 'success' ? 'Registration' : 'Alert', duration: 4000 });
+    } else {
+      const alertBox = document.getElementById("signupAlert");
+      const alertText = document.getElementById("signupAlertText");
+      if (alertBox && alertText) {
+        alertBox.style.display = "flex";
+        alertBox.style.background = type === 'success' ? 'rgba(34, 197, 94, 0.12)' : 'rgba(239, 68, 68, 0.12)';
+        alertBox.style.borderColor = type === 'success' ? 'rgba(34, 197, 94, 0.3)' : 'rgba(239, 68, 68, 0.3)';
+        alertBox.style.color = type === 'success' ? '#a7f3d0' : '#fca5a5';
+        alertText.textContent = message;
+        setTimeout(() => { alertBox.style.display = "none"; }, 5000);
+      } else { alert(message); }
+    }
+  }
+
+  const steps = document.querySelectorAll(".form-step");
+  const stepNodes = document.querySelectorAll(".step-node");
+  const nextBtns = document.querySelectorAll(".btn-next");
+  const prevBtns = document.querySelectorAll(".btn-prev");
+  const progressFill = document.getElementById("progressFill");
+  let currentStep = 0;
+
+  function updateMultiStep(direction = 'forward') {
+    steps.forEach((step, idx) => {
+      const isActive = idx === currentStep;
+      step.classList.toggle("active", isActive);
+      if (isActive) {
+        step.style.animation = 'none';
+        void step.offsetWidth;
+        step.style.animation = '';
+      }
+    });
+    stepNodes.forEach((node, idx) => {
+      node.classList.toggle("active", idx === currentStep);
+      node.classList.toggle("completed", idx < currentStep);
+    });
+    progressFill.style.width = ((currentStep + 1) / steps.length) * 100 + "%";
+  }
+
+  nextBtns.forEach(btn => btn.addEventListener("click", () => {
+    const inputs = steps[currentStep].querySelectorAll("input, select");
+    let isValid = true;
+    inputs.forEach(input => { if (!input.checkValidity()) { input.reportValidity(); isValid = false; } });
+    if (currentStep === 1 && !validatePasswords()) { isValid = false; showToast("Passwords must match and be at least 8 characters", "error"); }
+    if (isValid && currentStep < steps.length - 1) { currentStep++; updateMultiStep('forward'); }
+  }));
+
+  prevBtns.forEach(btn => btn.addEventListener("click", () => { if (currentStep > 0) { currentStep--; updateMultiStep('back'); } }));
+
+  stepNodes.forEach((node, idx) => node.addEventListener("click", () => {
+    if (idx < currentStep) { currentStep = idx; updateMultiStep('back'); }
+    else if (idx > currentStep) {
+      let allPrevValid = true;
+      for (let s = currentStep; s < idx; s++) {
+        const inputs = steps[s].querySelectorAll("input, select");
+        inputs.forEach(i => { if (!i.checkValidity()) { i.reportValidity(); allPrevValid = false; } });
+        if (s === 1 && !validatePasswords()) allPrevValid = false;
+      }
+      if (allPrevValid) { currentStep = idx; updateMultiStep('forward'); }
+      else showToast("Complete required fields before jumping ahead", "error");
+    }
+  }));
+
+  const dropzone = document.getElementById("dropzone");
+  const fileInput = document.getElementById("profile_image");
+  const imagePreview = document.getElementById("imagePreview");
+  const placeholderText = document.getElementById("placeholderText");
+  let base64Avatar = "";
+
+  dropzone.addEventListener("click", () => fileInput.click());
+  dropzone.addEventListener("dragover", (e) => { e.preventDefault(); dropzone.classList.add("dragover"); });
+  ["dragleave", "drop"].forEach(ev => dropzone.addEventListener(ev, () => dropzone.classList.remove("dragover")));
+  dropzone.addEventListener("drop", (e) => { e.preventDefault(); if (e.dataTransfer.files.length) { fileInput.files = e.dataTransfer.files; handleAvatarPreview(e.dataTransfer.files[0]); } });
+  fileInput.addEventListener("change", (e) => { if (e.target.files.length) handleAvatarPreview(e.target.files[0]); });
+
+  function handleAvatarPreview(file) {
+    if (file && file.type.startsWith("image/")) {
+      const reader = new FileReader();
+      reader.onload = (ev) => { imagePreview.src = ev.target.result; imagePreview.style.display = "block"; placeholderText.style.display = "none"; base64Avatar = ev.target.result; };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  const passwordInput = document.getElementById("password");
+  const confirmInput = document.getElementById("confirm_password");
+  const reqLength = document.getElementById("req-length");
+  const reqMatch = document.getElementById("req-match");
+
+  function validatePasswords() {
+    const p = passwordInput.value, c = confirmInput.value;
+    let lenValid = p.length >= 8, matchValid = lenValid && p === c && p !== "";
+    if (lenValid) { reqLength.classList.add("valid"); reqLength.innerHTML = '<i class="fa-solid fa-circle-check"></i> 8 or more characters'; }
+    else { reqLength.classList.remove("valid"); reqLength.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> 8 or more characters'; }
+    if (matchValid) { reqMatch.classList.add("valid"); reqMatch.innerHTML = '<i class="fa-solid fa-circle-check"></i> Passwords match'; }
+    else { reqMatch.classList.remove("valid"); reqMatch.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Passwords match'; }
+    return lenValid && matchValid;
+  }
+  passwordInput.addEventListener("input", validatePasswords);
+  confirmInput.addEventListener("input", validatePasswords);
+
+  const form = document.getElementById("signupForm");
+  const submitBtn = document.getElementById("submitBtn");
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (!validatePasswords()) { showToast("Passwords must match and be at least 8 characters", "error"); return; }
+    submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Registering...`;
+    submitBtn.disabled = true;
+    const fullname = document.getElementById("fullname").value.trim();
+    const email = document.getElementById("email").value.trim().toLowerCase();
+    const roleValue = document.getElementById("role").value;
+    const departmentValue = document.getElementById("department").value;
+    const organizationValue = document.getElementById("organization").value;
+    fetch('../api/auth/signup.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        fullname,
+        email,
+        password: passwordInput.value,
+        role: roleValue,
+        department: departmentValue,
+        organization: organizationValue,
+        profile_picture: base64Avatar || null
+      })
+    })
+      .then(async res => {
+        const data = await res.json().catch(() => null);
+        if (!res.ok) {
+          throw new Error(data?.message || `Registration failed (${res.status})`);
+        }
+        return data;
+      })
+      .then(data => {
+        if (data.status === 'success') {
+          const pending = data?.data?.pending_approval;
+          showToast(
+            pending
+              ? 'Registration received. Wait for admin approval before signing in.'
+              : 'Registration completed successfully!',
+            'success'
+          );
+          setTimeout(() => {
+            window.location.href = pending ? 'signin.php?registered=pending' : 'signin.php';
+          }, pending ? 2800 : 1800);
+        } else {
+          throw new Error(data.message || 'Registration failed.');
+        }
+      })
+      .catch((err) => { showToast(err.message || "Registration failed.", "error"); })
+      .finally(() => { setTimeout(() => { submitBtn.innerHTML = `Complete Registration <i class="fa-solid fa-check-double"></i>`; submitBtn.disabled = false; }, 2000); });
+  });
+  updateMultiStep();
+
+  if (window.RDOMMSSettings) {
+    RDOMMSSettings.loadPublic().then((settings) => {
+      if (settings.allow_registration === false) {
+        showToast('Public registration is currently disabled by the administrator.', 'error');
+        submitBtn.disabled = true;
+        form.querySelectorAll('input, select, button').forEach((el) => {
+          if (el !== submitBtn) el.disabled = true;
+        });
+      }
+    }).catch(() => {});
+  }
+</script>
+<script src="../assets/js/auth-particles.js?v=2"></script>
+</body>
+</html>

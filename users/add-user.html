@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RDO|MMS – Add User</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+<link rel="stylesheet" href="../assets/css/rdomms-icons-offline.css">
+<link rel="stylesheet" href="../assets/css/rdomms-session-countdown.css?v=2">
+<link rel="stylesheet" href="../assets/css/rdomms-toast.css">
+<script src="../assets/js/rdomms-security.js"></script>
+<script src="../assets/js/localStorage-service.js"></script>
+<script src="../assets/js/rdomms-departments.js"></script>
+<script src="../assets/js/rdomms-toast.js"></script>
+<style>
+:root { --primary:#2d5016; --secondary:#4a7c28; --dark:#1a3009; --danger:#dc3545; --text:#212529; --muted:#6c757d; --border:#dee2e6; --radius:0.75rem; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,sans-serif;background:linear-gradient(180deg,#fbfcf9 0%,#f0f4f1 100%);color:var(--text);min-height:100vh}
+.page{max-width:760px;margin:0 auto;padding:1.25rem 1.25rem 3rem}
+.page-loading{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;background:rgba(15,36,20,.35);color:#fff;font-weight:600;gap:.75rem}
+.page-loading.hidden{display:none}
+.hero{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:1.25rem 1.5rem;background:linear-gradient(135deg,var(--dark),var(--primary));color:#fff;border-radius:1rem;margin-bottom:1rem}
+.hero h1{font-size:1.55rem}.hero p{opacity:.92;margin-top:.35rem;max-width:520px;line-height:1.5}
+.header-actions{display:flex;gap:.5rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.55rem .9rem;border-radius:var(--radius);border:none;font:inherit;font-weight:600;cursor:pointer;text-decoration:none}
+.btn-outline{background:#fff;color:var(--primary)} .btn-light{background:#fff;border:1px solid var(--border);color:var(--primary)} .btn-primary{background:var(--secondary);color:#fff}
+.panel{background:#fff;border:1px solid var(--border);border-radius:1rem;padding:1.25rem;box-shadow:0 4px 12px rgba(0,0,0,.05)}
+.stepper{display:flex;gap:.35rem;margin-bottom:1rem;flex-wrap:wrap}
+.step-node{flex:1;min-width:110px;text-align:center;padding:.55rem .35rem;border-radius:999px;border:1px solid var(--border);background:#fff;font-size:.72rem;font-weight:600;color:var(--muted)}
+.step-node.active,.step-node.completed{background:var(--primary);border-color:var(--primary);color:#fff}
+.progress-track{height:4px;background:#e9ecef;border-radius:999px;margin-bottom:1.25rem;overflow:hidden}
+.progress-fill{height:100%;width:25%;background:linear-gradient(90deg,var(--secondary),#22c55e);transition:width .25s ease}
+.form-step{display:none}.form-step.active{display:block}
+.step-heading{font-size:1.05rem;color:var(--primary);margin-bottom:1rem;display:flex;align-items:center;gap:.45rem}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:.85rem}
+.form-group{display:flex;flex-direction:column;gap:.35rem}
+.form-group.full-width{grid-column:1/-1}
+.form-group label{font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase}
+.input-wrap{position:relative}
+.input-wrap img.input-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;opacity:.65;pointer-events:none}
+.control,.input-wrap input,.input-wrap select{width:100%;padding:.72rem .75rem .72rem 2.35rem;border:1px solid var(--border);border-radius:var(--radius);font:inherit;background:#fff}
+.control{padding-left:.75rem}
+.input-wrap select.control{padding-left:2.35rem}
+.validation-checklist{margin-top:.35rem;display:grid;gap:.35rem}
+.checklist-item{font-size:.82rem;color:var(--muted);display:flex;align-items:center;gap:.4rem}
+.checklist-item.valid{color:#166534}
+.avatar-upload-zone{border:2px dashed var(--border);border-radius:1rem;padding:1.25rem;text-align:center;cursor:pointer;transition:border-color .2s,background .2s}
+.avatar-upload-zone:hover,.avatar-upload-zone.dragover{border-color:var(--secondary);background:#f8fff8}
+.photo-preview-circle{width:96px;height:96px;border-radius:50%;margin:0 auto .75rem;background:#f3f4f6;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.photo-preview-circle img{width:100%;height:100%;object-fit:cover;display:none}
+.upload-action-text strong{display:block;margin-bottom:.2rem}
+.upload-action-text span{font-size:.82rem;color:var(--muted)}
+.upload-file-input{display:none}
+.step-actions{display:flex;justify-content:space-between;gap:.75rem;margin-top:1.25rem;flex-wrap:wrap}
+.admin-note{font-size:.78rem;color:var(--muted);margin-top:.35rem}
+@media(max-width:640px){.form-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="pageLoading" class="page-loading hidden"><i class="fas fa-spinner fa-spin"></i> Saving user…</div>
+<div class="page">
+  <div class="hero">
+    <div>
+      <h1><i class="fas fa-user-plus"></i> Add User</h1>
+      <p>Register a new staff account with the same details collected during public signup.</p>
+    </div>
+    <div class="header-actions">
+      <a href="../RDOMMS.html" class="btn btn-outline"><i class="fas fa-house"></i> Dashboard</a>
+      <a href="all-users.php" class="btn btn-light"><i class="fas fa-users"></i> All Users</a>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="stepper">
+      <div class="step-node active" data-step="0">1. Basic Info</div>
+      <div class="step-node" data-step="1">2. Security</div>
+      <div class="step-node" data-step="2">3. Role & Org</div>
+      <div class="step-node" data-step="3">4. Profile</div>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+
+    <form id="addUserForm" novalidate>
+      <div class="form-step active">
+        <h2 class="step-heading"><img src="../assets/icons/Signicon/register.png" alt="" width="18" height="18"> Basic Information</h2>
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="fullname">Full Name</label>
+            <div class="input-wrap">
+              <img src="../assets/icons/Signicon/name.png" class="input-icon" alt="">
+              <input type="text" id="fullname" placeholder="e.g., John Smith" autocomplete="name" required>
+            </div>
+          </div>
+          <div class="form-group full-width">
+            <label for="email">Email Address</label>
+            <div class="input-wrap">
+              <img src="../assets/icons/Signicon/email.png" class="input-icon" alt="">
+              <input type="email" id="email" placeholder="example@rdomms.org" autocomplete="email" required>
+            </div>
+          </div>
+        </div>
+        <div class="step-actions"><div></div><button type="button" class="btn btn-primary btn-next">Continue <i class="fas fa-arrow-right"></i></button></div>
+      </div>
+
+      <div class="form-step">
+        <h2 class="step-heading"><img src="../assets/icons/Signicon/password.png" alt="" width="18" height="18"> Security Setup</h2>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-wrap">
+              <img src="../assets/icons/Signicon/password.png" class="input-icon" alt="">
+              <input type="password" id="password" minlength="8" placeholder="Create secure password" autocomplete="new-password" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="confirm_password">Confirm Password</label>
+            <div class="input-wrap">
+              <img src="../assets/icons/Signicon/password.png" class="input-icon" alt="">
+              <input type="password" id="confirm_password" minlength="8" placeholder="Repeat secure password" autocomplete="new-password" required>
+            </div>
+          </div>
+          <div class="form-group full-width validation-checklist">
+            <div class="checklist-item" id="req-length"><i class="fas fa-circle-xmark"></i> 8 or more characters</div>
+            <div class="checklist-item" id="req-upper"><i class="fas fa-circle-xmark"></i> At least one uppercase letter</div>
+            <div class="checklist-item" id="req-number"><i class="fas fa-circle-xmark"></i> At least one number</div>
+            <div class="checklist-item" id="req-match"><i class="fas fa-circle-xmark"></i> Passwords match</div>
+          </div>
+        </div>
+        <div class="step-actions"><button type="button" class="btn btn-light btn-prev"><i class="fas fa-arrow-left"></i> Back</button><button type="button" class="btn btn-primary btn-next">Continue <i class="fas fa-arrow-right"></i></button></div>
+      </div>
+
+      <div class="form-step">
+        <h2 class="step-heading"><img src="../assets/icons/Signicon/role.png" alt="" width="18" height="18"> Role & Department</h2>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="role">System Role</label>
+            <div class="input-wrap">
+              <img src="../assets/icons/Signicon/role.png" class="input-icon" alt="">
+              <select class="control" id="role" required>
+                <option value="">Select Role</option>
+                <option value="admin">Admin</option>
+                <option value="head_of_department">Head of Department</option>
+                <option value="head_of_organization_center">Head of the Center</option>
+                <option value="human_resource_manager">Human Resource Manager</option>
+                <option value="accountant">Accountant</option>
+                <option value="field_officer">Field Officer</option>
+                <option value="staff">Staff</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="department">Department</label>
+            <div class="input-wrap">
+              <img src="../assets/icons/Signicon/dapartment.png" class="input-icon" alt="">
+              <select class="control" id="department" data-rdomms-department data-empty-label="Select Department" required></select>
+            </div>
+          </div>
+          <div class="form-group full-width">
+            <label for="organization">Organization Center</label>
+            <div class="input-wrap">
+              <img src="../assets/icons/Signicon/organizationselect.png" class="input-icon" alt="">
+              <select class="control" id="organization" required>
+                <option value="">Select organization</option>
+                <option value="rdo_mafinga">RDO Mafinga</option>
+                <option value="rdo_mdabulo">RDO Mdabulo</option>
+                <option value="rdo_ibwanzi">RDO Ibwanzi</option>
+                <option value="rdo_kilolo">RDO Kilolo</option>
+                <option value="rdo_malangali">RDO Malangali</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group full-width">
+            <label for="status">Account Status</label>
+            <select class="control" id="status">
+              <option value="active" selected>Active — can sign in immediately</option>
+              <option value="pending">Pending — awaiting approval</option>
+              <option value="suspended">Suspended</option>
+            </select>
+            <p class="admin-note">Public self-registration always creates a <strong>Pending</strong> account until an administrator approves it.</p>
+          </div>
+        </div>
+        <div class="step-actions"><button type="button" class="btn btn-light btn-prev"><i class="fas fa-arrow-left"></i> Back</button><button type="button" class="btn btn-primary btn-next">Continue <i class="fas fa-arrow-right"></i></button></div>
+      </div>
+
+      <div class="form-step">
+        <h2 class="step-heading"><img src="../assets/icons/Signicon/profile.png" alt="" width="18" height="18"> Profile Picture</h2>
+        <div class="avatar-upload-zone" id="dropzone">
+          <div class="photo-preview-circle">
+            <img id="imagePreview" alt="Profile preview">
+            <img src="../assets/icons/Signicon/profile.png" id="placeholderIcon" alt="" width="32" height="32">
+          </div>
+          <div class="upload-action-text">
+            <strong>Click here or drag a photo to upload</strong>
+            <span>Supports JPG, PNG, or GIF format (optional)</span>
+          </div>
+          <input type="file" class="upload-file-input" id="profile_image" accept="image/*">
+        </div>
+        <div class="step-actions">
+          <button type="button" class="btn btn-light btn-prev"><i class="fas fa-arrow-left"></i> Back</button>
+          <button type="submit" class="btn btn-primary" id="submitBtn"><i class="fas fa-user-plus"></i> Create User</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<script src="../assets/js/add-user.js?v=2"></script>
+</body>
+</html>

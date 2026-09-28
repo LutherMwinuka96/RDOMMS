@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../assets/css/rdomms-kpi.css?v=1">
+<link rel="stylesheet" href="../assets/css/rdomms-responsive.css">
+<title>RDO|MMS - Beneficiary History</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+<link rel="stylesheet" href="../assets/css/rdomms-icons-offline.css">
+<link rel="stylesheet" href="../assets/css/rdomms-session-countdown.css?v=2">
+<style>:root{--primary-green:#2d5016;--secondary-green:#4a7c28;--accent-green:#6dbd6d;--dark-green:#1a3009;--text-primary:#212529;--text-secondary:#6c757d;--border-gray:#dee2e6;--bg-secondary:#f8f9fa;--shadow-sm:0 2px 4px rgba(0,0,0,0.08);--shadow-md:0 4px 8px rgba(0,0,0,0.12);--radius-lg:1rem;--font-family:'Inter',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-family),sans-serif;background:linear-gradient(135deg,#2d5016 0%,#4a7c28 100%);color:var(--text-primary);min-height:100vh}
+.topbar{background:linear-gradient(135deg,var(--dark-green)0%,var(--primary-green)100%);padding:1rem 1.5rem;display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;box-shadow:var(--shadow-md)}
+.brand{color:#fff;font-size:1.125rem;font-weight:700}.brand span{color:var(--accent-green)}
+.sep{color:var(--accent-green);font-size:.6875rem}.crumb{color:rgba(255,255,255,.8);font-size:.8125rem}.crumb.active{color:#fff;font-weight:600}
+.topbar-back{color:rgba(255,255,255,.8);text-decoration:none;font-size:.8125rem;display:flex;align-items:center;gap:.375rem;margin-left:auto}.topbar-back:hover{color:#fff}
+.page{max-width:1280px;margin:0 auto;padding:2rem 1.5rem}
+.page-header{margin-bottom:1.5rem}.page-header h1{font-size:1.75rem;font-weight:700;color:#fff}.page-header p{color:rgba(255,255,255,.9);font-size:.9375rem;margin-top:.25rem}
+.content-card{background:rgba(255,255,255,.95);border:1.5px solid var(--border-gray);border-radius:var(--radius-lg);padding:2rem;box-shadow:var(--shadow-sm)}
+.icon-wrap{width:3.5rem;height:3.5rem;border-radius:.75rem;background:var(--bg-secondary);display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:var(--primary-green);margin-bottom:1rem}
+.content-card h2{font-size:1.25rem;margin-bottom:.5rem;color:var(--primary-green)}
+.content-card p{color:var(--text-secondary);font-size:.9375rem;line-height:1.6;margin-bottom:1.5rem}
+.placeholder-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem}
+.placeholder-item{background:var(--bg-secondary);border:1px dashed var(--border-gray);border-radius:.5rem;padding:1.25rem;text-align:center;font-size:.8125rem;color:var(--text-secondary)}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.625rem 1rem;border-radius:.5rem;font-size:.875rem;font-weight:600;text-decoration:none;background:linear-gradient(135deg,var(--primary-green),var(--secondary-green));color:#fff}</style>
+</head>
+<body>
+<div class="topbar">
+  <span class="brand">RDO|MMS</span>
+  <i class="fas fa-chevron-right sep"></i>
+  <span class="crumb">Beneficiaries</span>
+  <i class="fas fa-chevron-right sep"></i>
+  <span class="crumb active">Beneficiary History</span>
+  <a href="../RDOMMS.html" class="topbar-back"><i class="fas fa-arrow-left"></i> Dashboard</a>
+</div>
+<div class="page">
+  <div class="page-header">
+    <h1>Beneficiary History</h1>
+    <p>View historical records of beneficiary interactions and program participation.</p>
+  </div>
+  <div class="content-card">
+    <div class="icon-wrap"><i class="fas fa-history"></i></div>
+    <h2>Beneficiary History</h2>
+    <p>View historical records of beneficiary interactions and program participation. This module is ready for full implementation.</p>
+    <div class="placeholder-grid">
+      <div class="placeholder-item"><i class="fas fa-table"></i><br>Data Table</div>
+      <div class="placeholder-item"><i class="fas fa-filter"></i><br>Filters</div>
+      <div class="placeholder-item"><i class="fas fa-chart-bar"></i><br>Analytics</div>
+      <div class="placeholder-item"><i class="fas fa-download"></i><br>Export</div>
+    </div>
+    <p style="margin-top:1.5rem;margin-bottom:0"><a href="../RDOMMS.html" class="btn"><i class="fas fa-arrow-left"></i> Back to Dashboard</a></p>
+  </div>
+</div>
+<script src="../assets/js/rdomms-security.js"></script>
+<script src="../assets/js/localStorage-service.js"></script>
+</body>
+</html>

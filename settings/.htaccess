@@ -1,0 +1,5 @@
+# Redirect legacy Settings HTML pages to PHP entry points
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule ^(general-settings|organization-profile|notification-settings|data-backup|system-logs|email-smtp)\.html$ $1.php [R=301,L,QSA]
+</IfModule>

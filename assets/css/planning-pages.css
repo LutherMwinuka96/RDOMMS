@@ -1,0 +1,390 @@
+@import url('rdomms-cards.css');
+
+/**
+ * Shared visual layer for RDO|MMS Planning module pages.
+ * Keeps existing markup; unifies look across monthly / quarterly / annual / etc.
+ */
+.planning-page,
+html.has-planning-nav body {
+  --pl-green-950: #0f2414;
+  --pl-green-900: #163120;
+  --pl-green-800: #21482d;
+  --pl-green-700: #2d5a38;
+  --pl-green-600: #3d7a4d;
+  --pl-green-500: #58a46a;
+  --pl-green-100: #eaf6ed;
+  --pl-sand-100: #f4f0e6;
+  --pl-text: #16201a;
+  --pl-text-muted: #5f7168;
+  --pl-line: rgba(22, 48, 33, 0.1);
+  --pl-surface: #ffffff;
+  --pl-radius-xl: 24px;
+  --pl-radius-lg: 18px;
+  --pl-radius-md: 14px;
+  --pl-shadow-lg: 0 22px 48px rgba(13, 39, 23, 0.14);
+  --pl-shadow-md: 0 12px 28px rgba(13, 39, 23, 0.1);
+  --pl-shadow-sm: 0 6px 18px rgba(13, 39, 23, 0.07);
+  --pl-font: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-family: var(--pl-font);
+  color: var(--pl-text);
+  background:
+    radial-gradient(circle at 8% 0%, rgba(88, 164, 106, 0.16), transparent 32%),
+    radial-gradient(circle at 92% 8%, rgba(231, 221, 201, 0.55), transparent 28%),
+    linear-gradient(165deg, #f8fbf9 0%, #eef4f0 100%) !important;
+}
+
+.planning-page::before,
+html.has-planning-nav body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    linear-gradient(125deg, rgba(255, 255, 255, 0.35), transparent 38%),
+    radial-gradient(circle at 20% 15%, rgba(88, 164, 106, 0.06), transparent 30%);
+}
+
+.planning-page .page-shell,
+.planning-page .app-container,
+.planning-page .main-content,
+.planning-page .page,
+.planning-page .container {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Hero / page headers ── */
+.planning-page .hero,
+.planning-page .header:not(.header-content) {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--pl-radius-xl) !important;
+  background: linear-gradient(135deg, var(--pl-green-950) 0%, var(--pl-green-700) 58%, #3d7a4d 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: var(--pl-shadow-lg) !important;
+  color: #fff !important;
+}
+
+.planning-page .hero::after,
+.planning-page .header:not(.header-content)::after {
+  content: '';
+  position: absolute;
+  top: -40%;
+  right: -10%;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.14), transparent 68%);
+  pointer-events: none;
+}
+
+.planning-page .hero h1,
+.planning-page .header h1 {
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.planning-page .hero p,
+.planning-page .header p {
+  color: rgba(255, 255, 255, 0.86) !important;
+  line-height: 1.65;
+  max-width: 58ch;
+}
+
+.planning-page .eyebrow {
+  backdrop-filter: blur(6px);
+}
+
+/* Targets page top header */
+.planning-page .header.header-content,
+.planning-page > .header {
+  position: relative;
+  z-index: 1;
+  max-width: 1400px;
+  margin: 0 auto 1.25rem;
+  padding: 1.5rem 1.75rem !important;
+  top: auto !important;
+  border-radius: var(--pl-radius-xl) !important;
+}
+
+.planning-page .main-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1.25rem 2.5rem;
+}
+
+/* ── Panels & cards ── */
+.planning-page .panel,
+.planning-page .card,
+.planning-page .form-section,
+.planning-page .hero-card,
+.planning-page .preview-card,
+.planning-page .content-card {
+  background: var(--pl-surface) !important;
+  border: 1px solid var(--pl-line) !important;
+  border-radius: var(--pl-radius-lg) !important;
+  box-shadow: var(--pl-shadow-sm) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.planning-page .panel:hover,
+.planning-page .card:hover {
+  box-shadow: var(--pl-shadow-md) !important;
+}
+
+.planning-page .panel-header,
+.planning-page .panel-title,
+.planning-page .card-header {
+  border-bottom: 1px solid var(--pl-line);
+}
+
+.planning-page .panel-title,
+.planning-page .form-section h2 {
+  color: var(--pl-green-900) !important;
+}
+
+/* ── Stat cards ── */
+.planning-page .stats-grid,
+.planning-page .stats {
+  gap: 1rem !important;
+}
+
+.planning-page .stat-card,
+.planning-page .stat {
+  background: var(--pl-surface) !important;
+  border: 1px solid var(--pl-line) !important;
+  border-radius: var(--pl-radius-md) !important;
+  box-shadow: var(--pl-shadow-sm) !important;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.planning-page .stat-card:hover,
+.planning-page .stat:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--pl-shadow-md) !important;
+}
+
+.planning-page .stat-value,
+.planning-page .stat-number {
+  color: var(--pl-green-900) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.02em;
+}
+
+.planning-page .stat-label,
+.planning-page .label {
+  color: var(--pl-text-muted) !important;
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── Buttons ── */
+.planning-page .btn,
+.planning-page .action-btn,
+.planning-page .pill-btn,
+.planning-page .ghost-btn,
+.planning-page .nav-btn,
+.planning-page .back-btn,
+.planning-page .submit-btn {
+  border-radius: 999px !important;
+  font-weight: 600 !important;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease !important;
+}
+
+.planning-page .btn-primary,
+.planning-page .action-btn.primary,
+.planning-page .submit-btn,
+.planning-page .back-btn {
+  background: linear-gradient(135deg, var(--pl-green-800), var(--pl-green-600)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: #fff !important;
+  box-shadow: 0 8px 20px rgba(33, 72, 45, 0.22);
+}
+
+.planning-page .btn-primary:hover,
+.planning-page .action-btn.primary:hover,
+.planning-page .submit-btn:hover,
+.planning-page .back-btn:hover,
+.planning-page .nav-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(33, 72, 45, 0.28);
+}
+
+.planning-page .ghost-btn,
+.planning-page .btn-outline,
+.planning-page .btn-secondary {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  color: #fff !important;
+}
+
+.planning-page .panel .ghost-btn,
+.planning-page .panel .btn-outline,
+.planning-page .main-content .btn-outline {
+  background: var(--pl-green-100) !important;
+  border: 1px solid rgba(33, 72, 45, 0.12) !important;
+  color: var(--pl-green-900) !important;
+}
+
+/* ── Forms ── */
+.planning-page input:not([type='checkbox']):not([type='radio']),
+.planning-page select,
+.planning-page textarea {
+  border: 1px solid var(--pl-line) !important;
+  border-radius: 12px !important;
+  background: #fff !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.planning-page input:focus,
+.planning-page select:focus,
+.planning-page textarea:focus {
+  outline: none !important;
+  border-color: var(--pl-green-500) !important;
+  box-shadow: 0 0 0 3px rgba(88, 164, 106, 0.18) !important;
+}
+
+.planning-page label {
+  color: var(--pl-text-muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+/* ── Tables ── */
+.planning-page table,
+.planning-page .plan-table,
+.planning-page .data-table {
+  border-collapse: separate !important;
+  border-spacing: 0;
+  border-radius: var(--pl-radius-md);
+  overflow: hidden;
+}
+
+.planning-page thead th,
+.planning-page .plan-table thead th {
+  background: linear-gradient(180deg, var(--pl-green-100), #f4faf6) !important;
+  color: var(--pl-green-900) !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--pl-line) !important;
+}
+
+.planning-page tbody tr:hover {
+  background: rgba(234, 246, 237, 0.55) !important;
+}
+
+/* ── Upload evidence layout ── */
+.planning-page .container {
+  max-width: 1200px;
+  margin: 1rem auto 2.5rem !important;
+  padding: 1.5rem !important;
+  border-radius: var(--pl-radius-xl) !important;
+  border: 1px solid var(--pl-line) !important;
+  box-shadow: var(--pl-shadow-md) !important;
+  background: var(--pl-surface) !important;
+}
+
+.planning-page .container > .header {
+  border-bottom: none !important;
+  margin-bottom: 1rem !important;
+  padding: 1.25rem 1.5rem !important;
+  border-radius: var(--pl-radius-lg) !important;
+}
+
+.planning-page .container > .header h1 {
+  color: #fff !important;
+}
+
+.planning-page .upload-area {
+  border: 2px dashed rgba(33, 72, 45, 0.22) !important;
+  border-radius: var(--pl-radius-lg) !important;
+  background: linear-gradient(180deg, #fbfdfb, #f3f8f4) !important;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.planning-page .upload-area:hover,
+.planning-page .upload-area.dragover {
+  border-color: var(--pl-green-500) !important;
+  background: var(--pl-green-100) !important;
+}
+
+/* ── Badges & chips ── */
+.planning-page .badge,
+.planning-page .status-badge,
+.planning-page .mini-chip {
+  border-radius: 999px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em;
+}
+
+/* ── Monthly plans workspace ── */
+.planning-page .app-container {
+  max-width: 1400px;
+  padding: 1.25rem 1.25rem 2.5rem !important;
+}
+
+.planning-page .app-container > .header {
+  margin-bottom: 1.25rem !important;
+}
+
+/* ── Subtle entrance ── */
+@keyframes pl-fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.planning-page .hero,
+.planning-page .header,
+.planning-page .stats-grid,
+.planning-page .stats,
+.planning-page .panel,
+.planning-page .layout-grid,
+.planning-page .container {
+  animation: pl-fade-up 0.45s ease-out both;
+}
+
+@media (max-width: 768px) {
+  .planning-page .page-shell,
+  .planning-page .app-container,
+  .planning-page .main-content,
+  .planning-page .page,
+  .planning-page .container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  .planning-page .hero-inner {
+    grid-template-columns: 1fr !important;
+  }
+
+  .planning-page .stats-grid,
+  .planning-page .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.75rem !important;
+  }
+
+  .planning-page .stat-card,
+  .planning-page .stat {
+    padding: 1rem !important;
+  }
+
+  .planning-page .stat-value,
+  .planning-page .stat-number {
+    font-size: clamp(1.1rem, 5vw, 1.45rem) !important;
+    white-space: normal !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .planning-page .stats-grid,
+  .planning-page .stats {
+    grid-template-columns: 1fr !important;
+  }
+}

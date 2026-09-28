@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In | RDO|MMS Portal</title>
+  <meta name="description" content="Secure authentication system for RDO|MMS with role-based access control.">
+
+  <!-- Premium Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Local and CDN FontAwesome for offline and online icon support -->
+  <link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+<link rel="stylesheet" href="../assets/css/rdomms-icons-offline.css">
+<link rel="stylesheet" href="../assets/css/rdomms-session-countdown.css?v=2">
+
+  <!-- System Toast Stylesheet -->
+  <link rel="stylesheet" href="../assets/css/rdomms-toast.css">
+  <link rel="stylesheet" href="../assets/css/auth-background.css?v=2">
+
+  <style>
+    :root {
+      --primary: #22c55e;
+      --primary-hover: #16a34a;
+      --primary-light: rgba(34, 197, 94, 0.15);
+      --accent: #f59e0b;
+      --accent-hover: #d97706;
+      --dark-green: #062f17;
+      --deep-forest: #041f0f;
+      --glass-bg: rgba(4, 31, 15, 0.55);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --glass-border-focus: rgba(34, 197, 94, 0.4);
+      --text-white: #ffffff;
+      --text-muted: #94a3b8;
+      --danger: #ef4444;
+      --shadow-premium: 0 25px 60px rgba(0, 0, 0, 0.45), 0 0 40px rgba(34, 197, 94, 0.06);
+      --ease-premium: cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Outfit', 'Poppins', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      overflow-x: hidden;
+      color: #0f172a;
+      position: relative;
+    }
+
+    .auth-shell {
+      width: 100%;
+      max-width: 520px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Green sign-in form card */
+    .form-card {
+      background: linear-gradient(155deg, #062f17 0%, #064e3b 45%, #041f0f 100%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 28px;
+      padding: 50px 40px;
+      box-shadow:
+        0 30px 70px rgba(6, 47, 23, 0.28),
+        0 0 0 1px rgba(34, 197, 94, 0.12);
+      animation: cardFadeIn 0.8s var(--ease-premium);
+      position: relative;
+      overflow: hidden;
+      color: var(--text-white);
+    }
+
+    @keyframes cardFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.97);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .form-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.04), transparent);
+      transition: left 1.2s var(--ease-premium);
+      pointer-events: none;
+    }
+
+    .form-card:hover::after {
+      left: 100%;
+    }
+
+    /* Brand details */
+    .brand-section {
+      text-align: center;
+      margin-bottom: 35px;
+    }
+
+    .brand-logo {
+      width: 80px;
+      height: 80px;
+      border-radius: 18px;
+      object-fit: cover;
+      margin-bottom: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .brand-logo:hover {
+      transform: scale(1.05) rotate(3deg);
+    }
+
+    .brand-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--text-white);
+      letter-spacing: -0.025em;
+      margin-bottom: 6px;
+    }
+
+    .brand-subtitle {
+      color: var(--text-muted);
+      font-size: 0.925rem;
+      font-weight: 500;
+    }
+
+    .session-notice {
+      margin-bottom: 1rem;
+      padding: 0.9rem 1rem;
+      border-radius: 14px;
+      border: 1px solid rgba(74, 124, 40, 0.35);
+      background: rgba(74, 124, 40, 0.12);
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    .session-notice-text {
+      margin: 0.35rem 0 0.75rem;
+      font-size: 0.82rem;
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .session-notice-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .session-btn {
+      border: none;
+      border-radius: 10px;
+      padding: 0.55rem 0.85rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .session-btn.primary {
+      background: #4a7c28;
+      color: #fff;
+    }
+
+    .session-btn.secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    /* Compact 2FA — inside sign-in form, shown only after password for 2FA users */
+    #twoFactorFields[hidden] {
+      display: none !important;
+    }
+
+    #signinForm.is-two-factor-pending .credentials-fields {
+      display: none;
+    }
+
+    .two-factor-compact {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .two-factor-hint {
+      margin: 0;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+      text-align: center;
+    }
+
+    .two-factor-code-box {
+      width: 100%;
+    }
+
+    .two-factor-code-input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--text-white);
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.35em;
+      text-align: center;
+      outline: none;
+      font-family: inherit;
+      transition: all 0.3s var(--ease-premium);
+    }
+
+    .two-factor-code-input::placeholder {
+      color: rgba(255, 255, 255, 0.25);
+      letter-spacing: 0.2em;
+      font-weight: 500;
+      font-size: 1.1rem;
+    }
+
+    .two-factor-code-input:focus {
+      background: rgba(255, 255, 255, 0.11);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px var(--primary-light);
+    }
+
+    .two-factor-code-input:disabled {
+      opacity: 0.65;
+      cursor: wait;
+    }
+
+    .two-factor-back {
+      align-self: center;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 4px 0;
+      font-family: inherit;
+      transition: color 0.2s;
+    }
+
+    .two-factor-back:hover {
+      color: var(--text-white);
+    }
+
+    /* FORM LAYOUT */
+    .form-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-group label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+      letter-spacing: 0.02em;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    /* ICONS STYLING - SIZED APPROPRIATELY TO BE VISIBLE INSIDE TEXT FIELDS */
+    .input-wrap img.input-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px !important;
+      height: 18px !important;
+      pointer-events: none;
+      opacity: 0.7;
+      transition: opacity 0.2s, filter 0.2s;
+      z-index: 1;
+    }
+
+    /* Focus state - highlight icon */
+    .input-wrap input:focus ~ img.input-icon {
+      opacity: 1;
+      filter: brightness(0) invert(1);
+    }
+
+    /* Hover effect */
+    .input-wrap:hover img.input-icon {
+      opacity: 0.9;
+    }
+
+    .input-wrap input {
+      width: 100%;
+      padding: 14px 46px 14px 44px;
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--text-white);
+      font-size: 0.95rem;
+      outline: none;
+      font-family: inherit;
+      transition: all 0.3s var(--ease-premium);
+    }
+
+    .input-wrap input::placeholder {
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    .input-wrap input:focus {
+      background: rgba(255, 255, 255, 0.11);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px var(--primary-light);
+    }
+
+    /* PASSWORD TOGGLE EYE BUTTON */
+    .password-toggle {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 18px;
+      padding: 4px;
+      outline: none;
+      transition: color 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+
+    .password-toggle:hover {
+      color: var(--text-white);
+    }
+
+    /* OPTION ROWS (REMEMBER ME & FORGOT) */
+    .form-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 5px;
+      font-size: 0.875rem;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .checkbox-label:hover {
+      color: var(--text-white);
+    }
+
+    .checkbox-label input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--primary);
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .form-row a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .form-row a:hover {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+
+    /* ACTION BUTTON */
+    .btn-submit {
+      width: 100%;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-size: 0.875rem;
+      font-weight: 700;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: linear-gradient(135deg, var(--primary), #16a34a);
+      color: var(--deep-forest);
+      box-shadow: 0 8px 20px rgba(34, 197, 94, 0.22);
+      transition: all 0.3s var(--ease-premium);
+      font-family: inherit;
+      margin-top: 6px;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 30px rgba(34, 197, 94, 0.35);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    /* Button icons */
+    .btn-submit i {
+      font-size: 12px;
+    }
+
+    /* FOOTER LINKS */
+    .auth-links {
+      margin-top: 30px;
+      padding-top: 25px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      text-align: center;
+    }
+
+    .auth-links p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .auth-links a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 700;
+      transition: color 0.2s;
+    }
+
+    .auth-links a:hover {
+      color: var(--accent);
+    }
+
+    .back-link {
+      display: block;
+      margin-top: 15px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover {
+      color: var(--text-white);
+    }
+
+    /* GLASSMORPHIC INFO MODAL */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(2, 14, 8, 0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.35s var(--ease-premium);
+    }
+
+    .modal-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-container {
+      background: rgba(5, 30, 16, 0.85);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      width: 90%;
+      max-width: 520px;
+      box-shadow: var(--shadow-premium);
+      transform: scale(0.95) translateY(20px);
+      transition: all 0.35s var(--ease-premium);
+      overflow: hidden;
+    }
+
+    .modal-overlay.show .modal-container {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal-header {
+      background: linear-gradient(135deg, var(--dark-green) 0%, var(--deep-forest) 100%);
+      padding: 22px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .modal-header-content {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .modal-logo {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      object-fit: cover;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .modal-header h3 {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--text-white);
+      letter-spacing: -0.01em;
+    }
+
+    .modal-header p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .modal-close {
+      background: rgba(255, 255, 255, 0.05);
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      color: var(--text-white);
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+
+    .modal-close:hover {
+      background: rgba(255, 255, 255, 0.12);
+      transform: rotate(90deg);
+    }
+
+    .modal-body {
+      padding: 25px 28px;
+      max-height: 60vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .modal-body::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .modal-body::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 4px;
+    }
+
+    .modal-section {
+      padding: 16px 20px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      transition: all 0.3s;
+    }
+
+    .modal-section:hover {
+      background: rgba(34, 197, 94, 0.02);
+      border-color: rgba(34, 197, 94, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .modal-section h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-white);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .modal-section h4 i {
+      color: var(--primary);
+      font-size: 16px;
+    }
+
+    .modal-section p {
+      font-size: 0.825rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    @media (max-width: 480px) {
+      .form-card {
+        padding: 35px 20px;
+      }
+
+      .modal-container {
+        width: 95%;
+      }
+
+      .modal-body {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body class="auth-page">
+  <div class="auth-bg" aria-hidden="true">
+    <div class="auth-bg-image"></div>
+    <div class="auth-bg-overlay"></div>
+    <canvas id="authParticlesCanvas" class="auth-bg-canvas"></canvas>
+  </div>
+  <div class="auth-shell">
+    <div class="form-card">
+      <div class="brand-section">
+        <img src="../assets/photos/RDO.png" alt="RDO|MMS Logo" class="brand-logo" onclick="toggleInfoModal()">
+        <h1 class="brand-title">Welcome Back</h1>
+        <p class="brand-subtitle">Sign in to your RDO|MMS account</p>
+      </div>
+
+      <div id="existingSessionNotice" class="session-notice" hidden>
+        <p><strong id="existingSessionName">You are already signed in.</strong></p>
+        <p class="session-notice-text">Continue to the dashboard or sign out to use a different account.</p>
+        <div class="session-notice-actions">
+          <button type="button" class="session-btn primary" id="continueDashboardBtn">Go to dashboard</button>
+          <button type="button" class="session-btn secondary" id="switchAccountBtn">Sign out</button>
+        </div>
+      </div>
+
+      <form class="form-grid" id="signinForm" novalidate>
+        <div class="credentials-fields">
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <div class="input-wrap">
+              <input type="text" id="email" name="email" placeholder="example@rdomms.org" autocomplete="username">
+              <img src="../assets/icons/Signicon/email.png" class="input-icon" alt="Email Icon">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-wrap">
+              <input type="password" id="password" name="password" placeholder="Enter your password"
+                autocomplete="current-password">
+              <img src="../assets/icons/Signicon/password.png" class="input-icon" alt="Lock Icon">
+              <button type="button" class="password-toggle" onclick="togglePassword()"
+                aria-label="Toggle Password Visibility">
+                <i class="fa-solid fa-eye" id="passwordIcon"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label class="checkbox-label">
+              <input type="checkbox" id="remember">
+              Remember me
+            </label>
+            <a href="forgot_password.php">Forgot password?</a>
+          </div>
+        </div>
+
+        <div id="twoFactorFields" class="two-factor-compact" hidden>
+          <p class="two-factor-hint" id="twoFactorSubtitle">Enter the 6-digit code from your authenticator app.</p>
+          <div class="two-factor-code-box">
+            <input
+              type="text"
+              id="twoFactorCode"
+              class="two-factor-code-input"
+              inputmode="numeric"
+              pattern="[0-9]*"
+              maxlength="8"
+              placeholder="000000"
+              autocomplete="one-time-code"
+              aria-label="Verification code"
+            >
+          </div>
+          <button type="button" class="two-factor-back" id="twoFactorBackBtn">← Back to sign in</button>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">
+          Sign In <i class="fa-solid fa-arrow-right-to-bracket"></i>
+        </button>
+      </form>
+
+      <div class="auth-links">
+        <p>Don't have an account? <a href="signup.php">Create an account</a></p>
+        <a class="back-link" href="../index.html">← Back to Home</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Info Modal -->
+  <div id="infoModal" class="modal-overlay">
+    <div class="modal-container">
+      <div class="modal-header">
+        <div class="modal-header-content">
+          <img src="../assets/photos/RDO.png" alt="RDO|MMS" class="modal-logo">
+          <div>
+            <h3>RDO|MMS</h3>
+            <p>Operation Control Center</p>
+          </div>
+        </div>
+        <button class="modal-close" onclick="toggleInfoModal()" aria-label="Close Info Modal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-section">
+          <h4><i class="fa-solid fa-chart-pie"></i> Executive Management</h4>
+          <p>Easily track operational analytics, department plans, and program targets for sustainable impact.</p>
+        </div>
+
+        <div class="modal-section">
+          <h4><i class="fa-solid fa-users-viewfinder"></i> Beneficiary Database</h4>
+          <p>Register, screen, and log assistance deliverables for beneficiaries across all rural centers.</p>
+        </div>
+
+        <div class="modal-section">
+          <h4><i class="fa-solid fa-file-contract"></i> Audits & Financial Reports</h4>
+          <p>Monitor expense tracking, program allocations, and variance statistics automatically.</p>
+        </div>
+
+        <div class="modal-section">
+          <h4><i class="fa-solid fa-calendar-check"></i> Project Milestones</h4>
+          <p>Coordinate annual, quarterly, and weekly plans aligned with field officer activities.</p>
+        </div>
+
+        <div class="modal-section">
+          <h4><i class="fa-solid fa-gears"></i> Central Operations</h4>
+          <p>Oversee department-level roles, authorization settings, and real-time security configurations.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="../assets/js/rdomms-system-settings.js"></script>
+  <script src="../assets/js/rdomms-security.js"></script>
+<script src="../assets/js/localStorage-service.js"></script>
+  <script src="../assets/js/rdomms-toast.js"></script>
+  <script>
+    // Toggle Password Visibility
+    function togglePassword() {
+      const passwordInput = document.getElementById('password');
+      const passwordIcon = document.getElementById('passwordIcon');
+
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        passwordIcon.className = 'fa-solid fa-eye-slash';
+      } else {
+        passwordInput.type = 'password';
+        passwordIcon.className = 'fa-solid fa-eye';
+      }
+    }
+
+    // Toggle Info Modal
+    function toggleInfoModal() {
+      const modal = document.getElementById('infoModal');
+      if (modal) {
+        modal.classList.toggle('show');
+      }
+    }
+
+    // Toast Alert Helper - shows success or error messages
+    function showToastMessage(message, type = 'success') {
+      if (window.RDOMMSToast) {
+        RDOMMSToast.show(message, type, {
+          title: type === 'success' ? 'Success' : 'Error',
+          duration: 4000
+        });
+      } else {
+        // Fallback alert if toast not available
+        const toastFallback = document.createElement('div');
+        toastFallback.style.cssText = `
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          background: ${type === 'success' ? '#22c55e' : '#ef4444'};
+          color: white;
+          padding: 12px 20px;
+          border-radius: 12px;
+          font-size: 14px;
+          z-index: 10000;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+          animation: slideIn 0.3s ease;
+        `;
+        toastFallback.textContent = message;
+        document.body.appendChild(toastFallback);
+        setTimeout(() => {
+          toastFallback.style.opacity = '0';
+          setTimeout(() => toastFallback.remove(), 300);
+        }, 4000);
+      }
+    }
+
+    const signinForm = document.getElementById("signinForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const twoFactorFields = document.getElementById("twoFactorFields");
+    const twoFactorBackBtn = document.getElementById("twoFactorBackBtn");
+    const brandSubtitle = document.querySelector(".brand-subtitle");
+    const defaultBrandSubtitle = brandSubtitle ? brandSubtitle.textContent : "Sign in to your RDO|MMS account";
+    let pendingTwoFactorToken = null;
+    let twoFactorVerifying = false;
+    let twoFactorMode = false;
+
+    function resetAuthView() {
+      twoFactorMode = false;
+      pendingTwoFactorToken = null;
+      twoFactorVerifying = false;
+      try { sessionStorage.removeItem('rdomms_2fa_pending_token'); } catch (_) {}
+      if (signinForm) {
+        signinForm.classList.remove('is-two-factor-pending');
+        signinForm.hidden = false;
+      }
+      if (twoFactorFields) twoFactorFields.hidden = true;
+      if (submitBtn) {
+        submitBtn.hidden = false;
+        submitBtn.innerHTML = `Sign In <i class="fa-solid fa-arrow-right-to-bracket"></i>`;
+        submitBtn.disabled = false;
+      }
+      if (brandSubtitle) brandSubtitle.textContent = defaultBrandSubtitle;
+      const codeInput = document.getElementById('twoFactorCode');
+      if (codeInput) {
+        codeInput.value = '';
+        codeInput.disabled = false;
+      }
+      const subtitle = document.getElementById('twoFactorSubtitle');
+      if (subtitle) subtitle.textContent = 'Enter the 6-digit code from your authenticator app.';
+      document.querySelector('.auth-links')?.removeAttribute('hidden');
+    }
+
+    function completeLoginSuccess(data) {
+      const user = data.data && data.data.user ? data.data.user : {};
+      if (!user || (!user.db_id && !user.id)) {
+        throw new Error('Login failed. User data was not returned.');
+      }
+
+      clearLocalAuthState();
+      localStorage.setItem('currentUser', JSON.stringify({
+        id: user.id,
+        db_id: user.db_id || null,
+        fullname: user.fullname || '',
+        email: user.email || '',
+        role: user.role || 'staff',
+        department: user.department || '',
+        organization: user.organization || '',
+        profile_picture: user.profile_picture || null,
+        two_factor_enabled: !!user.two_factor_enabled
+      }));
+      localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('loginTime', new Date().toISOString());
+      if (data.data?.session_token) {
+        localStorage.setItem('sessionToken', data.data.session_token);
+      }
+      if (data.data?.session) {
+        try {
+          sessionStorage.setItem('rdomms_session_meta', JSON.stringify({
+            ...data.data.session,
+            _received_at: Date.now()
+          }));
+          sessionStorage.setItem('rdomms_anchor_session_on_dashboard', '1');
+        } catch (_) {}
+      }
+
+      window.__RDOMMS_SERVER_SESSION_VALID__ = true;
+      if (window.RDOMMSSecurity && typeof window.RDOMMSSecurity.invalidateCsrfToken === 'function') {
+        window.RDOMMSSecurity.invalidateCsrfToken();
+      }
+
+      showToastMessage(`Welcome back, ${user.fullname || user.email?.split('@')[0] || 'user'}! Login successful.`, 'success');
+
+      const dashboardUrl = window.RDOMMSRBAC && typeof window.RDOMMSRBAC.getLandingPageForRole === 'function'
+        ? window.RDOMMSRBAC.getLandingPageForRole(user.role)
+        : new URL('../RDOMMS.html', window.location.href).pathname;
+
+      window.location.replace(dashboardUrl);
+    }
+
+    function showTwoFactorStep(payload) {
+      pendingTwoFactorToken = payload?.pending_token || null;
+      twoFactorMode = true;
+      try {
+        sessionStorage.setItem('rdomms_2fa_pending_token', pendingTwoFactorToken || '');
+      } catch (_) {}
+
+      const subtitle = document.getElementById('twoFactorSubtitle');
+      if (subtitle) {
+        subtitle.textContent = payload?.user?.email
+          ? `Enter the 6-digit code for ${payload.user.email}.`
+          : 'Enter the 6-digit code from your authenticator app.';
+      }
+      if (brandSubtitle) {
+        brandSubtitle.textContent = 'Two-factor verification required';
+      }
+
+      if (signinForm) signinForm.classList.add('is-two-factor-pending');
+      if (twoFactorFields) twoFactorFields.hidden = false;
+      if (submitBtn) submitBtn.hidden = true;
+      document.querySelector('.auth-links')?.setAttribute('hidden', '');
+
+      const codeInput = document.getElementById('twoFactorCode');
+      if (codeInput) {
+        codeInput.value = '';
+        codeInput.disabled = false;
+        codeInput.focus();
+      }
+    }
+
+    function hideTwoFactorStep() {
+      resetAuthView();
+    }
+    const existingSessionNotice = document.getElementById("existingSessionNotice");
+    const existingSessionName = document.getElementById("existingSessionName");
+    const continueDashboardBtn = document.getElementById("continueDashboardBtn");
+    const switchAccountBtn = document.getElementById("switchAccountBtn");
+
+    function clearLocalAuthState() {
+      ['currentUser', 'isLoggedIn', 'loginTime', 'sessionToken'].forEach((key) => {
+        localStorage.removeItem(key);
+      });
+      try { sessionStorage.removeItem('rdomms_session_meta'); } catch (_) {}
+      try { sessionStorage.removeItem('rdomms_show_expired_toast'); } catch (_) {}
+      if (window.RDOMMSSession && typeof window.RDOMMSSession.stop === 'function') {
+        window.RDOMMSSession.stop();
+      }
+    }
+
+    function showExistingSessionNotice(user) {
+      if (!existingSessionNotice) return;
+      const name = user?.fullname || user?.email || 'your account';
+      if (existingSessionName) {
+        existingSessionName.textContent = `Signed in as ${name}`;
+      }
+      existingSessionNotice.hidden = false;
+    }
+
+    window.addEventListener('rdommsAlreadyAuthenticated', (event) => {
+      const user = event.detail?.user;
+      if (user) {
+        showExistingSessionNotice(user);
+      }
+    });
+
+    if (continueDashboardBtn) {
+      continueDashboardBtn.addEventListener('click', () => {
+        const targetPage = window.RDOMMSRBAC && typeof window.RDOMMSRBAC.getLandingPageForRole === 'function'
+          ? window.RDOMMSRBAC.getLandingPageForRole()
+          : '../RDOMMS.html';
+        window.location.href = targetPage;
+      });
+    }
+
+    if (switchAccountBtn) {
+      switchAccountBtn.addEventListener('click', async () => {
+        try {
+          await fetch('../api/auth/logout.php', {
+            method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            credentials: 'same-origin'
+          });
+        } catch (_) {}
+        clearLocalAuthState();
+        if (existingSessionNotice) existingSessionNotice.hidden = true;
+        showToastMessage('Signed out. You can now sign in with another account.', 'success');
+      });
+    }
+
+    if (signinForm) {
+      signinForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        if (twoFactorMode) {
+          await submitTwoFactorCode();
+          return;
+        }
+        
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value.trim();
+        
+        if (!email || !password) {
+          showToastMessage('Please fill in both email and password', 'error');
+          return;
+        }
+
+        submitBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Signing in...`;
+        submitBtn.disabled = true;
+
+        try {
+          try {
+            if (window.RDOMMSSecurity && typeof window.RDOMMSSecurity.ensureCsrfToken === 'function') {
+              await window.RDOMMSSecurity.ensureCsrfToken();
+            }
+          } catch (_) {}
+
+          const response = await fetch('../api/auth/login.php', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Requested-With': 'XMLHttpRequest'
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({ email, password })
+          });
+
+          const data = await response.json().catch(() => ({}));
+          if (!response.ok || data.status !== 'success') {
+            throw new Error(data.message || 'Login failed');
+          }
+
+          if (data.data?.requires_2fa) {
+            showTwoFactorStep(data.data);
+            submitBtn.innerHTML = `Sign In <i class="fas fa-arrow-right"></i>`;
+            submitBtn.disabled = false;
+            return;
+          }
+
+          completeLoginSuccess(data);
+        } catch (error) {
+          showToastMessage(error.message || 'Login failed', 'error');
+          submitBtn.innerHTML = `Sign In <i class="fas fa-arrow-right"></i>`;
+          submitBtn.disabled = false;
+        }
+      });
+    }
+
+    const submitTwoFactorCode = async () => {
+      if (twoFactorVerifying) return;
+
+      const codeInput = document.getElementById('twoFactorCode');
+      const subtitle = document.getElementById('twoFactorSubtitle');
+      const rawCode = String(codeInput?.value || '').trim();
+      const token = pendingTwoFactorToken || sessionStorage.getItem('rdomms_2fa_pending_token') || '';
+
+      if (!token || !rawCode) {
+        showToastMessage('Enter your 6-digit verification code', 'error');
+        return;
+      }
+
+      twoFactorVerifying = true;
+      if (codeInput) codeInput.disabled = true;
+      if (subtitle) subtitle.textContent = 'Verifying code...';
+
+      try {
+        const response = await fetch('../api/auth/2fa/verify-login.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          credentials: 'same-origin',
+          body: JSON.stringify({
+            pending_token: token,
+            code: rawCode.replace(/\s+/g, '')
+          })
+        });
+
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok || data.status !== 'success') {
+          if (response.status === 401 && String(data.message || '').toLowerCase().includes('expired')) {
+            hideTwoFactorStep();
+          }
+          throw new Error(data.message || 'Verification failed');
+        }
+
+        try { sessionStorage.removeItem('rdomms_2fa_pending_token'); } catch (_) {}
+        completeLoginSuccess(data);
+      } catch (error) {
+        twoFactorVerifying = false;
+        if (codeInput) {
+          codeInput.disabled = false;
+          codeInput.select();
+        }
+        if (subtitle) {
+          subtitle.textContent = 'Enter the 6-digit code from your authenticator app.';
+        }
+        showToastMessage(error.message || 'Verification failed', 'error');
+      }
+    };
+
+    const twoFactorCodeInput = document.getElementById('twoFactorCode');
+    if (twoFactorCodeInput) {
+      twoFactorCodeInput.addEventListener('input', () => {
+        const cleaned = twoFactorCodeInput.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 8);
+        if (cleaned !== twoFactorCodeInput.value) {
+          twoFactorCodeInput.value = cleaned;
+        }
+        if (/^\d{6}$/.test(cleaned)) {
+          submitTwoFactorCode();
+        }
+      });
+
+      twoFactorCodeInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          submitTwoFactorCode();
+        }
+      });
+    }
+
+    if (twoFactorBackBtn) {
+      twoFactorBackBtn.addEventListener('click', hideTwoFactorStep);
+    }
+
+    // Add CSS animation for toast fallback
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideIn {
+        from {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+
+    if (window.RDOMMSSettings) {
+      RDOMMSSettings.loadPublic().then((settings) => {
+        if (settings.maintenance_mode) {
+          showToastMessage('System is under maintenance. Only administrators can sign in right now.', 'error');
+        }
+      }).catch(() => {});
+    }
+
+    const expiredParams = new URLSearchParams(window.location.search);
+    if (expiredParams.get('expired') === '1') {
+      const shouldShowExpiredToast = sessionStorage.getItem('rdomms_show_expired_toast') === '1';
+      if (shouldShowExpiredToast) {
+        showToastMessage('Your session expired due to inactivity. Please sign in again.', 'warning');
+        try { sessionStorage.removeItem('rdomms_show_expired_toast'); } catch (_) {}
+      }
+      try { sessionStorage.removeItem('rdomms_session_meta'); } catch (_) {}
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+
+    if (expiredParams.get('registered') === 'pending') {
+      showToastMessage('Registration received. Your account is pending admin approval. You can sign in after approval.', 'info');
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+
+    resetAuthView();
+  </script>
+  <script src="../assets/js/auth-particles.js?v=2"></script>
+</body>
+
+</html>

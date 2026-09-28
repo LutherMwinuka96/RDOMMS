@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RDO|MMS – Archived Projects</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+<link rel="stylesheet" href="../assets/css/rdomms-icons-offline.css">
+<link rel="stylesheet" href="../assets/css/rdomms-session-countdown.css?v=2">
+<link rel="stylesheet" href="../assets/css/project-nav.css?v=5">
+<link rel="stylesheet" href="../assets/css/rdomms-currency.css">
+<script src="../assets/js/number-format.js"></script>
+<style>
+:root{
+  --primary-green:#2d5016;
+  --secondary-green:#4a7c28;
+  --accent-green:#6dbd6d;
+  --light-green:#a8d5a8;
+  --dark-green:#1a3009;
+  --success-green:#28a745;
+  --warning-amber:#ffc107;
+  --danger-red:#dc3545;
+  --info-blue:#17a2b8;
+  --light-gray:#f8f9fa;
+  --dark-gray:#343a40;
+  --border-gray:#dee2e6;
+  --text-primary:#212529;
+  --text-secondary:#6c757d;
+  --bg-primary:#ffffff;
+  --bg-secondary:#f8f9fa;
+  --shadow-sm:0 2px 4px rgba(0,0,0,0.08);
+  --shadow:0 4px 8px rgba(0,0,0,0.12);
+  --shadow-md:0 10px 15px -3px rgba(0,0,0,0.1),0 4px 6px -2px rgba(0,0,0,0.05);
+  --shadow-lg:0 8px 16px rgba(0,0,0,0.16);
+  --shadow-xl:0 25px 50px -12px rgba(0,0,0,0.25);
+  --transition:all 0.3s ease;
+  --radius-sm:0.375rem;
+  --radius:0.5rem;
+  --radius-md:0.75rem;
+  --radius-lg:1rem;
+  --font-family:'Inter',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-family),sans-serif;background:linear-gradient(135deg,#2d5016 0%,#4a7c28 100%);color:var(--text-primary);min-height:100vh;}
+
+.page{max-width:1280px;margin:0 auto;padding:2rem 1.5rem;}
+.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;}
+.page-header h1{font-size:1.75rem;font-weight:700;color:#fff;text-shadow:0 2px 4px rgba(0,0,0,0.2);}
+.page-header p{color:#fff;font-size:0.9375rem;margin-top:0.25rem;text-shadow:0 1px 2px rgba(0,0,0,0.1);}
+
+.btn{display:inline-flex;align-items:center;gap:0.5rem;padding:0.625rem 1rem;border-radius:var(--radius-md);font-size:0.875rem;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .2s;text-decoration:none;}
+.btn-primary{background:linear-gradient(135deg,var(--primary-green)0%,var(--secondary-green)100%);color:#fff;box-shadow:var(--shadow);border:2px solid var(--dark-green);}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:var(--shadow-md);background:linear-gradient(135deg,var(--dark-green)0%,var(--primary-green)100%);}
+.btn-outline{background:#fff;color:var(--info-blue);border:2px solid var(--info-blue);box-shadow:0 2px 4px rgba(23,162,184,0.2);}
+.btn-outline:hover{border-color:var(--primary-green);color:var(--primary-green);background:var(--bg-secondary);box-shadow:0 4px 8px rgba(45,80,22,0.2);}
+.btn-success{background:linear-gradient(135deg,var(--success-green)0%,#20c997 100%);color:#fff;border:2px solid #1a7c5e;box-shadow:0 2px 4px rgba(40,167,69,0.2);}
+.btn-success:hover{transform:translateY(-1px);box-shadow:0 4px 8px rgba(40,167,69,0.3);background:linear-gradient(135deg,#1a7c5e 0%,var(--success-green)100%);}
+.btn-danger{background:linear-gradient(135deg,var(--danger-red)0%,#c82333 100%);color:#fff;border:2px solid #a71d2a;box-shadow:0 2px 4px rgba(220,53,69,0.2);}
+.btn-danger:hover{transform:translateY(-1px);box-shadow:0 4px 8px rgba(220,53,69,0.3);background:linear-gradient(135deg,#a71d2a 0%,var(--danger-red)100%);}
+
+/* Stats Overview */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem;}
+@media (max-width:768px){.stats-grid{grid-template-columns:repeat(2,1fr);}}
+.stat-card{background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);border:1.5px solid var(--border-gray);border-radius:var(--radius-lg);padding:1.25rem;text-align:center;box-shadow:var(--shadow-sm);transition:all .2s;}
+.stat-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);}
+.stat-number{font-size:1.75rem;font-weight:800;color:var(--primary-green);margin-bottom:0.25rem;}
+.stat-label{font-size:0.6875rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.025em;font-weight:600;}
+.stat-icon{font-size:1.25rem;color:var(--text-secondary);margin-bottom:0.5rem;}
+
+/* Search and Filters */
+.controls{display:flex;gap:0.75rem;margin-bottom:1.25rem;flex-wrap:wrap;}
+.search-box{display:flex;align-items:center;gap:0.5rem;background:#fff;border:1.5px solid var(--border-gray);border-radius:var(--radius-md);padding:0.625rem 0.875rem;flex:1;min-width:250px;transition:border-color .2s;}
+.search-box:focus-within{border-color:var(--primary-green);box-shadow:0 0 0 3px rgba(45,80,22,0.1);}
+.search-box input{border:none;background:none;outline:none;font-size:0.875rem;color:var(--text-primary);flex:1;font-family:inherit;}
+.search-box input::placeholder{color:var(--text-secondary);}
+.search-box i{color:var(--text-secondary);}
+.filter-select{padding:0.625rem 0.875rem;border:1.5px solid var(--border-gray);border-radius:var(--radius-md);font-size:0.875rem;color:var(--text-primary);background:#fff;outline:none;cursor:pointer;font-family:inherit;transition:border-color .2s;}
+.filter-select:focus{border-color:var(--primary-green);box-shadow:0 0 0 3px rgba(45,80,22,0.1);}
+
+/* Archive Grid */
+.archive-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1.5rem;}
+.archive-card{background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);border:1.5px solid var(--border-gray);border-radius:var(--radius-lg);padding:1.5rem;transition:all .2s;cursor:pointer;box-shadow:var(--shadow-sm);}
+.archive-card:hover{box-shadow:var(--shadow-lg);border-color:var(--primary-green);transform:translateY(-2px);}
+
+.archive-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1rem;}
+.archive-icon{width:3rem;height:3rem;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:1.25rem;}
+.archive-icon.water{background:#eff6ff;color:#3b82f6;}
+.archive-icon.agri{background:#f0fdf4;color:#22c55e;}
+.archive-icon.health{background:#fff7ed;color:#f59e0b;}
+.archive-icon.infra{background:#faf5ff;color:#a855f7;}
+.archive-icon.edu{background:#fef2f2;color:#ef4444;}
+.archive-icon.energy{background:#ecfdf5;color:#10b981;}
+.archive-icon.default{background:var(--bg-secondary);color:var(--text-secondary);}
+
+.archive-status{padding:0.25rem 0.75rem;border-radius:999px;font-size:0.6875rem;font-weight:600;background:#ecfdf5;color:var(--success-green);border:1px solid var(--border-gray);}
+
+.archive-title{font-size:1rem;font-weight:700;margin-bottom:0.5rem;color:var(--text-primary);line-height:1.3;}
+.archive-meta{display:flex;flex-direction:column;gap:0.375rem;margin-bottom:1rem;}
+.meta-row{display:flex;justify-content:space-between;font-size:0.75rem;}
+.meta-label{color:var(--text-secondary);}
+.meta-value{font-weight:600;color:var(--text-primary);}
+
+.archive-summary{background:var(--bg-secondary);border-radius:var(--radius-md);padding:0.875rem;margin-bottom:1rem;border:1px solid var(--border-gray);}
+.summary-title{font-size:0.75rem;font-weight:600;color:var(--text-primary);margin-bottom:0.375rem;}
+.summary-text{font-size:0.6875rem;color:var(--text-secondary);line-height:1.4;}
+
+.archive-footer{display:flex;align-items:center;justify-content:space-between;padding-top:1rem;border-top:1px solid var(--border-gray);}
+.archive-team{display:flex;align-items:center;gap:0.25rem;}
+.team-avatar{width:1.5rem;height:1.5rem;border-radius:50%;border:2px solid #fff;background:var(--primary-green);display:flex;align-items:center;justify-content:center;font-size:0.5rem;font-weight:700;color:#fff;margin-left:-6px;}
+.team-avatar:first-child{margin-left:0;}
+.archive-date{font-size:0.6875rem;color:var(--text-secondary);}
+
+/* Detail View */
+.detail-modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+.detail-content{background:var(--bg-primary);border-radius:var(--radius-lg);padding:1.5rem;max-width:600px;width:90%;max-height:80vh;overflow-y:auto;box-shadow:var(--shadow-xl);}
+.detail-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;}
+.detail-title{font-size:1.25rem;font-weight:700;color:var(--primary-green);}
+.close-btn{background:none;border:none;font-size:1.25rem;color:var(--text-secondary);cursor:pointer;transition:color .2s;}
+.close-btn:hover{color:var(--text-primary);}
+
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.25rem;}
+.detail-item{background:var(--bg-secondary);border-radius:var(--radius-md);padding:0.875rem;border:1px solid var(--border-gray);}
+.detail-label{font-size:0.6875rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.025em;margin-bottom:0.25rem;font-weight:600;}
+.detail-value{font-size:0.875rem;font-weight:600;color:var(--text-primary);}
+
+.detail-description{background:var(--bg-secondary);border-radius:var(--radius-md);padding:1rem;margin-bottom:1.25rem;border:1px solid var(--border-gray);}
+.detail-description h4{font-size:0.875rem;font-weight:600;margin-bottom:0.5rem;color:var(--text-primary);}
+.detail-description p{font-size:0.8125rem;color:var(--text-secondary);line-height:1.5;}
+
+.detail-actions{display:flex;gap:0.75rem;justify-content:flex-end;flex-wrap:wrap;}
+.detail-btn{padding:0.5rem 1rem;border-radius:var(--radius-sm);font-size:0.75rem;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .2s;display:inline-flex;align-items:center;gap:0.25rem;}
+.btn-restore{background:var(--success-green);color:#fff;border:2px solid #1a7c5e;box-shadow:0 2px 4px rgba(40,167,69,0.2);}
+.btn-restore:hover{background:#1a7c5e;transform:translateY(-1px);box-shadow:0 4px 8px rgba(40,167,69,0.3);}
+.btn-export{background:var(--primary-green);color:#fff;border:2px solid var(--dark-green);box-shadow:0 2px 4px rgba(45,80,22,0.2);}
+.btn-export:hover{background:var(--dark-green);transform:translateY(-1px);box-shadow:0 4px 8px rgba(45,80,22,0.3);}
+.btn-delete{background:var(--danger-red);color:#fff;border:2px solid #a71d2a;box-shadow:0 2px 4px rgba(220,53,69,0.2);}
+.btn-delete:hover{background:#a71d2a;transform:translateY(-1px);box-shadow:0 4px 8px rgba(220,53,69,0.3);}
+
+/* Empty State */
+.empty-state{text-align:center;padding:3rem 1.25rem;background:var(--bg-primary);border-radius:var(--radius-lg);border:1.5px dashed var(--border-gray);}
+.empty-state i{font-size:3rem;color:var(--text-secondary);margin-bottom:1rem;}
+.empty-state h3{font-size:1.125rem;font-weight:600;color:var(--text-primary);margin-bottom:0.5rem;}
+.empty-state p{color:var(--text-secondary);font-size:0.875rem;}
+</style>
+</head>
+<body>
+<nav id="rdomms-project-nav" data-active="archived-projects"></nav>
+<script src="../assets/js/rpn-nav-shared.js?v=2"></script>
+<script src="../assets/js/project-finance-links.js?v=4"></script>
+<script src="../assets/js/project-nav.js?v=10"></script>
+
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1>Archived Projects</h1>
+      <p>View and manage completed and archived projects from previous periods.</p>
+    </div>
+    <div style="display:flex;gap:0.75rem;">
+      <a href="all-projects.php" class="btn btn-outline"><i class="fas fa-folder"></i> All Projects</a>
+      <a href="create-project.php" class="btn btn-primary"><i class="fas fa-plus"></i> New Project</a>
+    </div>
+  </div>
+
+  <!-- Stats Overview -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon"><i class="fas fa-archive"></i></div>
+      <div class="stat-number">12</div>
+      <div class="stat-label">Total Archived</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon"><i class="fas fa-coins"></i></div>
+      <div class="stat-number" id="statTotalBudget">TSH 0</div>
+      <div class="stat-label">Total Budget</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon"><i class="fas fa-users"></i></div>
+      <div class="stat-number">8,450</div>
+      <div class="stat-label">Beneficiaries Served</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+      <div class="stat-number">98%</div>
+      <div class="stat-label">Success Rate</div>
+    </div>
+  </div>
+
+  <!-- Search and Filters -->
+  <div class="controls">
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input type="text" placeholder="Search archived projects...">
+    </div>
+    <select class="filter-select" id="archiveYearFilter">
+      <option value="all">All Years</option>
+    </select>
+    <select class="filter-select">
+      <option value="all">All Sectors</option>
+      <option value="Water">Water</option>
+      <option value="Agriculture">Agriculture</option>
+      <option value="Health">Health</option>
+      <option value="Infrastructure">Infrastructure</option>
+      <option value="Education">Education</option>
+      <option value="Energy">Energy</option>
+    </select>
+    <select class="filter-select">
+      <option value="all">All Regions</option>
+      <option value="Kibaha">Kibaha</option>
+      <option value="Morogoro">Morogoro</option>
+      <option value="Dodoma">Dodoma</option>
+      <option value="Kilosa">Kilosa</option>
+      <option value="Pwani">Pwani</option>
+      <option value="Tabora">Tabora</option>
+    </select>
+  </div>
+
+  <!-- Archive Grid -->
+  <div class="archive-grid" id="archiveGrid">
+    <!-- Archive cards will be loaded dynamically -->
+    <div class="empty-state">
+      <i class="fas fa-archive"></i>
+      <h3>Loading Projects...</h3>
+      <p>Please wait while we load the archived projects.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Detail Modal -->
+<div id="detailModal" class="detail-modal">
+  <div class="detail-content">
+    <div class="detail-header">
+      <h2 class="detail-title">Project Details</h2>
+      <button class="close-btn" onclick="closeDetail()">&times;</button>
+    </div>
+    
+    <div class="detail-grid">
+      <div class="detail-item">
+        <div class="detail-label">Project ID</div>
+        <div class="detail-value" id="detailId">001</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">Status</div>
+        <div class="detail-value" id="detailStatus">Completed</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">Budget</div>
+        <div class="detail-value" id="detailBudget">TSH 0</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">Duration</div>
+        <div class="detail-value" id="detailDuration">Jan - Apr 2024</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">Beneficiaries</div>
+        <div class="detail-value" id="detailBeneficiaries">1,200</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">Region</div>
+        <div class="detail-value" id="detailRegion">Dodoma</div>
+      </div>
+    </div>
+    
+    <div class="detail-description">
+      <h4>Project Description</h4>
+      <p id="detailDescription">Successfully constructed 15km of rural road connecting 5 villages to main highway. Project completed on time and under budget, improving access to markets and services for over 1,200 residents.</p>
+    </div>
+    
+    <div class="detail-actions">
+      <button class="detail-btn btn-restore"><i class="fas fa-undo"></i> Restore Project</button>
+      <button class="detail-btn btn-export"><i class="fas fa-download"></i> Export Report</button>
+      <button class="detail-btn btn-delete"><i class="fas fa-user-slash"></i> Deregister Project</button>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/js/rdomms-security.js"></script>
+<script src="../assets/js/localStorage-service.js?v=2"></script>
+<script src="../assets/js/rdomms-dates.js"></script>
+<script>
+let archivedProjectsCache = [];
+const currentFilters = { year: 'all', sector: 'all', region: 'all' };
+
+function initArchiveYearFilter() {
+  const yearFilter = document.getElementById('archiveYearFilter');
+  if (!yearFilter || !window.RDOMMSDates) return;
+  RDOMMSDates.fillYearSelect(yearFilter, {
+    allYearsLabel: 'All Years',
+    allYearsValue: 'all',
+    selectedValue: currentFilters.year === 'all' ? RDOMMSDates.currentYear() : currentFilters.year,
+  });
+  yearFilter.value = currentFilters.year;
+}
+
+function normalizeProject(project) {
+  return {
+    ...project,
+    id: project.project_id || project.id,
+    startDate: project.startDate || project.start_date || '',
+    dueDate: project.dueDate || project.end_date || '',
+    createdAt: project.createdAt || project.created_at || '',
+    team: Array.isArray(project.team) ? project.team : (project.team ? (() => { try { return JSON.parse(project.team); } catch (e) { return []; } })() : []),
+    budget: Number(project.budget) || 0,
+    beneficiaries: Number(project.beneficiaries) || 0,
+    progress: Number(project.progress) || 0,
+    status: project.status || 'not-started',
+    location: project.location || project.district || '',
+    deregistrationStatus: project.deregistrationStatus || project.deregistration_status || 'none',
+  };
+}
+
+function getSectorIcon(sector) {
+  const icons = {
+    Water: 'fa-tint',
+    Agriculture: 'fa-seedling',
+    Health: 'fa-heartbeat',
+    Education: 'fa-graduation-cap',
+    Infrastructure: 'fa-road',
+    Energy: 'fa-solar-panel',
+    'Orphanage Support': 'fa-home',
+    'Water Transmission Association': 'fa-tint',
+    Administration: 'fa-building',
+    Pottery: 'fa-hammer',
+    'Vocational Training Center': 'fa-graduation-cap',
+    Emergency: 'fa-exclamation-triangle',
+    Store: 'fa-store',
+    Workshop: 'fa-tools',
+    Other: 'fa-ellipsis-h'
+  };
+  return icons[sector] || 'fa-folder';
+}
+
+function getSectorClass(sector) {
+  const classes = {
+    Water: 'water',
+    Agriculture: 'agri',
+    Health: 'health',
+    Education: 'edu',
+    Infrastructure: 'infra',
+    Energy: 'energy',
+    'Orphanage Support': 'water',
+    'Water Transmission Association': 'water',
+    Administration: 'infra',
+    Pottery: 'agri',
+    'Vocational Training Center': 'edu',
+    Emergency: 'health',
+    Store: 'infra',
+    Workshop: 'infra',
+    Other: 'default'
+  };
+  return classes[sector] || 'default';
+}
+
+function formatCurrency(amount) {
+  if (typeof formatRdommsCurrency === 'function') {
+    return formatRdommsCurrency(amount || 0);
+  }
+  return 'TSH ' + Number(amount || 0).toLocaleString('en-US');
+}
+
+function formatCurrencyHtml(amount) {
+  if (typeof formatRdommsCurrencyHtml === 'function') {
+    return formatRdommsCurrencyHtml(amount || 0);
+  }
+  return formatCurrency(amount);
+}
+
+function formatCount(amount) {
+  if (typeof formatRdommsNumber === 'function') {
+    return formatRdommsNumber(amount || 0);
+  }
+  return Number(amount || 0).toLocaleString('en-US');
+}
+
+function formatDateRange(startDate, endDate) {
+  if (!startDate && !endDate) return 'N/A';
+  const start = startDate ? new Date(startDate) : null;
+  const end = endDate ? new Date(endDate) : null;
+  if ((start && isNaN(start)) || (end && isNaN(end))) return 'N/A';
+  const startText = start ? start.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A';
+  const endText = end ? end.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A';
+  return `${startText} - ${endText}`;
+}
+
+function isAdminViewer() {
+  const role = String((JSON.parse(localStorage.getItem('currentUser') || '{}')).role || '').toLowerCase();
+  if (window.RDOMMSRBAC?.isAdminRole) {
+    return window.RDOMMSRBAC.isAdminRole(role);
+  }
+  return role === 'admin' || role === 'mkurugenzi_mtendaji' || role === 'administrator';
+}
+
+function getDashboardDateRange() {
+  const fallback = {
+    start: new Date('2020-01-01'),
+    end: new Date('2030-12-31')
+  };
+
+  try {
+    const saved = JSON.parse(localStorage.getItem('dashboardDateRange') || 'null');
+    if (!saved || !saved.start || !saved.end) return fallback;
+
+    const start = new Date(saved.start);
+    const end = new Date(saved.end);
+    if (isNaN(start) || isNaN(end) || start > end) return fallback;
+
+    return { start, end };
+  } catch (error) {
+    return fallback;
+  }
+}
+
+function isProjectInDashboardRange(project) {
+  const range = getDashboardDateRange();
+  const referenceDate = project.dueDate || project.createdAt || project.startDate;
+  if (!referenceDate) return true;
+
+  const date = new Date(referenceDate);
+  if (isNaN(date)) return true;
+
+  return date >= range.start && date <= range.end;
+}
+
+async function loadProjects(forceRefresh = false) {
+  if (!forceRefresh && archivedProjectsCache.length) {
+    return archivedProjectsCache;
+  }
+
+  try {
+    const res = await fetch(`../api/projects.php?t=${Date.now()}`, {
+      headers: { 'X-Requested-With': 'XMLHttpRequest' },
+      credentials: 'same-origin',
+      cache: 'no-store'
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data?.message || `Failed to load projects (${res.status})`);
+    }
+    if (data.status === 'success' && Array.isArray(data.data)) {
+      archivedProjectsCache = data.data.map(normalizeProject);
+      localStorage.setItem('rd_projects', JSON.stringify(archivedProjectsCache));
+      return archivedProjectsCache;
+    }
+    throw new Error(data?.message || 'Invalid projects response');
+  } catch (error) {
+    console.warn('API load failed, falling back to localStorage:', error);
+  }
+
+  try {
+    archivedProjectsCache = JSON.parse(localStorage.getItem('rd_projects') || '[]').map(normalizeProject);
+  } catch (error) {
+    archivedProjectsCache = [];
+  }
+
+  return archivedProjectsCache;
+}
+
+function getArchivedProjects(projects) {
+  return projects.filter(project => project.status === 'completed' || project.progress >= 100);
+}
+
+function updateStats(archivedProjects) {
+  const totalCount = archivedProjects.length;
+  const totalBudget = archivedProjects.reduce((sum, p) => sum + (Number(p.budget) || 0), 0);
+  const totalBeneficiaries = archivedProjects.reduce((sum, p) => sum + (Number(p.beneficiaries) || 0), 0);
+  const successRate = totalCount ? 100 : 0;
+
+  const statNumbers = document.querySelectorAll('.stat-number');
+  if (statNumbers[0]) statNumbers[0].textContent = totalCount;
+  if (statNumbers[1]) {
+    if (typeof setRdommsCurrencyElement === 'function') {
+      setRdommsCurrencyElement(statNumbers[1], totalBudget);
+    } else {
+      statNumbers[1].textContent = formatCurrency(totalBudget);
+    }
+  }
+  if (statNumbers[2]) statNumbers[2].textContent = formatCount(totalBeneficiaries);
+  if (statNumbers[3]) statNumbers[3].textContent = `${successRate}%`;
+}
+
+async function renderArchiveCards(filter = {}, forceRefresh = false) {
+  const archiveGrid = document.getElementById('archiveGrid');
+  const projects = await loadProjects(forceRefresh);
+  const archivedProjects = getArchivedProjects(projects).filter((project) => isAdminViewer() || isProjectInDashboardRange(project));
+
+  updateStats(archivedProjects);
+
+  let filteredProjects = archivedProjects;
+  if (filter.year && filter.year !== 'all') {
+    filteredProjects = filteredProjects.filter(project => {
+      const baseDate = project.dueDate || project.createdAt || project.startDate;
+      if (!baseDate) return false;
+      const year = new Date(baseDate).getFullYear();
+      return year === parseInt(filter.year, 10);
+    });
+  }
+  if (filter.sector && filter.sector !== 'all') {
+    filteredProjects = filteredProjects.filter(project => project.sector === filter.sector);
+  }
+  if (filter.region && filter.region !== 'all') {
+    filteredProjects = filteredProjects.filter(project => project.location === filter.region || project.district === filter.region);
+  }
+
+  if (!filteredProjects.length) {
+    archiveGrid.innerHTML = `
+      <div class="empty-state" style="grid-column:1/-1;">
+        <i class="fas fa-archive"></i>
+        <h3>No Archived Projects</h3>
+        <p>No completed projects found in the selected date range.</p>
+        <a href="all-projects.php" class="btn btn-primary" style="margin-top:1rem;"><i class="fas fa-folder"></i> View All Projects</a>
+      </div>
+    `;
+    return;
+  }
+
+  archiveGrid.innerHTML = filteredProjects.map(project => {
+    const sectorClass = getSectorClass(project.sector);
+    const sectorIcon = getSectorIcon(project.sector);
+    const team = Array.isArray(project.team) ? project.team : [];
+    const archiveDate = project.dueDate || project.createdAt || project.startDate;
+
+    return `
+      <div class="archive-card" onclick="showDetail(${JSON.stringify(project.id)})">
+        <div class="archive-header">
+          <div class="archive-icon ${sectorClass}"><i class="fas ${sectorIcon}"></i></div>
+          <div class="archive-status">Completed</div>
+        </div>
+        <div class="archive-title">${project.name || 'Untitled Project'}</div>
+        <div class="archive-meta">
+          <div class="meta-row">
+            <span class="meta-label">Budget</span>
+            <span class="meta-value">${formatCurrencyHtml(project.budget)}</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">Duration</span>
+            <span class="meta-value">${formatDateRange(project.startDate, project.dueDate)}</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">Beneficiaries</span>
+            <span class="meta-value">${formatCount(project.beneficiaries || 0)}</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">Region</span>
+            <span class="meta-value">${project.location || project.district || 'N/A'}</span>
+          </div>
+        </div>
+        <div class="archive-summary">
+          <div class="summary-title">Project Summary</div>
+          <div class="summary-text">${project.description || 'Project completed successfully. All objectives achieved within the planned timeline and budget.'}</div>
+        </div>
+        <div class="archive-footer">
+          <div class="archive-team">
+            ${team.slice(0, 3).map((member, i) => {
+              const initials = String(member || '').trim().substring(0, 2).toUpperCase() || 'NA';
+              return `<div class="team-avatar" style="background:hsl(${120 + i * 40}, 70%, 40%);">${initials}</div>`;
+            }).join('')}
+          </div>
+          <div class="archive-date">Archived: ${archiveDate ? new Date(archiveDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A'}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function getVisibleProjectsForDetails() {
+  return getArchivedProjects(archivedProjectsCache).filter((project) => isAdminViewer() || isProjectInDashboardRange(project));
+}
+
+function showDetail(projectId) {
+  const project = getVisibleProjectsForDetails().find(p => String(p.id) === String(projectId));
+  if (!project) return;
+
+  document.getElementById('detailId').textContent = String(project.id).padStart(3, '0');
+  document.getElementById('detailStatus').textContent = 'Completed';
+  const detailBudget = document.getElementById('detailBudget');
+  if (typeof setRdommsCurrencyElement === 'function') {
+    setRdommsCurrencyElement(detailBudget, project.budget);
+  } else {
+    detailBudget.textContent = formatCurrency(project.budget);
+  }
+  document.getElementById('detailDuration').textContent = formatDateRange(project.startDate, project.dueDate);
+  document.getElementById('detailBeneficiaries').textContent = formatCount(project.beneficiaries || 0);
+  document.getElementById('detailRegion').textContent = project.location || project.district || 'N/A';
+  document.getElementById('detailDescription').textContent = project.description || 'Project completed successfully. All objectives achieved within the planned timeline and budget.';
+
+  document.querySelector('.btn-restore').onclick = () => restoreProject(projectId);
+  document.querySelector('.btn-delete').onclick = () => deleteProject(projectId);
+
+  document.getElementById('detailModal').style.display = 'flex';
+}
+
+async function restoreProject(projectId) {
+  const project = archivedProjectsCache.find(p => String(p.id) === String(projectId));
+  if (!project) return;
+
+  try {
+    const res = await fetch('../api/projects.php', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      body: JSON.stringify({
+        id: project.id,
+        status: 'ongoing',
+        progress: 90
+      })
+    });
+    const result = await res.json();
+    if (!res.ok || result.status !== 'success') {
+      throw new Error(result.message || 'Failed to restore project');
+    }
+
+    alert('Project restored successfully!');
+    closeDetail();
+    await renderArchiveCards(currentFilters, true);
+  } catch (error) {
+    alert(error.message || 'Failed to restore project');
+  }
+}
+
+async function deleteProject(projectId) {
+  if (!window.RDOMMSProjectFinance?.promptProjectDeregistration) {
+    alert('Removal module not loaded.');
+    return;
+  }
+
+  try {
+    const ok = await RDOMMSProjectFinance.promptProjectDeregistration(projectId);
+    if (!ok) return;
+    closeDetail();
+    await renderArchiveCards(currentFilters, true);
+  } catch (error) {
+    alert(error.message || 'Failed to process project removal.');
+  }
+}
+
+function closeDetail() {
+  document.getElementById('detailModal').style.display = 'none';
+}
+
+document.querySelector('.search-box input').addEventListener('input', function(e) {
+  const searchTerm = e.target.value.toLowerCase();
+  const cards = document.querySelectorAll('.archive-card');
+
+  cards.forEach(card => {
+    const title = (card.querySelector('.archive-title')?.textContent || '').toLowerCase();
+    const summary = (card.querySelector('.summary-text')?.textContent || '').toLowerCase();
+    card.style.display = title.includes(searchTerm) || summary.includes(searchTerm) ? 'block' : 'none';
+  });
+});
+
+document.querySelectorAll('.filter-select').forEach((select, index) => {
+  select.addEventListener('change', function() {
+    if (index === 0) currentFilters.year = this.value;
+    if (index === 1) currentFilters.sector = this.value;
+    if (index === 2) currentFilters.region = this.value;
+    renderArchiveCards(currentFilters);
+  });
+});
+
+document.getElementById('detailModal').addEventListener('click', function(e) {
+  if (e.target === this) closeDetail();
+});
+
+window.addEventListener('storage', (e) => {
+  if (e.key === 'rd_projects' || e.key === 'dashboardDateRange') {
+    renderArchiveCards(currentFilters, true);
+  }
+});
+
+initArchiveYearFilter();
+renderArchiveCards(currentFilters, true);
+</script>
+</body>
+</html>

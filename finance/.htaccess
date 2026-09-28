@@ -1,0 +1,5 @@
+# Redirect legacy Finance HTML pages to PHP entry points
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule ^(budget-allocation|expense-tracking|financial-reports|project-budget-approvals)\.html$ $1.php [R=301,L,QSA]
+</IfModule>

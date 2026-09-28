@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RDO|MMS – Notification Settings</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+<link rel="stylesheet" href="../assets/css/rdomms-icons-offline.css">
+<link rel="stylesheet" href="../assets/css/rdomms-session-countdown.css?v=2">
+<link rel="stylesheet" href="../assets/css/rdomms-toast.css">
+<link rel="stylesheet" href="../assets/css/rdomms-theme.css">
+<script src="../assets/js/rdomms-security.js"></script>
+<script src="../assets/js/localStorage-service.js"></script>
+<script src="../assets/js/rdomms-system-settings.js"></script>
+<script src="../assets/js/rdomms-toast.js"></script>
+<style>
+:root { --primary:#2d5016; --secondary:#4a7c28; --dark:#1a3009; --text:#212529; --muted:#6c757d; --border:#dee2e6; --radius:0.75rem; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,sans-serif;background:linear-gradient(180deg,#fbfcf9 0%,#f0f4f1 100%);color:var(--text);min-height:100vh}
+.page{max-width:960px;margin:0 auto;padding:1.25rem 1.25rem 3rem}
+.page-loading{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;background:rgba(15,36,20,.35);color:#fff;font-weight:600;gap:.75rem}
+.page-loading.hidden{display:none}
+.hero{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:1.25rem 1.5rem;background:linear-gradient(135deg,var(--dark),var(--primary));color:#fff;border-radius:1rem;margin-bottom:1rem}
+.hero h1{font-size:1.55rem}.hero p{opacity:.92;margin-top:.35rem;max-width:620px;line-height:1.5}
+.header-actions{display:flex;gap:.5rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.55rem .9rem;border-radius:var(--radius);border:none;font:inherit;font-weight:600;cursor:pointer;text-decoration:none}
+.btn-outline{background:#fff;color:var(--primary)} .btn-light{background:#fff;border:1px solid var(--border);color:var(--primary)} .btn-primary{background:var(--secondary);color:#fff}
+.panel{background:#fff;border:1px solid var(--border);border-radius:1rem;padding:1.25rem;margin-bottom:1rem}
+.panel h2{font-size:1rem;color:var(--primary);margin-bottom:1rem;display:flex;align-items:center;gap:.45rem}
+.setting-item{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.85rem 0;border-bottom:1px solid var(--border)}
+.setting-item:last-child{border-bottom:none}
+.setting-info h4{font-size:.92rem;font-weight:600;margin-bottom:.15rem}
+.setting-info p{font-size:.78rem;color:var(--muted);line-height:1.45}
+.toggle{width:52px;height:28px;background:#cbd5e1;border-radius:40px;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
+.toggle.active{background:var(--secondary)}
+.toggle::after{content:'';width:24px;height:24px;background:#fff;border-radius:50%;position:absolute;top:2px;left:3px;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.toggle.active::after{transform:translateX(23px)}
+.form-group{display:flex;flex-direction:column;gap:.35rem;margin-top:.85rem}
+.form-group label{font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase}
+.control{width:100%;max-width:280px;padding:.72rem;border:1px solid var(--border);border-radius:var(--radius);font:inherit;background:#fff}
+.actions{display:flex;justify-content:flex-end;margin-top:.5rem}
+</style>
+</head>
+<body>
+<div id="pageLoading" class="page-loading"><i class="fas fa-spinner fa-spin"></i> Loading notification settings…</div>
+<div class="page">
+  <div class="hero">
+    <div>
+      <h1><i class="fas fa-bell"></i> Notification Settings</h1>
+      <p>Configure system-wide notification channels and alert types stored in the database. Disabled alerts are excluded from the dashboard badge and in-app notifications.</p>
+    </div>
+    <div class="header-actions">
+      <a href="../RDOMMS.html" class="btn btn-outline"><i class="fas fa-house"></i> Dashboard</a>
+      <a href="general-settings.php" class="btn btn-light"><i class="fas fa-cog"></i> General</a>
+    </div>
+  </div>
+
+  <section class="panel">
+    <h2><i class="fas fa-envelope"></i> Delivery Channels</h2>
+    <div class="setting-item">
+      <div class="setting-info">
+        <h4>Email Notifications</h4>
+        <p>Allow the system to send email alerts when SMTP is configured.</p>
+      </div>
+      <div class="toggle" id="emailToggle"></div>
+    </div>
+    <div class="setting-item">
+      <div class="setting-info">
+        <h4>In-App Notifications</h4>
+        <p>Show alerts in the dashboard badge and system alerts page.</p>
+      </div>
+      <div class="toggle active" id="pushToggle"></div>
+    </div>
+    <div class="setting-item">
+      <div class="setting-info">
+        <h4>SMS Alerts</h4>
+        <p>Enable SMS delivery for critical alerts (requires SMS gateway).</p>
+      </div>
+      <div class="toggle" id="smsToggle"></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2><i class="fas fa-exclamation-triangle"></i> Alert Types</h2>
+    <div class="setting-item">
+      <div class="setting-info">
+        <h4>Project Status Changes</h4>
+        <p>Notify when project status or milestones change.</p>
+      </div>
+      <div class="toggle active" id="projectStatusToggle"></div>
+    </div>
+    <div class="setting-item">
+      <div class="setting-info">
+        <h4>Budget Threshold Warnings</h4>
+        <p>Notify when spending approaches or exceeds budget limits.</p>
+      </div>
+      <div class="toggle active" id="budgetToggle"></div>
+    </div>
+    <div class="setting-item">
+      <div class="setting-info">
+        <h4>User &amp; Role Updates</h4>
+        <p>Notify administrators when users are created or roles change.</p>
+      </div>
+      <div class="toggle active" id="userRoleToggle"></div>
+    </div>
+    <div class="setting-item">
+      <div class="setting-info">
+        <h4>Approval Requests</h4>
+        <p>Include pending approval requests in the notification badge.</p>
+      </div>
+      <div class="toggle active" id="approvalToggle"></div>
+    </div>
+    <div class="setting-item">
+      <div class="setting-info">
+        <h4>System Alerts</h4>
+        <p>Allow creation and display of manual system alerts.</p>
+      </div>
+      <div class="toggle active" id="systemAlertsToggle"></div>
+    </div>
+    <div class="setting-item">
+      <div class="setting-info">
+        <h4>System Maintenance</h4>
+        <p>Notify when maintenance mode is enabled or disabled.</p>
+      </div>
+      <div class="toggle active" id="maintenanceToggle"></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2><i class="fas fa-clock"></i> Email Digest</h2>
+    <div class="setting-item">
+      <div class="setting-info">
+        <h4>Daily / Weekly Digest</h4>
+        <p>Bundle non-urgent alerts into a scheduled email summary.</p>
+      </div>
+      <label class="toggle-row" style="margin:0;">
+        <input type="checkbox" id="digestEnabled">
+        <span>Enable digest</span>
+      </label>
+    </div>
+    <div class="form-group">
+      <label for="digestFrequency">Digest Frequency</label>
+      <select class="control" id="digestFrequency">
+        <option value="daily">Daily</option>
+        <option value="weekly">Weekly</option>
+      </select>
+      <p class="impact-note">Stored for future scheduled delivery; requires email channel and SMTP.</p>
+    </div>
+  </section>
+
+  <div class="actions">
+    <button type="button" class="btn btn-primary" id="saveNotificationBtn">
+      <i class="fas fa-save"></i> Save Notification Settings
+    </button>
+  </div>
+</div>
+<script src="../assets/js/notification-settings.js?v=3"></script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+# Redirect legacy planning HTML pages to their PHP counterparts
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule ^(monthly-plans|quarterly-plans|annual-plans|targets-indicators|progress-monitoring|all-plans|upload-evidence)\.html$ $1.php [R=301,L,QSA]
+</IfModule>

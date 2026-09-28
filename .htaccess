@@ -1,0 +1,47 @@
+# RDOMMS — Apache entry point
+DirectoryIndex index.php index.html
+Options -Indexes
+
+# Block sensitive files
+<FilesMatch "^(\.env|\.env\.example|\.gitignore)$">
+  Require all denied
+</FilesMatch>
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# Auto-detect app base when deployed in a subfolder (e.g. /RDOMMS/)
+RewriteCond %{REQUEST_URI}::$1 ^(.*?)(.*)::\2$
+RewriteRule ^(.*)$ - [E=BASE:%1]
+
+# Visiting the folder root should always resolve to index.php (landing page)
+RewriteRule ^$ index.php [L]
+
+# Dashboard must pass through PHP auth guard
+RewriteRule ^RDOMMS\.html$ RDOMMS.php [L]
+
+# Production HTTPS redirect — uncomment when SSL is enabled:
+# RewriteCond %{HTTPS} !=on
+# RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Production HTTPS redirect when storage/security/.force-https exists (APP_ENV=production or FORCE_HTTPS=1)
+RewriteCond %{REQUEST_URI}::$1 ^(.*?)(.*)::\2$
+RewriteRule ^(.*)$ - [E=BASE:%1]
+RewriteCond %{DOCUMENT_ROOT}%{ENV:BASE}/storage/security/.force-https -f
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Avoid stale auth redirect logic in browsers during development
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "DENY"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+
+  <FilesMatch "localStorage-service\.js$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+  </FilesMatch>
+</IfModule>
+</IfModule>

@@ -1,0 +1,468 @@
+﻿/* Report Studio — mirrors planning/all-plans.php layout */
+
+.planning-page.gr-reports {
+  --green-950: #0f2414;
+  --green-900: #163120;
+  --green-800: #21482d;
+  --green-700: #2d5a38;
+  --green-600: #3d7a4d;
+  --green-500: #58a46a;
+  --green-100: #eaf6ed;
+  --text-900: #16201a;
+  --text-700: #3f5148;
+  --text-500: #66786f;
+  --ghost: #94a3b8;
+  --line: rgba(22, 48, 33, 0.12);
+  --shadow-md: 0 12px 28px rgba(13, 39, 23, 0.12);
+  --shadow-sm: 0 6px 18px rgba(13, 39, 23, 0.08);
+  --radius-xl: 30px;
+  --font: 'Inter', 'Segoe UI', Tahoma, sans-serif;
+  --red: #dc2626;
+  --sky: #2563eb;
+  font-family: var(--font);
+  color: var(--text-900);
+  background:
+    radial-gradient(circle at top left, rgba(88, 164, 106, 0.20), transparent 26%),
+    radial-gradient(circle at right 15%, rgba(231, 221, 201, 0.86), transparent 22%),
+    linear-gradient(160deg, #f7faf7 0%, #edf4ef 100%) !important;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.planning-page.gr-reports::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(120deg, rgba(255, 255, 255, 0.30), transparent 35%),
+    radial-gradient(circle at 18% 18%, rgba(88, 164, 106, 0.08), transparent 28%);
+  z-index: 0;
+}
+
+.planning-page.gr-reports .page-shell {
+  position: relative;
+  z-index: 1;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.planning-page.gr-reports .layout-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  margin-top: 22px;
+}
+
+.planning-page.gr-reports .panel {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border: 1px solid rgba(22, 48, 33, 0.10) !important;
+  border-radius: var(--radius-xl) !important;
+  box-shadow: var(--shadow-md) !important;
+  backdrop-filter: blur(14px);
+  overflow: hidden;
+}
+
+.planning-page.gr-reports .panel-header {
+  padding: 20px 22px 0;
+  border-bottom: none;
+}
+
+.planning-page.gr-reports .panel-title {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--green-900) !important;
+}
+
+.planning-page.gr-reports .panel-subtitle {
+  margin: 8px 0 0;
+  color: var(--text-500);
+  line-height: 1.6;
+}
+
+.planning-page.gr-reports .section-body {
+  padding: 22px;
+}
+
+.planning-page.gr-reports .summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.planning-page.gr-reports .summary-card {
+  background: linear-gradient(180deg, #fff 0%, #f8fbf8 100%);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 14px 16px;
+  box-shadow: var(--shadow-sm);
+  min-width: 0;
+}
+
+.planning-page.gr-reports .summary-card .k {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-500);
+}
+
+.planning-page.gr-reports .summary-card .v {
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: var(--green-900);
+  margin-top: 6px;
+}
+
+.planning-page.gr-reports .summary-card .v.gr-kpi-date {
+  font-size: 1.1rem;
+}
+
+.planning-page.gr-reports .summary-card .s {
+  font-size: 0.78rem;
+  color: var(--text-500);
+  margin-top: 4px;
+}
+
+.planning-page.gr-reports .gr-note {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(45, 90, 56, 0.16);
+  background: var(--green-100);
+  font-size: 0.86rem;
+  line-height: 1.55;
+}
+
+.planning-page.gr-reports .gr-note > i { color: var(--green-600); margin-top: 2px; }
+.planning-page.gr-reports .gr-note strong { color: var(--green-900); }
+.planning-page.gr-reports .gr-note p { margin: 4px 0 0; color: var(--text-500); }
+
+.planning-page.gr-reports .gr-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.planning-page.gr-reports .preset-btn {
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #fff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-500);
+  cursor: pointer;
+}
+
+.planning-page.gr-reports .preset-btn.is-active {
+  background: linear-gradient(135deg, var(--green-900), var(--green-700));
+  color: #fff;
+  border-color: transparent;
+}
+
+.planning-page.gr-reports .toolbar {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 14px;
+  align-items: center;
+}
+
+.planning-page.gr-reports .filters-inline {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.planning-page.gr-reports .filters-inline select,
+.planning-page.gr-reports .filters-inline input {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 11px 14px;
+  background: #fff;
+  min-width: 150px;
+  color: var(--text-900);
+}
+
+.planning-page.gr-reports .filters-inline select:first-child {
+  flex: 1;
+  min-width: 220px;
+}
+
+.planning-page.gr-reports .btn-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.planning-page.gr-reports .action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 16px;
+  border-radius: 14px !important;
+  border: 1px solid transparent;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.planning-page.gr-reports .action-btn.primary {
+  background: linear-gradient(135deg, var(--green-900), var(--green-700)) !important;
+  color: #fff !important;
+}
+
+.planning-page.gr-reports .action-btn.ghost {
+  background: transparent !important;
+  border-color: var(--line) !important;
+  color: var(--text-700) !important;
+}
+
+.planning-page.gr-reports .action-btn.export-pdf {
+  background: var(--red) !important;
+  color: #fff !important;
+}
+
+.planning-page.gr-reports .action-btn.export-word {
+  background: var(--sky) !important;
+  color: #fff !important;
+}
+
+.planning-page.gr-reports .active-filters {
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: var(--green-100);
+  border: 1px solid rgba(45, 90, 56, 0.18);
+  font-size: 0.84rem;
+  color: var(--text-500);
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.planning-page.gr-reports .active-filters strong { color: var(--green-900); }
+
+.planning-page.gr-reports .gr-module-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.planning-page.gr-reports .gr-module-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--line);
+  color: var(--green-800);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: var(--shadow-sm);
+}
+
+.planning-page.gr-reports .empty-row {
+  display: none;
+  padding: 36px 18px;
+  border-radius: 18px;
+  border: 1px dashed rgba(33, 72, 45, 0.25);
+  background: #f8fbf8;
+  color: var(--text-500);
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.planning-page.gr-reports .empty-row.is-visible { display: block; }
+.planning-page.gr-reports .empty-row i {
+  display: block;
+  font-size: 1.4rem;
+  margin-bottom: 8px;
+  color: var(--green-500);
+}
+
+.planning-page.gr-reports .gr-output {
+  display: none;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: #fff;
+  padding: 18px 20px 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.planning-page.gr-reports .gr-output.is-visible { display: block; }
+
+.planning-page.gr-reports .gr-output-title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--green-900);
+}
+
+.planning-page.gr-reports .gr-output-meta {
+  margin: 6px 0 0;
+  font-size: 0.82rem;
+  color: var(--ghost);
+}
+
+.planning-page.gr-reports .filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.planning-page.gr-reports .filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--green-100);
+  border: 1px solid rgba(45, 90, 56, 0.18);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--green-800);
+}
+
+.planning-page.gr-reports .summary-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.planning-page.gr-reports .summary-chip {
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: #f8fbf8;
+  border: 1px solid var(--line);
+  font-size: 0.78rem;
+}
+
+.planning-page.gr-reports .summary-chip strong {
+  color: var(--green-900);
+  font-weight: 800;
+}
+
+.planning-page.gr-reports .gr-chart-panel {
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 16px 18px;
+  margin-bottom: 16px;
+  background: #f8fbf8;
+}
+
+.planning-page.gr-reports .gr-chart-title {
+  margin: 0 0 12px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-500);
+}
+
+.planning-page.gr-reports .gr-chart-box {
+  height: 320px;
+  position: relative;
+}
+
+.planning-page.gr-reports .gr-table-title {
+  margin: 0 0 10px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-500);
+}
+
+.planning-page.gr-reports .gr-table-wrap {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: auto;
+  margin-bottom: 16px;
+}
+
+.planning-page.gr-reports .rpt-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.84rem;
+}
+
+.planning-page.gr-reports .rpt-table th {
+  background: linear-gradient(135deg, var(--green-900), var(--green-700));
+  color: #fff;
+  padding: 10px 12px;
+  text-align: left;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.planning-page.gr-reports .rpt-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.planning-page.gr-reports .rpt-table tbody tr:hover {
+  background: #f8fbf8;
+}
+
+.planning-page.gr-reports .gr-export-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-top: 4px;
+}
+
+.planning-page.gr-reports .gr-loading {
+  position: fixed;
+  inset: 0;
+  z-index: 4000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 36, 20, 0.45);
+  backdrop-filter: blur(4px);
+}
+
+.planning-page.gr-reports .gr-loading.active { display: flex; }
+
+.planning-page.gr-reports .gr-loading-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: var(--shadow-md);
+  font-weight: 700;
+  color: var(--green-900);
+}
+
+@media (max-width: 1100px) {
+  .planning-page.gr-reports .summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 760px) {
+  .planning-page.gr-reports .page-shell { padding: 14px; }
+  .planning-page.gr-reports .summary-grid { grid-template-columns: 1fr; }
+  .planning-page.gr-reports .panel-header,
+  .planning-page.gr-reports .section-body { padding-left: 16px; padding-right: 16px; }
+  .planning-page.gr-reports .filters-inline { width: 100%; }
+  .planning-page.gr-reports .filters-inline select,
+  .planning-page.gr-reports .filters-inline input { width: 100%; min-width: 0; }
+  .planning-page.gr-reports .action-btn { width: 100%; justify-content: center; }
+  .planning-page.gr-reports .gr-chart-box { height: 240px; }
+}

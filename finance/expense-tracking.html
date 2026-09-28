@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RDO|MMS – Expense Tracking</title>
+<meta name="description" content="Track and manage actual spending across departments, categories, and stations in RDO|MMS.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+<link rel="stylesheet" href="../assets/css/rdomms-icons-offline.css">
+<link rel="stylesheet" href="../assets/css/rdomms-session-countdown.css?v=2">
+<link rel="stylesheet" href="../assets/css/project-nav.css?v=3">
+<link rel="stylesheet" href="../assets/css/rdomms-toast.css">
+<link rel="stylesheet" href="../assets/css/rdomms-currency.css">
+<script src="../assets/js/rdomms-security.js"></script>
+<script src="../assets/js/localStorage-service.js"></script>
+<script src="../assets/js/number-format.js"></script>
+<script src="../assets/vendor/chart.umd.min.js"></script>
+<script src="../assets/vendor/html2pdf.bundle.min.js"></script>
+<script src="../assets/vendor/sheetjs/xlsx.full.min.js"></script>
+<script src="../assets/js/rdomms-export.js"></script>
+<style>
+:root {
+  --primary-green: #2d5016;
+  --secondary-green: #4a7c28;
+  --accent-green: #6dbd6d;
+  --dark-green: #1a3009;
+  --success-green: #28a745;
+  --warning-amber: #ffc107;
+  --danger-red: #dc3545;
+  --info-blue: #17a2b8;
+  --text-primary: #212529;
+  --text-secondary: #6c757d;
+  --border-gray: #dee2e6;
+  --bg-secondary: #f8f9fa;
+  --shadow-sm: 0 2px 4px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 8px rgba(0,0,0,0.12);
+  --radius-lg: 1rem;
+  --radius-md: 0.75rem;
+  --font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-family);
+  background:
+    radial-gradient(circle at top left, rgba(74, 124, 40, 0.14), transparent 28%),
+    radial-gradient(circle at top right, rgba(220, 53, 69, 0.06), transparent 24%),
+    linear-gradient(180deg, #fbfcf9 0%, #f0f4f1 100%);
+  color: var(--text-primary);
+  min-height: 100vh;
+}
+
+.page { max-width: 1280px; margin: 0 auto; padding: 1.25rem 1.25rem 3rem; }
+.page-loading {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 36, 20, 0.35);
+  backdrop-filter: blur(3px);
+  color: #fff;
+  font-weight: 600;
+  gap: 0.75rem;
+}
+.page-loading.hidden { display: none; }
+.page-hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+  padding: 1.35rem 1.5rem;
+  background: linear-gradient(135deg, var(--dark-green) 0%, var(--primary-green) 55%, #166534 100%);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+.page-hero-main { display: flex; align-items: center; gap: 1.15rem; flex: 1; min-width: 240px; }
+.hero-icon-wrap {
+  width: 4.25rem; height: 4.25rem;
+  border-radius: 1rem;
+  background: rgba(255,255,255,0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-md);
+  flex-shrink: 0;
+}
+.hero-icon-wrap img { width: 2.75rem; height: 2.75rem; object-fit: contain; }
+.page-hero h1 { font-size: 1.75rem; font-weight: 700; color: #fff; }
+.page-hero p { color: rgba(255,255,255,0.92); font-size: 0.9375rem; margin-top: 0.4rem; max-width: 520px; line-height: 1.5; }
+.hero-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.65rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,.14);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #fff;
+}
+.header-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+.header-actions .filter-select {
+  background: rgba(255,255,255,0.95);
+  border-color: rgba(255,255,255,0.45);
+  color: var(--primary-green);
+  font-weight: 600;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  text-decoration: none;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+  color: #fff;
+  border: 2px solid var(--dark-green);
+}
+.btn-primary .btn-ico { filter: brightness(0) invert(1); }
+.btn-outline {
+  background: rgba(255,255,255,0.95);
+  color: var(--primary-green);
+  border: 2px solid rgba(255,255,255,0.5);
+}
+.btn-success { background: var(--success-green); color: #fff; }
+.btn-info { background: var(--info-blue); color: #fff; }
+.btn-warning { background: var(--warning-amber); color: #1a3009; }
+.btn-danger { background: var(--danger-red); color: #fff; }
+.btn-sm { padding: 0.35rem 0.6rem; font-size: 0.75rem; }
+.btn-ico { width: 1rem; height: 1rem; object-fit: contain; }
+
+.module-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+@media (max-width: 768px) { .module-grid { grid-template-columns: 1fr; } }
+.module-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  background: rgba(255,255,255,0.97);
+  border: 1.5px solid var(--border-gray);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: var(--text-primary);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+.module-link:hover {
+  border-color: var(--primary-green);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.module-ico-wrap {
+  width: 2.5rem; height: 2.5rem;
+  border-radius: 0.5rem;
+  background: var(--bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.module-ico-wrap img { width: 1.5rem; height: 1.5rem; object-fit: contain; }
+.module-link small { display: block; font-weight: 500; color: var(--text-secondary); font-size: 0.6875rem; }
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+@media (max-width: 900px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .stats-grid { grid-template-columns: 1fr; } }
+.stat-card {
+  background: rgba(255,255,255,0.97);
+  border: 1.5px solid var(--border-gray);
+  border-radius: var(--radius-lg);
+  padding: 1.15rem 1.25rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.stat-icon {
+  width: 3rem; height: 3rem;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.stat-icon img { width: 1.65rem; height: 1.65rem; object-fit: contain; }
+.stat-icon.total { background: linear-gradient(135deg, #ecfdf5, #d1fae5); border: 1px solid #a7f3d0; }
+.stat-icon.approved { background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1px solid #bfdbfe; }
+.stat-icon.pending { background: linear-gradient(135deg, #fffbeb, #fef3c7); border: 1px solid #fde68a; }
+.stat-icon.budget { background: linear-gradient(135deg, #f0fdf4, #dcfce7); border: 1px solid #bbf7d0; }
+.stat-label { font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-secondary); font-weight: 600; }
+.stat-value { font-size: 1.35rem; font-weight: 800; color: var(--primary-green); margin-top: 0.2rem; }
+.stat-meta { font-size: 0.72rem; color: var(--text-secondary); margin-top: 0.35rem; font-weight: 500; }
+
+.scope-bar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 0.95rem 1.1rem;
+  margin-bottom: 1.25rem;
+  background: rgba(255,255,255,0.97);
+  border: 1.5px solid var(--border-gray);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+.scope-bar-main { flex: 1; min-width: 220px; }
+.scope-bar-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  margin-bottom: 0.55rem;
+}
+.filter-chips { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.32rem 0.65rem;
+  border-radius: 999px;
+  background: #ecfdf5;
+  border: 1px solid #bbf7d0;
+  color: #166534;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+.filter-chip.muted {
+  background: var(--bg-secondary);
+  border-color: var(--border-gray);
+  color: var(--text-secondary);
+}
+.filter-chip.warn {
+  background: #fffbeb;
+  border-color: #fde68a;
+  color: #92400e;
+}
+.scope-bar-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+.scope-bar-actions .btn-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--primary-green);
+  text-decoration: none;
+}
+.scope-bar-actions .btn-link:hover { text-decoration: underline; }
+
+.budget-context-box.is-success { border-color: #86efac; background: #f0fdf4; }
+.budget-context-box.is-success h3 { color: #166534; }
+.budget-context-box.is-warning { border-color: #fcd34d; background: #fffbeb; }
+.budget-context-box.is-warning h3 { color: #92400e; }
+.budget-context-box.is-danger { border-color: #fca5a5; background: #fef2f2; }
+.budget-context-box.is-danger h3 { color: #991b1b; }
+.budget-context-box .context-link {
+  color: #1d4ed8;
+  font-weight: 700;
+  text-decoration: none;
+}
+.budget-context-box .context-link:hover { text-decoration: underline; }
+
+.panel-toggle-btn {
+  border: 1px solid var(--border-gray);
+  background: #fff;
+  color: var(--primary-green);
+  border-radius: var(--radius-md);
+  padding: 0.35rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.panel-collapsible.collapsed .panel-collapsible-body { display: none; }
+
+.data-table tbody tr[data-scope-row] { cursor: pointer; }
+.data-table tbody tr[data-scope-row]:hover { background: #f8fafc; }
+.data-table tbody tr.row-over-budget { background: rgba(254, 226, 226, 0.35); }
+.data-table tbody tr.row-near-limit { background: rgba(254, 243, 199, 0.35); }
+
+.table-scroll-hint {
+  display: none;
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.45rem;
+}
+@media (max-width: 900px) {
+  .table-scroll-hint { display: block; }
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+}
+
+.budget-overview-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 1.25rem;
+}
+@media (max-width: 980px) { .budget-overview-grid { grid-template-columns: 1fr; } }
+
+.budget-summary-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+  margin-bottom: 1rem;
+}
+@media (max-width: 640px) { .budget-summary-cards { grid-template-columns: 1fr; } }
+
+.budget-mini-card {
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  border: 1px solid var(--border-gray);
+  border-radius: var(--radius-md);
+  padding: 0.95rem 1rem;
+}
+.budget-mini-card .label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  font-weight: 700;
+}
+.budget-mini-card .value {
+  margin-top: 0.25rem;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--primary-green);
+}
+.budget-mini-card .value.danger { color: var(--danger-red); }
+.budget-mini-card .value.warning { color: #b45309; }
+.budget-mini-card .value.info { color: var(--info-blue); }
+
+.budget-progress-wrap { margin-top: 0.35rem; }
+.budget-progress-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.35rem;
+}
+.budget-progress-bar {
+  height: 12px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.budget-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.35s ease;
+  background: linear-gradient(90deg, #28a745, #4a7c28);
+}
+.budget-progress-fill.warning { background: linear-gradient(90deg, #f59e0b, #d97706); }
+.budget-progress-fill.danger { background: linear-gradient(90deg, #ef4444, #dc3545); }
+
+.budget-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.28rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+.budget-status-badge.success { background: #d1fae5; color: #065f46; }
+.budget-status-badge.warning { background: #fef3c7; color: #92400e; }
+.budget-status-badge.danger { background: #fee2e2; color: #991b1b; }
+.budget-status-badge.info { background: #dbeafe; color: #1e40af; }
+.budget-status-badge.secondary { background: #e5e7eb; color: #475569; }
+
+.budget-context-box {
+  margin-top: 1rem;
+  padding: 0.95rem 1rem;
+  border: 1px dashed #93c5fd;
+  border-radius: var(--radius-md);
+  background: #eff6ff;
+}
+.budget-context-box h3 {
+  font-size: 0.82rem;
+  color: #1e40af;
+  margin-bottom: 0.55rem;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+.budget-context-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+@media (max-width: 900px) { .budget-context-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.budget-context-grid .item .label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #475569;
+  font-weight: 700;
+}
+.budget-context-grid .item .value {
+  margin-top: 0.15rem;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.budget-table .num.positive { color: #065f46; font-weight: 700; }
+.budget-table .num.negative { color: #991b1b; font-weight: 700; }
+.budget-table .num.neutral { color: var(--text-secondary); font-weight: 700; }
+
+.panel-tools {
+  display: flex;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.panel {
+  background: rgba(255,255,255,0.97);
+  border: 1.5px solid var(--border-gray);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+  box-shadow: var(--shadow-sm);
+}
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-gray);
+}
+.panel-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--primary-green);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.panel-title img { width: 1.25rem; height: 1.25rem; object-fit: contain; }
+.panel-sub {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  margin: -0.35rem 0 1rem;
+}
+
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem 1rem;
+  margin-top: 0.5rem;
+}
+.preview-grid .span-2 { grid-column: 1 / -1; }
+.preview-grid dt {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+}
+.preview-grid dd {
+  margin-top: 0.2rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  align-items: end;
+}
+.form-group label {
+  display: block;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-secondary);
+  margin-bottom: 0.35rem;
+}
+.form-control {
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  border: 1.5px solid var(--border-gray);
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-family: inherit;
+  background: #fff;
+}
+.form-control:focus {
+  outline: none;
+  border-color: var(--primary-green);
+  box-shadow: 0 0 0 3px rgba(45, 80, 22, 0.1);
+}
+.form-span-2 { grid-column: span 2; }
+@media (max-width: 600px) { .form-span-2 { grid-column: span 1; } }
+
+.editing-banner {
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.85rem;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: var(--radius-md);
+  font-size: 0.8125rem;
+  color: #1e40af;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+.editing-banner.show { display: flex; }
+.editing-banner img { width: 1rem; height: 1rem; object-fit: contain; }
+
+.controls {
+  display: flex;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 200px;
+  padding: 0.5rem 0.75rem;
+  background: #fff;
+  border: 1.5px solid var(--border-gray);
+  border-radius: var(--radius-md);
+}
+.search-box:focus-within { border-color: var(--primary-green); box-shadow: 0 0 0 3px rgba(45, 80, 22, 0.08); }
+.search-box input { border: none; outline: none; flex: 1; font-size: 0.875rem; font-family: inherit; }
+.search-box img { width: 1rem; height: 1rem; object-fit: contain; opacity: 0.6; }
+.filter-select {
+  padding: 0.5rem 0.75rem;
+  border: 1.5px solid var(--border-gray);
+  border-radius: var(--radius-md);
+  font-size: 0.8125rem;
+  font-family: inherit;
+  background: #fff;
+  cursor: pointer;
+}
+
+.table-wrap { overflow-x: auto; }
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+.data-table th, .data-table td {
+  padding: 0.7rem 0.85rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-gray);
+  vertical-align: middle;
+}
+.data-table th {
+  background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+  color: #fff;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.data-table tbody tr:hover td { background: rgba(45, 80, 22, 0.04); }
+.data-table .num { font-variant-numeric: tabular-nums; font-weight: 600; }
+.actions { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+.badge.approved { background: #d1fae5; color: #065f46; }
+.badge.pending { background: #fef3c7; color: #92400e; }
+.badge.rejected { background: #fee2e2; color: #991b1b; }
+
+.chart-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+@media (max-width: 900px) { .chart-row { grid-template-columns: 1fr; } }
+.chart-box { height: 260px; position: relative; }
+.chart-box canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.empty-row td {
+  text-align: center;
+  padding: 2.5rem;
+  color: var(--text-secondary);
+}
+.empty-row i { display: block; font-size: 1.75rem; margin-bottom: 0.65rem; opacity: 0.35; color: var(--primary-green); }
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 1rem;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  max-width: 480px;
+  width: 100%;
+  box-shadow: var(--shadow-md);
+}
+.modal h2 {
+  font-size: 1.125rem;
+  color: var(--primary-green);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.modal h2 img { width: 1.35rem; height: 1.35rem; object-fit: contain; }
+.modal-actions { display: flex; gap: 0.5rem; margin-top: 1.25rem; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+
+<nav id="rdomms-finance-nav" data-active="expense-tracking"></nav>
+
+<div id="pageLoading" class="page-loading hidden" aria-live="polite">
+  <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+  <span>Loading expenses…</span>
+</div>
+
+<div class="page">
+  <div class="page-hero">
+    <div class="page-hero-main">
+      <div class="hero-icon-wrap">
+        <img src="../assets/photos/systemicon/expense.png" alt="Expense Tracking">
+      </div>
+      <div>
+        <h1>Expense Tracking</h1>
+        <p>Record spending by organization center, department, and category. Budget allocations, filters, and variance analysis stay in sync across finance modules.</p>
+        <span class="hero-chip" id="dbStatusChip"><i class="fas fa-database"></i> Connecting…</span>
+        <span class="hero-chip" id="userScopeChip" style="display:none;margin-left:0.35rem;"></span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button type="button" class="btn btn-outline" id="btnRefresh"><i class="fas fa-rotate"></i> Refresh</button>
+      <select id="exportFormat" class="filter-select" title="Export format">
+        <option value="pdf" selected>PDF</option>
+        <option value="word">Word</option>
+        <option value="excel">Excel</option>
+        <option value="csv">CSV</option>
+      </select>
+      <button type="button" class="btn btn-primary" id="btnExport"><i class="fas fa-file-export"></i> Export</button>
+    </div>
+  </div>
+
+  <div class="module-grid">
+    <a href="budget-allocation.php" class="module-link">
+      <span class="module-ico-wrap"><img src="../assets/photos/systemicon/budgetallocation.png" alt=""></span>
+      <span>Budget Allocation<small>Plan departmental budgets</small></span>
+    </a>
+    <a href="financial-reports.php" class="module-link">
+      <span class="module-ico-wrap"><img src="../assets/photos/systemicon/financialreport.png" alt=""></span>
+      <span>Financial Reports<small>Summary and ledger views</small></span>
+    </a>
+    <a href="../reports/variance-analysis.php" class="module-link">
+      <span class="module-ico-wrap"><img src="../assets/photos/systemicon/varianceanalysis.png" alt=""></span>
+      <span>Variance Analysis<small>Budget vs actual</small></span>
+    </a>
+  </div>
+
+  <div class="scope-bar" id="scopeBar">
+    <div class="scope-bar-main">
+      <div class="scope-bar-label"><i class="fas fa-sliders"></i> Active scope</div>
+      <div class="filter-chips" id="filterChips">
+        <span class="filter-chip muted">All records</span>
+      </div>
+    </div>
+    <div class="scope-bar-actions">
+      <button type="button" class="btn btn-sm btn-outline" id="btnApplyScopeToForm" style="color:var(--primary-green);border-color:var(--border-gray);background:#fff;">
+        <i class="fas fa-arrow-down"></i> Use in form
+      </button>
+      <a href="budget-allocation.php" class="btn-link"><i class="fas fa-wallet"></i> Budget allocation</a>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon total"><img src="../assets/photos/systemicon/expense.png" alt=""></div>
+      <div>
+        <div class="stat-label">Total Expenses</div>
+        <div class="stat-value" id="statTotal">TSH 0</div>
+        <div class="stat-meta" id="statTotalMeta">Filtered view</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon approved"><img src="../assets/photos/systemicon/profit.png" alt=""></div>
+      <div>
+        <div class="stat-label">Approved</div>
+        <div class="stat-value" id="statApproved">TSH 0</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon pending"><img src="../assets/photos/systemicon/calendar.png" alt=""></div>
+      <div>
+        <div class="stat-label">Pending</div>
+        <div class="stat-value" id="statPending">TSH 0</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon budget"><img src="../assets/photos/systemicon/budgetallocation.png" alt=""></div>
+      <div>
+        <div class="stat-label">Budget Used</div>
+        <div class="stat-value" id="statBudgetUsed">0%</div>
+        <div class="stat-meta" id="statBudgetMeta">For selected scope</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-collapsible" id="budgetOverviewPanel">
+    <div class="panel-head">
+      <div>
+        <div class="panel-title"><i class="fas fa-scale-balanced"></i> Budget vs Expense Overview</div>
+        <p class="panel-sub" id="budgetOverviewSubtitle">Compare approved allocations against committed spending and track remaining budget.</p>
+      </div>
+      <div class="panel-tools">
+        <button type="button" class="panel-toggle-btn" id="btnToggleBudgetPanel" aria-expanded="true">
+          <i class="fas fa-chevron-up"></i> Collapse
+        </button>
+        <button type="button" class="panel-toggle-btn" id="btnRetryBudgetOverview" title="Reload budget overview">
+          <i class="fas fa-rotate"></i>
+        </button>
+        <select id="budgetViewMode" class="filter-select" title="Breakdown view">
+          <option value="department" selected>By Department</option>
+          <option value="organization">By Organization Center</option>
+          <option value="project">By Project</option>
+        </select>
+        <select id="budgetFilterQuarter" class="filter-select">
+          <option value="">All quarters</option>
+          <option value="q1">Q1</option>
+          <option value="q2">Q2</option>
+          <option value="q3">Q3</option>
+          <option value="q4">Q4</option>
+        </select>
+        <select id="budgetFilterYear" class="filter-select">
+          <option value="">All years</option>
+        </select>
+        <select id="budgetFilterOrganization" class="filter-select" data-rdomms-organization data-empty-label="All organization centers" data-include-empty="true"></select>
+        <select id="budgetFilterDepartment" class="filter-select" data-rdomms-department data-empty-label="All departments" data-include-empty="true"></select>
+      </div>
+    </div>
+
+    <div class="panel-collapsible-body">
+    <div class="budget-overview-grid">
+      <div>
+        <div class="budget-summary-cards">
+          <div class="budget-mini-card">
+            <div class="label">Allocated Budget</div>
+            <div class="value" id="budgetAllocatedTotal">TSH 0</div>
+          </div>
+          <div class="budget-mini-card">
+            <div class="label">Committed Expenses</div>
+            <div class="value info" id="budgetSpentTotal">TSH 0</div>
+          </div>
+          <div class="budget-mini-card">
+            <div class="label">Remaining Budget</div>
+            <div class="value" id="budgetRemainingTotal">TSH 0</div>
+          </div>
+          <div class="budget-mini-card">
+            <div class="label">Utilization</div>
+            <div class="value" id="budgetUtilizationTotal">0%</div>
+          </div>
+        </div>
+
+        <div class="budget-progress-wrap">
+          <div class="budget-progress-meta">
+            <span id="budgetProgressLabel">Budget utilization</span>
+            <span id="budgetStatusBadge" class="budget-status-badge secondary">No data</span>
+          </div>
+          <div class="budget-progress-bar">
+            <div class="budget-progress-fill" id="budgetProgressFill" style="width:0%"></div>
+          </div>
+          <p class="panel-sub" id="budgetProgressHint" style="margin-top:0.65rem;margin-bottom:0;">
+            Approved + pending expenses are compared against approved budget allocations.
+          </p>
+        </div>
+      </div>
+
+      <div class="chart-box" style="height:280px;">
+        <canvas id="chartBudgetVsExpense"></canvas>
+      </div>
+    </div>
+
+    <div class="table-wrap" style="margin-top:1rem;">
+      <table class="data-table budget-table">
+        <thead>
+          <tr>
+            <th id="budgetTableNameHeader">Department</th>
+            <th class="num">Allocated</th>
+            <th class="num">Approved Spent</th>
+            <th class="num">Pending</th>
+            <th class="num">Remaining</th>
+            <th class="num">Utilization</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="budgetOverviewBody">
+          <tr class="empty-row"><td colspan="7"><i class="fas fa-chart-line"></i>Loading budget overview…</td></tr>
+        </tbody>
+      </table>
+    </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <div class="panel-title"><i class="fas fa-plus-circle"></i> Quick Expense Entry</div>
+      <button type="button" class="btn btn-sm btn-outline" id="btnCancelEdit" style="display:none;color:var(--primary-green);border-color:var(--border-gray);background:#fff;">Cancel edit</button>
+    </div>
+    <p class="panel-sub">Record spending against organization center, department, category, quarter, and fiscal year.</p>
+    <div class="editing-banner" id="editingBanner">
+      <i class="fas fa-pen-to-square"></i>
+      Editing expense — update fields and click Save Expense
+    </div>
+    <form id="expenseForm" class="form-grid">
+      <div class="form-group">
+        <label for="expenseDate">Date *</label>
+        <input type="date" id="expenseDate" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="expenseCategory">Category *</label>
+        <select id="expenseCategory" class="form-control" required>
+          <option value="">Select category</option>
+          <option value="operational">Operational Expenses</option>
+          <option value="personnel">Personnel Costs</option>
+          <option value="program">Program Activities</option>
+          <option value="administrative">Administrative Costs</option>
+          <option value="capital">Capital Expenditures</option>
+          <option value="maintenance">Maintenance & Repairs</option>
+          <option value="utilities">Utilities & Services</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="expenseOrganization">Organization Center</label>
+        <select id="expenseOrganization" class="form-control" data-rdomms-organization data-empty-label="Select organization center"></select>
+      </div>
+      <div class="form-group">
+        <label for="expenseDepartment">Department *</label>
+        <select id="expenseDepartment" class="form-control" data-rdomms-department data-empty-label="Select department" required></select>
+      </div>
+      <div class="form-group">
+        <label for="expenseQuarter">Quarter *</label>
+        <select id="expenseQuarter" class="form-control" required>
+          <option value="">Select quarter</option>
+          <option value="q1">Q1 (Jan–Mar)</option>
+          <option value="q2">Q2 (Apr–Jun)</option>
+          <option value="q3">Q3 (Jul–Sep)</option>
+          <option value="q4">Q4 (Oct–Dec)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="expenseFiscalYear">Fiscal Year *</label>
+        <select id="expenseFiscalYear" class="form-control" required></select>
+      </div>
+      <div class="form-group">
+        <label for="expenseFundingType">Funded item type</label>
+        <select id="expenseFundingType" class="form-control">
+          <option value="">General / Department only</option>
+          <option value="project">Project</option>
+          <option value="monthly_plan">Monthly Plan</option>
+          <option value="quarterly_plan">Quarterly Plan</option>
+          <option value="annual_plan">Annual Plan</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="expenseFundingItem">Project / Plan</label>
+        <select id="expenseFundingItem" class="form-control" disabled>
+          <option value="">Select item</option>
+        </select>
+        <small id="expenseFundingHint" class="panel-sub" style="display:block;margin-top:0.35rem;">
+          Link this expense to a project or plan that needs funding (optional).
+        </small>
+      </div>
+      <div class="form-group">
+        <label for="expenseAmount">Amount (TSH) *</label>
+        <input type="number" id="expenseAmount" class="form-control" placeholder="0" required>
+      </div>
+      <div class="form-group form-span-2">
+        <label for="expenseDescription">Description</label>
+        <input type="text" id="expenseDescription" class="form-control" placeholder="Purpose of this expense">
+      </div>
+      <div class="form-group">
+        <label for="expenseReference">Reference / Voucher No.</label>
+        <input type="text" id="expenseReference" class="form-control" placeholder="Optional reference">
+      </div>
+      <div class="form-group">
+        <label>&nbsp;</label>
+        <button type="submit" class="btn btn-success" id="btnSaveExpense">
+          <i class="fas fa-floppy-disk"></i>
+          <span id="btnSaveLabel">Save Expense</span>
+        </button>
+      </div>
+    </form>
+
+    <div class="budget-context-box" id="formBudgetContext">
+      <h3><i class="fas fa-chart-pie"></i> Budget context for this entry</h3>
+      <div class="budget-context-grid">
+        <div class="item">
+          <div class="label">Allocated</div>
+          <div class="value" id="formBudgetAllocated">TSH 0</div>
+        </div>
+        <div class="item">
+          <div class="label">Already spent</div>
+          <div class="value" id="formBudgetSpent">TSH 0</div>
+        </div>
+        <div class="item">
+          <div class="label">Remaining</div>
+          <div class="value" id="formBudgetRemaining">TSH 0</div>
+        </div>
+        <div class="item">
+          <div class="label">After this entry</div>
+          <div class="value" id="formBudgetAfter">TSH 0</div>
+        </div>
+      </div>
+      <p class="panel-sub" id="formBudgetHint" style="margin-top:0.75rem;margin-bottom:0;">
+        Select organization center, department, quarter, and fiscal year to preview budget impact before saving.
+      </p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <div class="panel-title"><i class="fas fa-table-list"></i> Expense Records</div>
+    </div>
+    <p class="panel-sub" id="tableMeta">Loading expenses…</p>
+    <div class="table-scroll-hint"><i class="fas fa-arrows-left-right"></i> Swipe horizontally to view all columns on smaller screens.</div>
+    <div class="controls">
+      <div class="search-box">
+        <img src="../assets/photos/systemicon/magnifying-glass.png" alt="">
+        <input type="search" id="searchInput" placeholder="Search category or description…">
+      </div>
+      <select id="filterStatus" class="filter-select">
+        <option value="">All statuses</option>
+        <option value="pending">Pending</option>
+        <option value="approved">Approved</option>
+        <option value="rejected">Rejected</option>
+      </select>
+      <select id="filterCategory" class="filter-select">
+        <option value="">All categories</option>
+        <option value="operational">Operational</option>
+        <option value="personnel">Personnel</option>
+        <option value="program">Program</option>
+        <option value="administrative">Administrative</option>
+        <option value="capital">Capital</option>
+        <option value="maintenance">Maintenance</option>
+        <option value="utilities">Utilities</option>
+      </select>
+      <select id="filterQuarterTable" class="filter-select">
+        <option value="">All quarters</option>
+        <option value="q1">Q1</option>
+        <option value="q2">Q2</option>
+        <option value="q3">Q3</option>
+        <option value="q4">Q4</option>
+      </select>
+      <select id="filterYearTable" class="filter-select">
+        <option value="">All years</option>
+      </select>
+      <select id="filterOrganizationTable" class="filter-select" data-rdomms-organization data-empty-label="All organization centers" data-include-empty="true"></select>
+      <select id="filterDepartmentTable" class="filter-select" data-rdomms-department data-empty-label="All departments" data-include-empty="true"></select>
+      <button type="button" class="btn btn-sm btn-outline" id="btnClearFilters" style="color:var(--primary-green);border-color:var(--border-gray);background:#fff;">Clear filters</button>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Category</th>
+            <th>Organization Center</th>
+            <th>Department</th>
+            <th>Quarter</th>
+            <th>Fiscal Year</th>
+            <th class="num">Amount</th>
+            <th>Linked To</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="expenseTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="panel" id="chartPanel">
+    <div class="panel-title"><i class="fas fa-chart-pie"></i> Expense Analytics</div>
+    <p class="panel-sub">Spending by category and department from live expense records.</p>
+    <div class="chart-row">
+      <div class="chart-box"><canvas id="chartCategory"></canvas></div>
+      <div class="chart-box"><canvas id="chartDepartment"></canvas></div>
+    </div>
+  </div>
+
+  <div class="panel" id="noChartsData" style="display:none;text-align:center;padding:2.5rem 1.5rem;">
+    <i class="fas fa-chart-column" style="font-size:2.5rem;opacity:.3;color:var(--primary-green);margin-bottom:.75rem;"></i>
+    <p style="color:var(--text-secondary);font-size:.9375rem;">No expense data yet</p>
+    <p style="color:var(--text-secondary);font-size:.8125rem;margin-top:.35rem;">Add expense records above to view analytics charts.</p>
+  </div>
+</div>
+
+<div class="modal-overlay" id="previewModal" aria-hidden="true">
+  <div class="modal preview-modal" role="dialog" aria-labelledby="previewTitle">
+    <h2 id="previewTitle"><i class="fas fa-eye"></i> Confirm expense</h2>
+    <div id="previewBody"></div>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-outline" id="btnPreviewCancel" style="color:var(--primary-green);border:1.5px solid var(--border-gray);background:#fff;">Cancel</button>
+      <button type="button" class="btn btn-success" id="btnPreviewConfirm"><i class="fas fa-check"></i> Confirm &amp; Save</button>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/js/rdomms-departments.js"></script>
+<script src="../assets/js/rdomms-organizations.js"></script>
+<script src="../assets/js/rdomms-finance-filters.js"></script>
+<script src="../assets/js/rdomms-dates.js"></script>
+<script src="../assets/js/rdomms-toast.js"></script>
+<script src="../assets/js/rpn-nav-shared.js?v=2"></script>
+<script src="../assets/js/project-finance-links.js?v=3"></script>
+<script src="../assets/js/finance-nav.js?v=4"></script>
+<script src="../assets/js/finance-funding-links.js?v=1"></script>
+<script src="../assets/js/expense-tracking.js?v=6"></script>
+</body>
+</html>

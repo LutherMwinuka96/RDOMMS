@@ -1,0 +1,5 @@
+# Redirect legacy Projects HTML pages to their PHP counterparts
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule ^(create-project|all-projects|status-tracking|project-health|archived-projects)\.html$ $1.php [R=301,L,QSA]
+</IfModule>

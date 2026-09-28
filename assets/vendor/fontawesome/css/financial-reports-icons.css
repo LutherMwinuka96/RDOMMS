@@ -1,0 +1,59 @@
+@font-face {
+    font-family: "Font Awesome 6 Free";
+    font-style: normal;
+    font-weight: 900;
+    font-display: block;
+    src: url("../webfonts/fa-solid-900.woff2") format("woff2"),
+        url("../webfonts/fa-solid-900.ttf") format("truetype");
+}
+
+.fa,
+.fas,
+.fa-solid {
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    line-height: 1;
+    text-rendering: auto;
+}
+
+.fa-chevron-right::before {
+    content: "\f054";
+}
+.fa-arrow-left::before {
+    content: "\f060";
+}
+.fa-chart-line::before {
+    content: "\f201";
+}
+.fa-file-invoice-dollar::before {
+    content: "\f571";
+}
+.fa-receipt::before {
+    content: "\f543";
+}
+.fa-scale-balanced::before {
+    content: "\f24e";
+}
+.fa-chart-pie::before {
+    content: "\f200";
+}
+.fa-file-pdf::before {
+    content: "\f1c1";
+}
+.fa-file-excel::before {
+    content: "\f1c3";
+}
+.fa-file-word::before {
+    content: "\f1c2";
+}
+.fa-chart-bar::before {
+    content: "\f080";
+}
+.fa-circle-check::before {
+    content: "\f058";
+}

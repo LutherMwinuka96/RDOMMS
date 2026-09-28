@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RDO|MMS – Organization Profile</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+<link rel="stylesheet" href="../assets/css/rdomms-icons-offline.css">
+<link rel="stylesheet" href="../assets/css/rdomms-session-countdown.css?v=2">
+<link rel="stylesheet" href="../assets/css/rdomms-toast.css">
+<link rel="stylesheet" href="../assets/css/rdomms-theme.css">
+<script src="../assets/js/rdomms-security.js"></script>
+<script src="../assets/js/localStorage-service.js"></script>
+<script src="../assets/js/rdomms-system-settings.js"></script>
+<script src="../assets/js/rdomms-toast.js"></script>
+<style>
+:root { --primary:#2d5016; --secondary:#4a7c28; --dark:#1a3009; --text:#212529; --muted:#6c757d; --border:#dee2e6; --radius:0.75rem; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,sans-serif;background:linear-gradient(180deg,#fbfcf9 0%,#f0f4f1 100%);color:var(--text);min-height:100vh}
+.page{max-width:960px;margin:0 auto;padding:1.25rem 1.25rem 3rem}
+.page-loading{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;background:rgba(15,36,20,.35);color:#fff;font-weight:600;gap:.75rem}
+.page-loading.hidden{display:none}
+.hero{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:1.25rem 1.5rem;background:linear-gradient(135deg,var(--dark),var(--primary));color:#fff;border-radius:1rem;margin-bottom:1rem}
+.hero h1{font-size:1.55rem}.hero p{opacity:.92;margin-top:.35rem;max-width:560px;line-height:1.5}
+.header-actions{display:flex;gap:.5rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.55rem .9rem;border-radius:var(--radius);border:none;font:inherit;font-weight:600;cursor:pointer;text-decoration:none}
+.btn-outline{background:#fff;color:var(--primary)} .btn-light{background:#fff;border:1px solid var(--border);color:var(--primary)} .btn-primary{background:var(--secondary);color:#fff}
+.panel{background:#fff;border:1px solid var(--border);border-radius:1rem;padding:1.25rem;margin-bottom:1rem}
+.panel h2{font-size:1rem;color:var(--primary);margin-bottom:1rem;display:flex;align-items:center;gap:.45rem}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:.85rem}
+@media(max-width:720px){.grid-2{grid-template-columns:1fr}}
+.form-group{display:flex;flex-direction:column;gap:.35rem;margin-bottom:.85rem}
+.form-group label{font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase}
+.control{width:100%;padding:.72rem;border:1px solid var(--border);border-radius:var(--radius);font:inherit;background:#fff}
+.impact-note{font-size:.78rem;color:#64748b;margin-top:.35rem;line-height:1.45}
+.logo-zone{display:flex;gap:1rem;align-items:center;flex-wrap:wrap}
+.logo-preview{width:96px;height:96px;border-radius:1rem;border:1px dashed var(--border);display:flex;align-items:center;justify-content:center;background:#f8fafc;overflow:hidden}
+.logo-preview img{width:100%;height:100%;object-fit:contain;display:none}
+.preview-card{background:#f8faf9;border:1px solid var(--border);border-radius:var(--radius);padding:1rem;margin-top:1rem}
+.preview-card h3{font-size:.95rem;margin-bottom:.35rem}
+.preview-card p{font-size:.82rem;color:var(--muted);line-height:1.5}
+.actions{display:flex;justify-content:flex-end;gap:.5rem;flex-wrap:wrap;margin-top:.5rem}
+</style>
+</head>
+<body>
+<div id="pageLoading" class="page-loading"><i class="fas fa-spinner fa-spin"></i> Loading organization profile…</div>
+<div class="page">
+  <div class="hero">
+    <div>
+      <h1><i class="fas fa-building"></i> Organization Profile</h1>
+      <p>Manage your organization’s official details stored in the database. Updates appear on the dashboard, exports, and public branding.</p>
+    </div>
+    <div class="header-actions">
+      <a href="../RDOMMS.html" class="btn btn-outline"><i class="fas fa-house"></i> Dashboard</a>
+      <a href="general-settings.php" class="btn btn-light"><i class="fas fa-cog"></i> General Settings</a>
+    </div>
+  </div>
+
+  <section class="panel">
+    <h2><i class="fas fa-id-card"></i> Organization Information</h2>
+    <div class="grid-2">
+      <div class="form-group">
+        <label for="orgName">Organization Name</label>
+        <input class="control" id="orgName" type="text" required>
+        <p class="impact-note">Used in dashboard footer, reports, and exported documents.</p>
+      </div>
+      <div class="form-group">
+        <label for="orgRegNo">Registration Number</label>
+        <input class="control" id="orgRegNo" type="text" placeholder="REG/2023/123">
+      </div>
+      <div class="form-group">
+        <label for="orgEmail">Email Address</label>
+        <input class="control" id="orgEmail" type="email" placeholder="info@rdo.or.tz">
+        <p class="impact-note">Displayed as the organization contact across the system.</p>
+      </div>
+      <div class="form-group">
+        <label for="orgPhone">Phone Number</label>
+        <input class="control" id="orgPhone" type="text" placeholder="+255 22 123456">
+      </div>
+      <div class="form-group">
+        <label for="orgWebsite">Website</label>
+        <input class="control" id="orgWebsite" type="url" placeholder="https://rdo.or.tz">
+      </div>
+      <div class="form-group">
+        <label for="orgAddress">Address</label>
+        <input class="control" id="orgAddress" type="text" placeholder="Dodoma, Tanzania">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="orgMission">Mission Statement</label>
+      <textarea class="control" id="orgMission" rows="3" placeholder="Empowering rural communities…"></textarea>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2><i class="fas fa-image"></i> Organization Logo</h2>
+    <div class="logo-zone">
+      <div class="logo-preview" id="logoPreviewWrap">
+        <img id="logoPreview" alt="Organization logo preview">
+        <i class="fas fa-building" id="logoPlaceholder" style="font-size:1.75rem;color:var(--muted)"></i>
+      </div>
+      <div>
+        <input class="control" id="orgLogoFile" type="file" accept="image/*" style="max-width:320px">
+        <p class="impact-note">Upload PNG/JPG/WebP (max 2MB). Logo path is stored in the database and used for branding.</p>
+        <input type="hidden" id="orgLogoCurrent">
+      </div>
+    </div>
+    <div class="preview-card">
+      <h3><span data-rdomms-org-name id="previewOrgName">Rural Development Organization</span></h3>
+      <p id="previewOrgMission">Mission preview will appear here.</p>
+      <p style="margin-top:.5rem"><i class="fas fa-envelope"></i> <span data-rdomms-org-email id="previewOrgEmail">info@rdo.or.tz</span></p>
+    </div>
+    <div class="actions">
+      <button type="button" class="btn btn-light" id="resetBtn"><i class="fas fa-rotate-left"></i> Reload</button>
+      <button type="button" class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> Save Profile</button>
+    </div>
+  </section>
+</div>
+<script src="../assets/js/organization-profile.js?v=1"></script>
+</body>
+</html>

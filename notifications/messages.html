@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="../assets/js/rdomms-security.js"></script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RDO|MMS – Messages</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+<link rel="stylesheet" href="../assets/css/rdomms-icons-offline.css">
+<link rel="stylesheet" href="../assets/css/rdomms-toast.css">
+<script src="../assets/js/rdomms-toast.js"></script>
+<style>
+:root { --primary:#2d5016; --secondary:#4a7c28; --dark:#1a3009; --text:#212529; --muted:#6c757d; --border:#dee2e6; --radius:0.75rem; }
+*{box-sizing:border-box;margin:0;padding:0} body{font-family:Inter,sans-serif;background:#f0f4f1;color:var(--text);min-height:100vh}
+.page-loading{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;background:rgba(15,36,20,.35);color:#fff;font-weight:600;gap:.75rem}
+.page-loading.hidden{display:none}
+.topbar{background:linear-gradient(135deg,var(--dark),var(--primary));color:#fff;padding:1rem 1.25rem}
+.topbar-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;align-items:center}
+.messenger{max-width:1200px;margin:1rem auto;padding:0 1.25rem 2rem;display:grid;grid-template-columns:300px 1fr;gap:1rem;min-height:70vh}
+@media(max-width:900px){.messenger{grid-template-columns:1fr}}
+.panel{background:#fff;border:1px solid var(--border);border-radius:1rem;overflow:hidden;display:flex;flex-direction:column;min-height:520px}
+.panel-head{padding:.85rem 1rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.contacts-search{padding:.75rem;border-bottom:1px solid var(--border)} .contacts-search input{width:100%;padding:.65rem;border:1px solid var(--border);border-radius:var(--radius);font:inherit}
+.contacts-list{overflow:auto;flex:1}
+.contact-item{width:100%;text-align:left;padding:.85rem 1rem;border:none;border-bottom:1px solid var(--border);background:#fff;cursor:pointer;font:inherit}
+.contact-item.active,.contact-item:hover{background:#f4fbf4}
+.contact-name{font-weight:700}.contact-preview,.contact-meta{font-size:.78rem;color:var(--muted);margin-top:.15rem}
+.unread-badge{display:inline-block;margin-left:.35rem;background:var(--secondary);color:#fff;border-radius:999px;padding:.1rem .4rem;font-size:.65rem;font-weight:700}
+.empty-contact,.empty-chat{padding:2rem;text-align:center;color:var(--muted)}
+.chat-header,.composer{padding:.85rem 1rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:.75rem}
+.composer{border-bottom:none;border-top:1px solid var(--border)} .composer textarea{flex:1;min-height:44px;max-height:120px;padding:.65rem;border:1px solid var(--border);border-radius:var(--radius);font:inherit;resize:vertical}
+.messages-scroll{flex:1;overflow:auto;padding:1rem;display:flex;flex-direction:column;gap:.65rem}
+.bubble-row{display:flex;flex-direction:column;max-width:75%}.bubble-row.mine{align-self:flex-end;align-items:flex-end}.bubble-row.theirs{align-self:flex-start}
+.bubble{padding:.65rem .8rem;border-radius:.85rem;background:#eef7ef}.bubble-row.mine .bubble{background:var(--secondary);color:#fff}
+.bubble-time{font-size:.68rem;color:var(--muted);margin-top:.15rem}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.55rem .9rem;border-radius:var(--radius);border:none;font:inherit;font-weight:600;cursor:pointer;text-decoration:none;background:var(--secondary);color:#fff}
+.btn-light{background:#fff;border:1px solid var(--border);color:var(--primary)} .btn-sm{padding:.35rem .55rem;font-size:.75rem}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:9999;padding:1rem}
+.modal-overlay.open{display:flex}.modal{background:#fff;border-radius:1rem;padding:1.25rem;max-width:480px;width:100%}
+.form-group{display:flex;flex-direction:column;gap:.35rem;margin-bottom:.75rem}
+.form-group label{font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase}
+.form-control{width:100%;padding:.7rem;border:1px solid var(--border);border-radius:var(--radius);font:inherit}
+.muted{color:var(--muted);font-size:.82rem}
+</style>
+</head>
+<body>
+<div id="pageLoading" class="page-loading hidden"><i class="fas fa-spinner fa-spin"></i> Loading messages…</div>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div><strong>RDO|MMS Messages</strong><div class="muted" style="color:rgba(255,255,255,.85);margin-top:.2rem">Internal messaging stored in the database</div></div>
+    <a href="../RDOMMS.html" class="btn btn-light"><i class="fas fa-house"></i> Dashboard</a>
+  </div>
+</header>
+
+<div class="messenger">
+  <aside class="panel">
+    <div class="panel-head">
+      <strong>Conversations</strong>
+      <button type="button" class="btn btn-sm" id="newConvoBtn"><i class="fas fa-edit"></i> New</button>
+    </div>
+    <div class="contacts-search"><input id="contactSearch" type="search" placeholder="Search contacts…"></div>
+    <div class="contacts-list" id="contactsList"></div>
+  </aside>
+
+  <section class="panel" id="chatArea">
+    <div class="empty-chat"><i class="fas fa-paper-plane"></i><p>Select a conversation or start a new one.</p></div>
+  </section>
+</div>
+
+<div class="modal-overlay" id="newConvoModal">
+  <div class="modal">
+    <h3 style="margin-bottom:.75rem;color:var(--primary)">New conversation</h3>
+    <div class="form-group"><label for="newConvoName">Contact name *</label><input id="newConvoName" class="form-control" type="text"></div>
+    <div class="form-group"><label for="newConvoRole">Role</label><input id="newConvoRole" class="form-control" type="text" placeholder="e.g. Field Officer"></div>
+    <div class="form-group"><label for="newConvoMessage">First message</label><textarea id="newConvoMessage" class="form-control" rows="3"></textarea></div>
+    <div style="display:flex;gap:.5rem;justify-content:flex-end">
+      <button type="button" class="btn btn-light" id="closeNewConvoBtn">Cancel</button>
+      <button type="button" class="btn" id="createConvoBtn">Create</button>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/js/messages.js?v=1"></script>
+</body>
+</html>

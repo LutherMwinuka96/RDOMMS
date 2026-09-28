@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RDO|MMS – General Settings</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+<link rel="stylesheet" href="../assets/css/rdomms-icons-offline.css">
+<link rel="stylesheet" href="../assets/css/rdomms-session-countdown.css?v=2">
+<link rel="stylesheet" href="../assets/css/rdomms-toast.css">
+<link rel="stylesheet" href="../assets/css/rdomms-theme.css">
+<script src="../assets/js/rdomms-security.js"></script>
+<script src="../assets/js/localStorage-service.js"></script>
+<script src="../assets/js/rdomms-system-settings.js"></script>
+<script src="../assets/js/rdomms-toast.js"></script>
+<style>
+:root { --primary:#2d5016; --secondary:#4a7c28; --dark:#1a3009; --text:#212529; --muted:#6c757d; --border:#dee2e6; --radius:0.75rem; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,sans-serif;background:linear-gradient(180deg,#fbfcf9 0%,#f0f4f1 100%);color:var(--text);min-height:100vh}
+.page{max-width:960px;margin:0 auto;padding:1.25rem 1.25rem 3rem}
+.page-loading{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;background:rgba(15,36,20,.35);color:#fff;font-weight:600;gap:.75rem}
+.page-loading.hidden{display:none}
+.hero{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:1.25rem 1.5rem;background:linear-gradient(135deg,var(--dark),var(--primary));color:#fff;border-radius:1rem;margin-bottom:1rem}
+.hero h1{font-size:1.55rem}.hero p{opacity:.92;margin-top:.35rem;max-width:560px;line-height:1.5}
+.header-actions{display:flex;gap:.5rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.55rem .9rem;border-radius:var(--radius);border:none;font:inherit;font-weight:600;cursor:pointer;text-decoration:none}
+.btn-outline{background:#fff;color:var(--primary)} .btn-light{background:#fff;border:1px solid var(--border);color:var(--primary)} .btn-primary{background:var(--secondary);color:#fff}
+.panel{background:#fff;border:1px solid var(--border);border-radius:1rem;padding:1.25rem;margin-bottom:1rem}
+.panel h2{font-size:1rem;color:var(--primary);margin-bottom:1rem;display:flex;align-items:center;gap:.45rem}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:.85rem}
+@media(max-width:720px){.grid-2{grid-template-columns:1fr}}
+.form-group{display:flex;flex-direction:column;gap:.35rem;margin-bottom:.85rem}
+.form-group label{font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase}
+.control{width:100%;padding:.72rem;border:1px solid var(--border);border-radius:var(--radius);font:inherit;background:#fff}
+.control[readonly]{background:#f8fafc;color:#64748b}
+.theme-row,.toggle-row{display:flex;gap:1rem;flex-wrap:wrap;margin-top:.35rem}
+.theme-row label,.toggle-row label{display:flex;align-items:center;gap:.45rem;font-size:.86rem;text-transform:none;color:var(--text);font-weight:500}
+.actions{display:flex;justify-content:flex-end;margin-top:.5rem}
+</style>
+</head>
+<body>
+<div id="pageLoading" class="page-loading"><i class="fas fa-spinner fa-spin"></i> Loading settings…</div>
+<div class="page">
+  <div class="hero">
+    <div>
+      <h1><i class="fas fa-cog"></i> General Settings</h1>
+      <p>Configure system-wide preferences stored in the database. Changes apply across login, dashboard, pagination, and registration.</p>
+    </div>
+    <div class="header-actions">
+      <a href="../RDOMMS.html" class="btn btn-outline"><i class="fas fa-house"></i> Dashboard</a>
+      <a href="organization-profile.php" class="btn btn-light"><i class="fas fa-building"></i> Organization</a>
+      <a href="notification-settings.php" class="btn btn-light"><i class="fas fa-bell"></i> Notifications</a>
+      <a href="data-backup.php" class="btn btn-light"><i class="fas fa-database"></i> Backup</a>
+      <a href="system-logs.php" class="btn btn-light"><i class="fas fa-server"></i> Logs</a>
+    </div>
+  </div>
+
+  <div id="maintenanceBanner" class="rdomms-maintenance-banner">
+    <i class="fas fa-screwdriver-wrench"></i>
+    Maintenance mode is currently enabled. Only administrators can sign in.
+  </div>
+
+  <section class="panel">
+    <h2><i class="fas fa-id-badge"></i> Application Identity</h2>
+    <div class="grid-2">
+      <div class="form-group">
+        <label for="appName">Application Name</label>
+        <input class="control" id="appName" type="text" maxlength="80" placeholder="RDOMMS">
+        <p class="impact-note">Shown in the dashboard sidebar and system branding.</p>
+      </div>
+      <div class="form-group">
+        <label for="appVersion">Application Version</label>
+        <input class="control" id="appVersion" type="text" readonly>
+        <p class="impact-note">Read-only release label from the database.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2><i class="fas fa-globe-americas"></i> Regional Preferences</h2>
+    <div class="grid-2">
+      <div class="form-group">
+        <label for="appLanguage">Default Language</label>
+        <select class="control" id="appLanguage">
+          <option value="en">English (EN)</option>
+          <option value="fr">French (FR)</option>
+        </select>
+        <p class="impact-note">Sets the HTML language attribute across the application.</p>
+      </div>
+      <div class="form-group">
+        <label for="dateFormat">Date Format</label>
+        <select class="control" id="dateFormat">
+          <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+          <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+          <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+        </select>
+        <p class="impact-note">Used by lists, logs, and dashboard date displays.</p>
+      </div>
+      <div class="form-group">
+        <label for="timezoneSelect">Time Zone Label</label>
+        <select class="control" id="timezoneSelect">
+          <option value="EAT">East Africa Time (EAT)</option>
+          <option value="UTC">UTC</option>
+          <option value="GMT">GMT</option>
+        </select>
+        <p class="impact-note">Stored for reporting context and future server-side scheduling.</p>
+      </div>
+      <div class="form-group">
+        <label for="itemsPerPage">Items Per Page</label>
+        <input class="control" id="itemsPerPage" type="number" min="5" max="100" value="15">
+        <p class="impact-note">Controls pagination on activity log and other system tables.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2><i class="fas fa-palette"></i> Display</h2>
+    <div class="form-group">
+      <label>System Theme</label>
+      <div class="theme-row">
+        <label><input type="radio" name="theme" value="light" checked> Light</label>
+        <label><input type="radio" name="theme" value="dark"> Dark</label>
+      </div>
+      <p class="impact-note">Applies immediately to settings pages, lists, and the dashboard shell.</p>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2><i class="fas fa-shield-alt"></i> Access Control</h2>
+    <div class="toggle-row">
+      <label><input type="checkbox" id="maintenanceMode"> Enable maintenance mode</label>
+      <label><input type="checkbox" id="allowRegistration" checked> Allow public registration</label>
+    </div>
+    <p class="impact-note" style="margin-top:.75rem">
+      Maintenance mode blocks non-admin sign-in. Disabling registration rejects new signups at the API level.
+    </p>
+    <div class="actions">
+      <button type="button" class="btn btn-primary" id="saveGeneralBtn"><i class="fas fa-save"></i> Save General Settings</button>
+    </div>
+  </section>
+</div>
+<script src="../assets/js/general-settings.js?v=1"></script>
+</body>
+</html>

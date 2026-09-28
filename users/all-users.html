@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RDO|MMS – All Users</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+<link rel="stylesheet" href="../assets/css/rdomms-icons-offline.css">
+<link rel="stylesheet" href="../assets/css/rdomms-session-countdown.css?v=2">
+<link rel="stylesheet" href="../assets/css/rdomms-toast.css">
+<link rel="stylesheet" href="../assets/css/rdomms-theme.css">
+<script src="../assets/js/rdomms-security.js"></script>
+<script src="../assets/js/localStorage-service.js"></script>
+<script src="../assets/js/rdomms-system-settings.js"></script>
+<script src="../assets/js/rdomms-departments.js"></script>
+<script src="../assets/js/rdomms-toast.js"></script>
+<style>
+:root { --primary:#2d5016; --secondary:#4a7c28; --dark:#1a3009; --danger:#dc3545; --text:#212529; --muted:#6c757d; --border:#dee2e6; --radius:0.75rem; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,sans-serif;background:linear-gradient(180deg,#fbfcf9 0%,#f0f4f1 100%);color:var(--text);min-height:100vh}
+.page{max-width:1280px;margin:0 auto;padding:1.25rem 1.25rem 3rem}
+.page-loading{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;background:rgba(15,36,20,.35);color:#fff;font-weight:600;gap:.75rem}
+.page-loading.hidden{display:none}
+.hero{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:1.25rem 1.5rem;background:linear-gradient(135deg,var(--dark),var(--primary));color:#fff;border-radius:1rem;margin-bottom:1rem}
+.hero h1{font-size:1.55rem}.hero p{opacity:.92;margin-top:.35rem;max-width:560px;line-height:1.5}
+.header-actions{display:flex;gap:.5rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.55rem .9rem;border-radius:var(--radius);border:none;font:inherit;font-weight:600;cursor:pointer;text-decoration:none}
+.btn-outline{background:#fff;color:var(--primary)} .btn-light{background:#fff;border:1px solid var(--border);color:var(--primary)} .btn-primary{background:var(--secondary);color:#fff} .btn-danger{background:#fee2e2;color:var(--danger);border:1px solid #fecaca}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1rem}
+@media(max-width:900px){.stats-grid{grid-template-columns:1fr 1fr}}
+.stat-card,.panel{background:#fff;border:1px solid var(--border);border-radius:1rem;padding:1rem}
+.stat-label{font-size:.75rem;color:var(--muted)} .stat-value{font-size:1.45rem;font-weight:800;color:var(--primary);margin-top:.15rem}
+.filters{display:grid;grid-template-columns:1.5fr 1fr 1fr auto;gap:.65rem;margin-bottom:1rem}
+@media(max-width:800px){.filters{grid-template-columns:1fr}}
+.control{width:100%;padding:.7rem;border:1px solid var(--border);border-radius:var(--radius);font:inherit;background:#fff}
+.table-wrap{overflow:auto}
+table{width:100%;border-collapse:collapse;font-size:.84rem}
+thead th{text-align:left;background:#f8faf9;color:#355548;font-size:.72rem;text-transform:uppercase;padding:.75rem;border-bottom:1px solid var(--border)}
+tbody td{padding:.75rem;border-bottom:1px solid #edf2ef;vertical-align:middle}
+tbody tr:hover{background:#fbfdfb}
+.user-cell{display:flex;align-items:center;gap:.65rem}
+.avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--primary),var(--secondary));overflow:hidden;flex-shrink:0}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.u-name{font-weight:700}.u-email{font-size:.74rem;color:var(--muted)}
+.badge{display:inline-flex;align-items:center;gap:.25rem;border-radius:999px;padding:.18rem .55rem;font-size:.68rem;font-weight:700}
+.b-active{background:#f0fdf4;color:#15803d}.b-pending{background:#fffbeb;color:#b45309}.b-suspended{background:#fef2f2;color:#b91c1c}.b-admin{background:#eff6ff;color:#1d4ed8}.b-role{background:#f3f4f6;color:#374151}
+.actions{display:flex;gap:.25rem;flex-wrap:wrap}
+.icon-btn{width:30px;height:30px;border:0;border-radius:8px;background:transparent;color:#64748b;cursor:pointer}
+.icon-btn:hover{background:#eef7ef;color:var(--primary)} .icon-btn.approve{color:#15803d}.icon-btn.danger:hover{background:#fef2f2;color:var(--danger)}
+.empty-state{text-align:center;padding:2rem;color:var(--muted);display:none}
+.empty-state.show{display:block}
+.table-meta{font-size:.82rem;color:var(--muted);margin-bottom:.65rem}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9999;padding:1rem}
+.modal-overlay.open{display:flex}
+.modal{background:#fff;border-radius:1rem;max-width:620px;width:100%;max-height:90vh;overflow:auto;border:1px solid var(--border)}
+.modal-head{padding:1rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.modal-body{padding:1rem}.modal-actions{padding:1rem;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:.5rem;flex-wrap:wrap}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:.65rem}
+@media(max-width:640px){.modal-grid{grid-template-columns:1fr}}
+.kv{font-size:.84rem;margin-bottom:.45rem}.kv b{color:var(--text)}
+</style>
+</head>
+<body>
+<div id="pageLoading" class="page-loading"><i class="fas fa-spinner fa-spin"></i> Loading users…</div>
+<div class="page">
+  <div class="hero">
+    <div>
+      <h1><i class="fas fa-users"></i> All Users</h1>
+      <p>View, search, and manage staff accounts stored in the database — aligned with signup profile fields.</p>
+    </div>
+    <div class="header-actions">
+      <a href="../RDOMMS.html" class="btn btn-outline"><i class="fas fa-house"></i> Dashboard</a>
+      <a href="add-user.php" class="btn btn-light" id="addUserLink"><i class="fas fa-user-plus"></i> Add User</a>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Total Users</div><div class="stat-value" id="statTotal">0</div></div>
+    <div class="stat-card"><div class="stat-label">Active</div><div class="stat-value" id="statActive">0</div></div>
+    <div class="stat-card"><div class="stat-label">Pending</div><div class="stat-value" id="statPending">0</div></div>
+    <div class="stat-card"><div class="stat-label">Suspended</div><div class="stat-value" id="statSuspended">0</div></div>
+  </div>
+
+  <div class="panel" style="margin-bottom:1rem;padding:.85rem">
+    <div class="filters">
+      <input id="searchInput" class="control" type="search" placeholder="Search name, email, department…">
+      <select id="roleFilter" class="control">
+        <option value="">All Roles</option>
+        <option value="admin">Admin</option>
+        <option value="head_of_department">Head of Department</option>
+        <option value="head_of_organization_center">Head of the Center</option>
+        <option value="human_resource_manager">Human Resource Manager</option>
+        <option value="accountant">Accountant</option>
+        <option value="field_officer">Field Officer</option>
+        <option value="staff">Staff</option>
+      </select>
+      <select id="statusFilter" class="control">
+        <option value="">All Status</option>
+        <option value="active">Active</option>
+        <option value="pending">Pending</option>
+        <option value="suspended">Suspended</option>
+      </select>
+      <button type="button" class="btn btn-light" id="resetBtn"><i class="fas fa-rotate-left"></i> Reset</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="table-meta" id="tableMeta">Loading users…</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Role</th>
+            <th>Department</th>
+            <th>Organization</th>
+            <th>Status</th>
+            <th>Registered</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="usersBody"></tbody>
+      </table>
+    </div>
+    <div class="empty-state" id="emptyState"><i class="fas fa-folder-open"></i> No users match your filters.</div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="viewModal">
+  <div class="modal">
+    <div class="modal-head"><h3><i class="fas fa-eye"></i> User Details</h3><button type="button" class="icon-btn" data-close="viewModal"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body" id="viewBody"></div>
+    <div class="modal-actions"><button type="button" class="btn btn-light" data-close="viewModal">Close</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <div class="modal-head"><h3><i class="fas fa-pen"></i> Edit User</h3><button type="button" class="icon-btn" data-close="editModal"><i class="fas fa-times"></i></button></div>
+    <form id="editForm">
+      <div class="modal-body">
+        <input type="hidden" id="editId">
+        <div class="modal-grid">
+          <div><label class="stat-label" for="editFullname">Full Name</label><input class="control" id="editFullname" required></div>
+          <div><label class="stat-label" for="editEmail">Email</label><input class="control" id="editEmail" type="email" required></div>
+          <div><label class="stat-label" for="editRole">Role</label>
+            <select class="control" id="editRole" required>
+              <option value="admin">Admin</option>
+              <option value="head_of_department">Head of Department</option>
+              <option value="head_of_organization_center">Head of the Center</option>
+              <option value="human_resource_manager">Human Resource Manager</option>
+              <option value="accountant">Accountant</option>
+              <option value="field_officer">Field Officer</option>
+              <option value="staff">Staff</option>
+            </select>
+          </div>
+          <div><label class="stat-label" for="editStatus">Status</label>
+            <select class="control" id="editStatus" required>
+              <option value="active">Active</option>
+              <option value="pending">Pending</option>
+              <option value="suspended">Suspended</option>
+            </select>
+          </div>
+          <div><label class="stat-label" for="editDepartment">Department</label>
+            <select class="control" id="editDepartment" data-rdomms-department data-empty-label="Select Department" required></select>
+          </div>
+          <div><label class="stat-label" for="editOrganization">Organization</label>
+            <select class="control" id="editOrganization" required>
+              <option value="">Select organization</option>
+              <option value="rdo_mafinga">RDO Mafinga</option>
+              <option value="rdo_mdabulo">RDO Mdabulo</option>
+              <option value="rdo_ibwanzi">RDO Ibwanzi</option>
+              <option value="rdo_kilolo">RDO Kilolo</option>
+              <option value="rdo_malangali">RDO Malangali</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-light" data-close="editModal">Cancel</button>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-head"><h3><i class="fas fa-trash"></i> Confirm Delete</h3><button type="button" class="icon-btn" data-close="deleteModal"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body"><p id="deleteText"></p></div>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-light" data-close="deleteModal">Cancel</button>
+      <button type="button" class="btn btn-danger" id="confirmDeleteBtn"><i class="fas fa-trash"></i> Delete</button>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/js/all-users.js?v=3"></script>
+</body>
+</html>

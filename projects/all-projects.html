@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RDO|MMS – All Projects | Unified Project Management</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+<link rel="stylesheet" href="../assets/css/rdomms-icons-offline.css">
+<link rel="stylesheet" href="../assets/css/rdomms-session-countdown.css?v=2">
+<link rel="stylesheet" href="../assets/css/project-nav.css?v=5">
+<link rel="stylesheet" href="../assets/css/rdomms-currency.css">
+<script src="../assets/js/number-format.js"></script>
+<style>
+:root {
+    --primary-green: #2d5016;
+    --secondary-green: #4a7c28;
+    --accent-green: #6dbd6d;
+    --light-green: #a8d5a8;
+    --dark-green: #1a3009;
+    --success-green: #28a745;
+    --warning-amber: #ffc107;
+    --danger-red: #dc3545;
+    --info-blue: #17a2b8;
+    --light-gray: #f8f9fa;
+    --dark-gray: #343a40;
+    --border-gray: #dee2e6;
+    --text-primary: #212529;
+    --text-secondary: #6c757d;
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.08);
+    --shadow-md: 0 4px 8px rgba(0,0,0,0.12);
+    --shadow-lg: 0 8px 16px rgba(0,0,0,0.16);
+    --transition: all 0.3s ease;
+    --border-radius: 12px;
+    --font-family: 'Inter', sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #2d5016 0%, #4a7c28 100%);
+    margin: 0;
+    padding: 20px;
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1400px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 40px;
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    margin: auto;
+    border: 1px solid rgba(0,0,0,0.05);
+    backdrop-filter: blur(10px);
+}
+
+.header-section {
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+    color: white;
+    padding: 30px;
+    border-radius: 16px;
+    margin-bottom: 30px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(45, 80, 22, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.header-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.header-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    position: relative;
+    z-index: 1;
+}
+
+.header-subtitle {
+    font-size: 16px;
+    opacity: 0.9;
+    position: relative;
+    z-index: 1;
+}
+
+.page{max-width:1280px;margin:0 auto;padding:2rem 1.5rem;}
+.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;}
+.page-header h1{font-size:1.5rem;font-weight:700;color:#fff;text-shadow:0 2px 4px rgba(0,0,0,0.2);margin-bottom:0.25rem;}
+.page-header p{font-size:0.875rem;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,0.1);}
+
+.btn{display:inline-flex;align-items:center;gap:0.5rem;padding:0.625rem 1rem;border-radius:var(--radius-md);font-size:0.875rem;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .2s;text-decoration:none;}
+.btn-primary{background:linear-gradient(135deg,var(--primary-green)0%,var(--secondary-green)100%);color:#fff;box-shadow:var(--shadow);border:2px solid var(--dark-green);}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:var(--shadow-md);background:linear-gradient(135deg,var(--dark-green)0%,var(--primary-green)100%);}
+.btn-outline{background:#fff;color:var(--info-blue);border:2px solid var(--info-blue);box-shadow:0 2px 4px rgba(23,162,184,0.2);}
+.btn-outline:hover{border-color:var(--primary-green);color:var(--primary-green);background:var(--bg-secondary);box-shadow:0 4px 8px rgba(45,80,22,0.2);}
+.btn-success{background:linear-gradient(135deg,var(--success-green)0%,#20c997 100%);color:#fff;border:2px solid #1a7c5e;box-shadow:0 2px 4px rgba(40,167,69,0.2);}
+.btn-success:hover{transform:translateY(-1px);box-shadow:0 4px 8px rgba(40,167,69,0.3);background:linear-gradient(135deg,#1a7c5e 0%,var(--success-green)100%);}
+.btn-danger{background:linear-gradient(135deg,var(--danger-red)0%,#c82333 100%);color:#fff;border:2px solid #a71d2a;box-shadow:0 2px 4px rgba(220,53,69,0.2);}
+.btn-danger:hover{transform:translateY(-1px);box-shadow:0 4px 8px rgba(220,53,69,0.3);background:linear-gradient(135deg,#a71d2a 0%,var(--danger-red)100%);}
+
+.filters{display:flex;align-items:center;gap:0.75rem;margin-bottom:1.25rem;flex-wrap:wrap;}
+.search-box{display:flex;align-items:center;gap:0.5rem;background:#fff;border:1.5px solid var(--border-gray);border-radius:var(--radius-md);padding:0.625rem 0.875rem;flex:1;min-width:200px;transition:border-color .2s;}
+.search-box:focus-within{border-color:var(--primary-green);box-shadow:0 0 0 3px rgba(45,80,22,0.1);}
+.search-box input{border:none;background:none;outline:none;font-size:0.875rem;color:var(--text-primary);flex:1;font-family:inherit;}
+.search-box input::placeholder{color:var(--text-secondary);}
+.search-box i{color:var(--text-secondary);}
+.filter-select{padding:0.625rem 0.875rem;border:1.5px solid var(--border-gray);border-radius:var(--radius-md);font-size:0.875rem;color:var(--text-primary);background:#fff;outline:none;cursor:pointer;font-family:inherit;transition:border-color .2s;}
+.filter-select:focus{border-color:var(--primary-green);box-shadow:0 0 0 3px rgba(45,80,22,0.1);}
+
+.stat-pills{display:flex;gap:0.75rem;margin-bottom:1.5rem;flex-wrap:wrap;}
+.pill{padding:0.5rem 1rem;border-radius:999px;font-size:0.875rem;font-weight:600;cursor:pointer;border:1.5px solid var(--border-gray);background:#fff;color:var(--text-secondary);transition:all .2s;}
+.pill.active,.pill:hover{background:var(--primary-green);color:#fff;border-color:var(--primary-green);}
+.pill span{margin-left:0.5rem;background:rgba(0,0,0,0.1);border-radius:999px;padding:0.125rem 0.5rem;font-size:0.75rem;}
+
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:1.5rem;}
+.project-card{background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);border:1.5px solid var(--border-gray);border-radius:var(--radius-lg);padding:1.5rem;cursor:pointer;transition:all 0.2s ease;}
+.project-card:hover{box-shadow:var(--shadow-lg);border-color:var(--primary-green);transform:translateY(-2px);}
+
+.pc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1rem;}
+.pc-icon{width:48px;height:48px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:1.25rem;}
+.pc-icon.water{background:#eff6ff;color:#3b82f6;}
+.pc-icon.agri{background:#f0fdf4;color:#22c55e;}
+.pc-icon.health{background:#fff7ed;color:#f59e0b;}
+.pc-icon.road{background:#faf5ff;color:#a855f7;}
+.pc-icon.school{background:#fef2f2;color:#ef4444;}
+.pc-icon.energy{background:#ecfdf5;color:#10b981;}
+.pc-icon.default{background:var(--bg-secondary);color:var(--text-secondary);}
+
+.badge{display:inline-flex;align-items:center;gap:0.25rem;padding:0.25rem 0.75rem;border-radius:999px;font-size:0.75rem;font-weight:700;}
+.badge.ongoing{background:#eff6ff;color:#3b82f6;}
+.badge.completed{background:#f0fdf4;color:#16a34a;}
+.badge.delayed{background:#fef2f2;color:#ef4444;}
+.badge.not-started{background:#f1f5f9;color:#475569;}
+
+.pc-title{font-size:1.0625rem;font-weight:700;margin-bottom:0.375rem;color:var(--text-primary);}
+.pc-loc{font-size:0.8125rem;color:var(--text-secondary);display:flex;align-items:center;gap:0.375rem;margin-bottom:1rem;}
+.pc-meta{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin:1rem 0;background:var(--bg-secondary);padding:0.875rem;border-radius:var(--radius-md);}
+.pc-meta-item label{color:var(--text-secondary);font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.5px;display:block;font-weight:600;}
+.pc-meta-item span{font-weight:700;color:var(--text-primary);font-size:0.875rem;}
+.progress-wrap{margin:1rem 0 0.625rem;}
+.progress-top{display:flex;justify-content:space-between;font-size:0.8125rem;margin-bottom:0.375rem;color:var(--text-secondary);}
+.progress-bg{height:8px;background:var(--border-gray);border-radius:999px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:999px;transition:width 0.3s;}
+.fill-green{background:linear-gradient(90deg,#22c55e,#4ade80);}
+.fill-blue{background:linear-gradient(90deg,#3b82f6,#60a5fa);}
+.fill-yellow{background:linear-gradient(90deg,#f59e0b,#fbbf24);}
+.pc-footer{display:flex;align-items:center;justify-content:space-between;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border-gray);}
+.pc-remove-btn{border:1px solid rgba(220,53,69,0.35);background:#fff;color:#dc3545;border-radius:999px;width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+.pc-remove-btn:hover{background:#fef2f2;}
+.pc-team{display:flex;align-items:center;gap:0.125rem;}
+.avatar-sm{width:28px;height:28px;border-radius:50%;border:2px solid #fff;background:var(--primary-green);display:flex;align-items:center;justify-content:center;font-size:0.625rem;font-weight:700;color:#fff;margin-left:-6px;box-shadow:var(--shadow-sm);}
+.avatar-sm:first-child{margin-left:0;}
+.pc-days{font-size:0.8125rem;font-weight:600;color:var(--text-secondary);}
+.health-pill{position:absolute;top:1rem;right:1rem;width:10px;height:10px;border-radius:50%;border:2px solid #fff;box-shadow:var(--shadow-sm);}
+.health-pill.good{background:var(--success-green);}
+.health-pill.warning{background:var(--warning-amber);}
+.health-pill.critical{background:var(--danger-red);}
+.project-card{position:relative;}
+
+.empty-state{text-align:center;padding:3rem 1.25rem;background:#fff;border-radius:var(--radius-lg);border:1.5px dashed var(--border-gray);}
+.empty-state i{font-size:3.5rem;color:var(--text-secondary);margin-bottom:1rem;}
+.empty-state p{color:var(--text-secondary);font-size:0.875rem;}
+
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--dark-green);color:#fff;padding:0.75rem 1.5rem;border-radius:999px;font-size:0.875rem;font-weight:500;z-index:1100;box-shadow:var(--shadow-lg);animation:slideIn 0.3s ease-out;}
+@keyframes slideIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+@media (max-width:768px){
+  .page{padding:1.5rem 1rem;}
+  .page-header{flex-direction:column;align-items:flex-start;}
+  .filters{flex-direction:column;align-items:stretch;}
+  .search-box{min-width:100%;}
+  .filter-select{width:100%;}
+  .projects-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<nav id="rdomms-project-nav" data-active="all-projects"></nav>
+<script src="../assets/js/rpn-nav-shared.js?v=2"></script>
+<script src="../assets/js/project-finance-links.js?v=4"></script>
+<script src="../assets/js/project-nav.js?v=10"></script>
+
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1>All Projects <span id="projectCountSpan" style="color:var(--accent-green);font-size:1.125rem;">(0)</span></h1>
+      <p>Manage and monitor all organizational projects</p>
+    </div>
+    <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+      <a href="project-health.php" class="btn btn-outline"><i class="fas fa-heart-pulse"></i> Project Health</a>
+      <a href="../finance/budget-allocation.php" class="btn btn-outline"><i class="fas fa-wallet"></i> Budget Allocation</a>
+      <a href="../finance/expense-tracking.php" class="btn btn-outline"><i class="fas fa-receipt"></i> Expenses</a>
+      <a href="create-project.php" class="btn btn-primary"><i class="fas fa-plus"></i> New Project</a>
+    </div>
+  </div>
+
+  <!-- Filters row -->
+  <div class="filters">
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input type="text" id="searchInput" placeholder="Search by name, organization, district or sector...">
+    </div>
+    <select id="organizationFilter" class="filter-select">
+      <option value="all">All Organizations</option>
+      <option value="RDO Mdabulo">RDO Mdabulo</option>
+      <option value="RDO Kilolo">RDO Kilolo</option>
+      <option value="RDO Ibwanzi">RDO Ibwanzi</option>
+      <option value="RDO Malangali">RDO Malangali</option>
+      <option value="RDO Mafinga">RDO Mafinga</option>
+    </select>
+    <select id="districtFilter" class="filter-select">
+      <option value="all">All Districts</option>
+      <option value="Iringa District">Iringa District</option>
+      <option value="Kilolo District">Kilolo District</option>
+      <option value="Mufindi District">Mufindi District</option>
+      <option value="Iringa Municipal Council">Iringa Municipal Council</option>
+      <option value="Mafinga Town Council">Mafinga Town Council</option>
+    </select>
+    <select id="sectorFilter" class="filter-select">
+      <option value="all">All Sectors</option>
+    </select>
+    <select id="sortSelect" class="filter-select">
+      <option value="latest">Sort: Latest</option>
+      <option value="progress">Sort: Progress</option>
+      <option value="budget">Sort: Budget (High-Low)</option>
+      <option value="name">Sort: Name A-Z</option>
+    </select>
+    <select id="exportFormat" class="filter-select" title="Export format">
+      <option value="pdf" selected>PDF</option>
+      <option value="word">Word</option>
+      <option value="excel">Excel</option>
+    </select>
+    <button type="button" class="btn btn-outline" id="exportBtn"><i class="fas fa-file-export"></i> Export</button>
+  </div>
+
+  <!-- Status pills dynamic -->
+  <div id="statusPillsContainer" class="stat-pills"></div>
+
+  <!-- Projects grid -->
+  <div id="projectsGridContainer" class="projects-grid"></div>
+</div>
+
+<script src="../assets/js/rdomms-security.js"></script>
+<script src="../assets/js/localStorage-service.js?v=2"></script>
+<script src="../assets/js/rdomms-departments.js"></script>
+<script src="../assets/vendor/html2pdf.bundle.min.js"></script>
+<script src="../assets/vendor/sheetjs/xlsx.full.min.js"></script>
+<script src="../assets/js/rdomms-export.js"></script>
+<script>
+// ---------- GLOBAL PROJECTS STORAGE ----------
+let masterProjects = [];
+let projectHealthMap = {};
+
+async function loadProjectHealthMap() {
+  try {
+    const res = await fetch("../api/projects/health.php", {
+      headers: { "X-Requested-With": "XMLHttpRequest" },
+      credentials: "same-origin"
+    });
+    const payload = await res.json();
+    if (res.ok && payload?.status === "success" && Array.isArray(payload.data?.projects)) {
+      projectHealthMap = {};
+      payload.data.projects.forEach((row) => {
+        projectHealthMap[String(row.projectId)] = row;
+      });
+    }
+  } catch (error) {
+    console.warn("Project health map load failed:", error);
+  }
+}
+
+function normalizeProject(project) {
+  return {
+    ...project,
+    id: project.project_id || project.id,
+    startDate: project.startDate || project.start_date || "",
+    dueDate: project.dueDate || project.end_date || "",
+    createdAt: project.createdAt || project.created_at || "",
+    team: Array.isArray(project.team) ? project.team : (project.team ? (() => { try { return JSON.parse(project.team); } catch (e) { return []; } })() : []),
+    budget: Number(project.budget) || 0,
+    beneficiaries: Number(project.beneficiaries) || 0,
+    progress: Number(project.progress) || 0,
+    location: project.location || project.district || "",
+    status: project.status || "not-started",
+    budgetApprovalStatus: project.budgetApprovalStatus || project.budget_approval_status || (Number(project.budget) > 0 ? "pending" : "draft"),
+    budgetCanOperate: project.budgetCanOperate ?? project.budget_can_operate,
+    budgetRejectReason: project.budgetRejectReason || project.budget_reject_reason || "",
+    deregistrationStatus: project.deregistrationStatus || project.deregistration_status || "none",
+  };
+}
+
+async function loadProjectsFromApi() {
+  try {
+    const res = await fetch(`../api/projects.php?t=${Date.now()}`, {
+      headers: { "X-Requested-With": "XMLHttpRequest" },
+      credentials: 'same-origin',
+      cache: 'no-store'
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data?.message || `Failed to load projects (${res.status})`);
+    }
+    if (data.status === "success" && Array.isArray(data.data)) {
+      masterProjects = data.data.map(normalizeProject);
+      localStorage.setItem("rd_projects", JSON.stringify(masterProjects));
+      return;
+    }
+    throw new Error(data?.message || 'Invalid projects response');
+  } catch (error) {
+    console.warn("API load failed, falling back to localStorage:", error);
+  }
+
+  const stored = localStorage.getItem("rd_projects");
+  masterProjects = stored && stored.length > 2 ? JSON.parse(stored).map(normalizeProject) : [];
+}
+
+let currentStatusFilter = "all";
+
+function getStatusCounts() {
+  const counts = { all: masterProjects.length, ongoing: 0, completed: 0, delayed: 0, "not-started": 0 };
+  masterProjects.forEach(p => { counts[p.status] = (counts[p.status] || 0) + 1; });
+  return counts;
+}
+
+function renderStatusPills() {
+  const counts = getStatusCounts();
+  const pills = [
+    { key: "all", label: "All", count: counts.all },
+    { key: "ongoing", label: "Ongoing", count: counts.ongoing },
+    { key: "completed", label: "Completed", count: counts.completed },
+    { key: "delayed", label: "Delayed", count: counts.delayed },
+    { key: "not-started", label: "Not Started", count: counts["not-started"] }
+  ];
+  const container = document.getElementById("statusPillsContainer");
+  container.innerHTML = "";
+  pills.forEach(p => {
+    const pillDiv = document.createElement("div");
+    pillDiv.className = `pill ${currentStatusFilter === p.key ? "active" : ""}`;
+    pillDiv.innerHTML = `${p.label} <span>${p.count}</span>`;
+    pillDiv.addEventListener("click", () => {
+      currentStatusFilter = p.key;
+      renderAllProjects(); 
+      renderStatusPills();
+    });
+    container.appendChild(pillDiv);
+  });
+}
+
+function getFilteredAndSorted() {
+  let filtered = [...masterProjects];
+  // status filter
+  if (currentStatusFilter !== "all") {
+    filtered = filtered.filter(p => p.status === currentStatusFilter);
+  }
+  // search
+  const searchTerm = document.getElementById("searchInput").value.toLowerCase();
+  if (searchTerm) {
+    filtered = filtered.filter(p => p.name.toLowerCase().includes(searchTerm) || p.location.toLowerCase().includes(searchTerm) || p.sector.toLowerCase().includes(searchTerm));
+  }
+  // organization filter
+  const organizationVal = document.getElementById("organizationFilter").value;
+  if (organizationVal !== "all") {
+    filtered = filtered.filter(p => p.organization === organizationVal);
+  }
+  // district filter
+  const districtVal = document.getElementById("districtFilter").value;
+  if (districtVal !== "all") {
+    filtered = filtered.filter(p => p.district === districtVal);
+  }
+  // sector filter
+  const sectorVal = document.getElementById("sectorFilter").value;
+  if (sectorVal !== "all") {
+    filtered = filtered.filter(p => p.sector === sectorVal);
+  }
+  // sorting
+  const sortType = document.getElementById("sortSelect").value;
+  if (sortType === "progress") filtered.sort((a,b) => b.progress - a.progress);
+  else if (sortType === "budget") filtered.sort((a,b) => b.budget - a.budget);
+  else if (sortType === "name") filtered.sort((a,b) => a.name.localeCompare(b.name));
+  else if (sortType === "latest") filtered.sort((a,b) => (b.dueDate || "").localeCompare(a.dueDate || ""));
+  return filtered;
+}
+
+function getDaysLeft(dueDate, status) {
+  if (status === "completed") return { text: "Done", color: "#22c55e", icon: "fa-check-circle" };
+  if (!dueDate) return { text: "No date", color: "var(--muted)" };
+  const today = new Date();
+  const due = new Date(dueDate);
+  const diff = Math.ceil((due - today) / (1000 * 60 * 60 * 24));
+  if (diff < 0) return { text: `Overdue by ${Math.abs(diff)}d`, color: "#ef4444", icon: "fa-exclamation-circle" };
+  if (diff === 0) return { text: "Due today", color: "#f59e0b" };
+  return { text: `${diff} days left`, color: "var(--text)" };
+}
+
+function getProgressColor(progress) {
+  if (progress >= 70) return "fill-green";
+  if (progress >= 40) return "fill-blue";
+  return "fill-yellow";
+}
+
+function renderProjects() {
+  const filtered = getFilteredAndSorted();
+  const container = document.getElementById("projectsGridContainer");
+  const totalSpan = document.getElementById("projectCountSpan");
+  totalSpan.innerHTML = `(${filtered.length})`;
+  
+  if (filtered.length === 0) {
+    container.innerHTML = `<div class="empty-state"><i class="fas fa-folder-open"></i><p>No projects found. Try adjusting filters or <a href="create-project.php" style="color: var(--primary); text-decoration: none;">create a new project</a>.</p></div>`;
+    return;
+  }
+  
+  container.innerHTML = "";
+  filtered.forEach(proj => {
+    const progressColor = getProgressColor(proj.progress);
+    const sectorIcon = proj.icon || "fa-chart-line";
+    let sectorClass = "default";
+    if (proj.sector === "Water") sectorClass = "water";
+    else if (proj.sector === "Agriculture") sectorClass = "agri";
+    else if (proj.sector === "Health") sectorClass = "health";
+    else if (proj.sector === "Infrastructure") sectorClass = "road";
+    else if (proj.sector === "Education") sectorClass = "school";
+    else if (proj.sector === "Energy") sectorClass = "energy";
+    
+    const statusBadge = proj.status === "ongoing" ? '<span class="badge ongoing"><i class="fas fa-play-circle"></i> Ongoing</span>' :
+                        (proj.status === "completed" ? '<span class="badge completed"><i class="fas fa-check-circle"></i> Completed</span>' :
+                        (proj.status === "delayed" ? '<span class="badge delayed"><i class="fas fa-exclamation-triangle"></i> Delayed</span>' :
+                        '<span class="badge not-started"><i class="fas fa-hourglass-start"></i> Not Started</span>'));
+    
+    const daysInfo = getDaysLeft(proj.dueDate, proj.status);
+    const daysHtml = `<div class="pc-days" style="color:${daysInfo.color};">${daysInfo.icon ? `<i class="fas ${daysInfo.icon}"></i> ` : ""}<strong>${daysInfo.text}</strong></div>`;
+    
+    // team avatars (max 3)
+    const teamList = proj.team || [];
+    const visibleTeam = teamList.slice(0, 3);
+    const extraCount = teamList.length - 3;
+    let teamHtml = `<div class="pc-team">` + visibleTeam.map(t => `<div class="avatar-sm">${t.substring(0,2).toUpperCase()}</div>`).join('');
+    if (extraCount > 0) teamHtml += `<div class="avatar-sm" style="background:#94a3b8;">+${extraCount}</div>`;
+    teamHtml += `</div>`;
+    
+    const health = projectHealthMap[String(proj.id)];
+    const healthPill = health
+      ? `<span class="health-pill ${health.health}" title="${health.alerts?.length ? health.alerts.map((a) => a.label).join(', ') : 'Healthy'}"></span>`
+      : "";
+
+    const budgetBadge = window.RDOMMSProjectFinance?.renderBudgetApprovalBadge
+      ? RDOMMSProjectFinance.renderBudgetApprovalBadge(proj)
+      : "";
+    const deregBadge = window.RDOMMSProjectFinance?.renderDeregistrationBadge
+      ? RDOMMSProjectFinance.renderDeregistrationBadge(proj)
+      : "";
+
+    const card = document.createElement("div");
+    card.className = "project-card";
+    card.setAttribute("data-id", proj.id);
+    card.innerHTML = `
+      ${healthPill}
+      <div class="pc-top">
+        <div class="pc-icon ${sectorClass}"><i class="fas ${sectorIcon}"></i></div>
+        ${statusBadge}
+      </div>
+      <div class="pc-title">${escapeHtml(proj.name)}</div>
+      <div class="pc-loc"><i class="fas fa-map-marker-alt"></i> ${escapeHtml(proj.location)}</div>
+      ${budgetBadge}
+      ${deregBadge}
+      <div class="pc-meta">
+        <div class="pc-meta-item"><label>Budget</label><span>${typeof formatRdommsCurrencyHtml === 'function' ? formatRdommsCurrencyHtml(proj.budget) : 'TSH ' + Number(proj.budget || 0).toLocaleString('en-US')}</span></div>
+        <div class="pc-meta-item"><label>Beneficiaries</label><span>${proj.beneficiaries || 0}</span></div>
+        <div class="pc-meta-item"><label>Start</label><span>${proj.startDate || "—"}</span></div>
+        <div class="pc-meta-item"><label>Due</label><span>${proj.dueDate || "—"}</span></div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-top"><span>Progress</span><span>${proj.progress}%</span></div>
+        <div class="progress-bg"><div class="progress-fill ${progressColor}" style="width:${proj.progress}%"></div></div>
+      </div>
+      <div class="pc-footer">
+        ${teamHtml}
+        ${daysHtml}
+        <button type="button" class="pc-remove-btn" title="Request project removal" data-remove-id="${escapeHtml(String(proj.id))}"><i class="fas fa-user-slash"></i></button>
+      </div>
+    `;
+    const removeBtn = card.querySelector('.pc-remove-btn');
+    if (removeBtn) {
+      removeBtn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        if (!window.RDOMMSProjectFinance?.promptProjectDeregistration) return;
+        try {
+          const ok = await RDOMMSProjectFinance.promptProjectDeregistration(proj.id);
+          if (ok) {
+            await loadProjectsFromApi();
+            renderProjects();
+          }
+        } catch (error) {
+          alert(error.message || 'Unable to request project removal.');
+        }
+      });
+    }
+    card.addEventListener("click", (e) => {
+      if (e.target.closest('.pc-remove-btn')) return;
+      if(e.target.tagName === 'A' || e.target.closest('a')) return;
+      const budgetLine = typeof formatRdommsCurrency === 'function' ? formatRdommsCurrency(proj.budget) : 'TSH ' + Number(proj.budget || 0).toLocaleString('en-US');
+      alert(`📌 ${proj.name}\n📍 ${proj.location}\n💰 Budget: ${budgetLine}\n📈 Progress: ${proj.progress}%\n👥 Team: ${(proj.team || []).join(", ") || "None"}\n🎯 Status: ${proj.status}`);
+    });
+    container.appendChild(card);
+  });
+}
+
+function escapeHtml(str) { return str.replace(/[&<>]/g, function(m){ if(m === '&') return '&amp;'; if(m === '<') return '&lt;'; if(m === '>') return '&gt;'; return m;}); }
+
+function renderAllProjects() {
+  renderProjects();
+}
+
+function exportProjects() {
+  if (!masterProjects.length) {
+    showToast("No projects to export.");
+    return;
+  }
+  if (!window.RDOMMSExport) {
+    showToast("Export module not loaded.");
+    return;
+  }
+  const format = document.getElementById("exportFormat")?.value || "pdf";
+  const headers = ["ID", "Name", "Location", "Sector", "Budget", "Progress", "Status", "Due Date", "Beneficiaries"];
+  const rows = masterProjects.map((p) => [
+    p.id,
+    p.name,
+    p.location,
+    p.sector,
+    p.budget,
+    `${p.progress}%`,
+    p.status,
+    p.dueDate,
+    p.beneficiaries || 0
+  ]);
+  RDOMMSExport.exportData({
+    format,
+    title: "All Projects",
+    subtitle: `Export date: ${new Date().toLocaleString()} | Total: ${masterProjects.length}`,
+    headers,
+    rows,
+    filename: `rd_projects_${new Date().toISOString().slice(0, 10)}`
+  }).then(() => showToast("Exported successfully!"))
+    .catch((error) => showToast(error.message || "Export failed."));
+}
+
+function showToast(msg) {
+  let t = document.createElement('div');
+  t.className = 'toast';
+  t.innerHTML = `<i class="fas fa-check-circle"></i> ${msg}`;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2500);
+}
+
+function populateSectorFilter() {
+  const sel = document.getElementById("sectorFilter");
+  if (!sel || !window.RDOMMSDepartments) return;
+  const current = sel.value;
+  sel.innerHTML = '<option value="all">All Sectors</option>';
+  RDOMMSDepartments.list().forEach((item) => {
+    const option = document.createElement("option");
+    option.value = item.label;
+    option.textContent = item.label;
+    sel.appendChild(option);
+  });
+  if (current) sel.value = current;
+}
+
+// sync event listeners after dom ready
+function bindEventListeners() {
+  document.getElementById("searchInput").addEventListener("input", () => renderAllProjects());
+  document.getElementById("organizationFilter").addEventListener("change", () => renderAllProjects());
+  document.getElementById("districtFilter").addEventListener("change", () => renderAllProjects());
+  document.getElementById("sectorFilter").addEventListener("change", () => renderAllProjects());
+  document.getElementById("sortSelect").addEventListener("change", () => renderAllProjects());
+  document.getElementById("exportBtn")?.addEventListener("click", exportProjects);
+}
+
+// also listen to storage changes across tabs
+window.addEventListener("storage", (event) => {
+  if (event.key === "rd_projects") {
+    loadProjectsFromApi(true).then(() => loadProjectHealthMap()).then(() => {
+      renderStatusPills();
+      renderAllProjects();
+    });
+  }
+});
+
+// initialization — always fetch fresh from database
+Promise.all([loadProjectsFromApi(), loadProjectHealthMap()]).then(() => {
+  populateSectorFilter();
+  bindEventListeners();
+  renderStatusPills();
+  renderAllProjects();
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('budget_pending') === '1') {
+    showToast('Project created. Budget request is awaiting approval.');
+  }
+});
+</script>
+</body>
+</html>

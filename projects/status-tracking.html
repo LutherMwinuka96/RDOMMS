@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RDO|MMS – Status Tracking</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+<link rel="stylesheet" href="../assets/css/rdomms-icons-offline.css">
+<link rel="stylesheet" href="../assets/css/rdomms-session-countdown.css?v=2">
+<link rel="stylesheet" href="../assets/css/project-nav.css?v=3">
+<link rel="stylesheet" href="../assets/css/rdomms-currency.css">
+<script src="../assets/js/number-format.js"></script>
+<style>
+:root{
+  --primary-green:#2d5016;
+  --secondary-green:#4a7c28;
+  --accent-green:#6dbd6d;
+  --light-green:#a8d5a8;
+  --dark-green:#1a3009;
+  --success-green:#28a745;
+  --warning-amber:#ffc107;
+  --danger-red:#dc3545;
+  --info-blue:#17a2b8;
+  --light-gray:#f8f9fa;
+  --dark-gray:#343a40;
+  --border-gray:#dee2e6;
+  --text-primary:#212529;
+  --text-secondary:#6c757d;
+  --bg-primary:#ffffff;
+  --bg-secondary:#f8f9fa;
+  --shadow-sm:0 2px 4px rgba(0,0,0,0.08);
+  --shadow:0 4px 8px rgba(0,0,0,0.12);
+  --shadow-md:0 10px 15px -3px rgba(0,0,0,0.1),0 4px 6px -2px rgba(0,0,0,0.05);
+  --shadow-lg:0 8px 16px rgba(0,0,0,0.16);
+  --transition:all 0.3s ease;
+  --radius-sm:0.375rem;
+  --radius:0.5rem;
+  --radius-md:0.75rem;
+  --radius-lg:1rem;
+  --font-family:'Inter',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-family),sans-serif;background:linear-gradient(135deg,#2d5016 0%,#4a7c28 100%);color:var(--text-primary);min-height:100vh;}
+
+.page{max-width:1280px;margin:0 auto;padding:2rem 1.5rem;}
+.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;}
+.page-header h1{font-size:1.75rem;font-weight:700;color:#fff;text-shadow:0 2px 4px rgba(0,0,0,0.2);}
+.page-header p{color:#fff;font-size:0.9375rem;margin-top:0.25rem;text-shadow:0 1px 2px rgba(0,0,0,0.1);}
+
+.btn{display:inline-flex;align-items:center;gap:0.5rem;padding:0.625rem 1rem;border-radius:var(--radius-md);font-size:0.875rem;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .2s;text-decoration:none;}
+.btn-primary{background:linear-gradient(135deg,var(--primary-green)0%,var(--secondary-green)100%);color:#fff;box-shadow:var(--shadow);border:2px solid var(--dark-green);}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:var(--shadow-md);background:linear-gradient(135deg,var(--dark-green)0%,var(--primary-green)100%);}
+.btn-outline{background:#fff;color:var(--info-blue);border:2px solid var(--info-blue);box-shadow:0 2px 4px rgba(23,162,184,0.2);}
+.btn-outline:hover{border-color:var(--primary-green);color:var(--primary-green);background:var(--bg-secondary);box-shadow:0 4px 8px rgba(45,80,22,0.2);}
+.btn-success{background:linear-gradient(135deg,var(--success-green)0%,#20c997 100%);color:#fff;border:2px solid #1a7c5e;box-shadow:0 2px 4px rgba(40,167,69,0.2);}
+.btn-success:hover{transform:translateY(-1px);box-shadow:0 4px 8px rgba(40,167,69,0.3);background:linear-gradient(135deg,#1a7c5e 0%,var(--success-green)100%);}
+.btn-danger{background:linear-gradient(135deg,var(--danger-red)0%,#c82333 100%);color:#fff;border:2px solid #a71d2a;box-shadow:0 2px 4px rgba(220,53,69,0.2);}
+.btn-danger:hover{transform:translateY(-1px);box-shadow:0 4px 8px rgba(220,53,69,0.3);background:linear-gradient(135deg,#a71d2a 0%,var(--danger-red)100%);}
+
+/* Summary strip */
+.summary-strip{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1rem;margin-bottom:1.5rem;}
+.ss-card{background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);border:1.5px solid var(--border-gray);border-radius:var(--radius-lg);padding:1.25rem;text-align:center;cursor:pointer;transition:all .2s;box-shadow:var(--shadow-sm);min-width:0;}
+.ss-card:hover,.ss-card.active{border-color:var(--primary-green);box-shadow:var(--shadow-md);transform:translateY(-2px);}
+.ss-num{font-size:clamp(1.25rem,4vw,1.75rem);font-weight:800;margin-bottom:0.25rem;line-height:1.1;word-break:break-word;}
+.ss-label{font-size:0.6875rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.025em;font-weight:600;line-height:1.3;}
+.ss-bar{height:4px;border-radius:2px;margin-top:0.75rem;}
+@media (max-width:1100px){.summary-strip{grid-template-columns:repeat(3,minmax(0,1fr));}}
+@media (max-width:768px){
+  .page{padding:1.25rem 1rem;}
+  .page-header{flex-direction:column;align-items:stretch;}
+  .page-header h1{font-size:clamp(1.35rem,6vw,1.75rem);}
+  .summary-strip{grid-template-columns:repeat(2,minmax(0,1fr));gap:0.75rem;}
+  .ss-card{padding:1rem 0.875rem;}
+}
+@media (max-width:480px){
+  .summary-strip{grid-template-columns:1fr;gap:0.625rem;}
+  .ss-card{display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto auto;gap:0.25rem 0.75rem;text-align:left;padding:0.875rem 1rem;align-items:center;}
+  .ss-num{grid-column:1;grid-row:1;margin-bottom:0;font-size:1.5rem;}
+  .ss-label{grid-column:1;grid-row:2;}
+  .ss-bar{grid-column:2;grid-row:1 / span 2;width:4px;height:auto;min-height:44px;margin-top:0;border-radius:999px;align-self:stretch;}
+}
+
+/* Kanban board */
+.board{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;align-items:start;}
+@media (max-width:1024px){.board{grid-template-columns:repeat(2,1fr);}}
+@media (max-width:640px){.board{grid-template-columns:1fr;}}
+.column{background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);border:1.5px solid var(--border-gray);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-sm);}
+.col-header{padding:1rem 1.25rem;font-size:0.875rem;font-weight:700;display:flex;align-items:center;gap:0.5rem;border-bottom:1.5px solid var(--border-gray);background:var(--bg-secondary);}
+.col-dot{width:10px;height:10px;border-radius:50%;}
+.col-count{margin-left:auto;background:var(--border-gray);border-radius:999px;font-size:0.75rem;padding:0.125rem 0.625rem;color:var(--text-secondary);font-weight:600;}
+.col-body{padding:0.75rem;display:flex;flex-direction:column;gap:0.5rem;min-height:200px;}
+
+.k-card{border:1.5px solid var(--border-gray);border-radius:var(--radius-md);padding:1rem;cursor:grab;transition:all .2s;background:var(--bg-primary);}
+.k-card:hover{box-shadow:var(--shadow);border-color:var(--primary-green);transform:translateY(-1px);}
+.k-card:active{cursor:grabbing;}
+.k-sector{font-size:0.625rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.025em;margin-bottom:0.375rem;display:flex;align-items:center;gap:0.25rem;font-weight:600;}
+.k-title{font-size:0.875rem;font-weight:700;color:var(--text-primary);margin-bottom:0.5rem;line-height:1.3;}
+.k-loc{font-size:0.75rem;color:var(--text-secondary);display:flex;align-items:center;gap:0.25rem;margin-bottom:0.5rem;}
+.k-progress-bg{height:5px;background:var(--border-gray);border-radius:3px;margin-bottom:0.5rem;}
+.k-progress-fill{height:100%;border-radius:3px;}
+.k-foot{display:flex;align-items:center;justify-content:space-between;font-size:0.6875rem;}
+.k-budget{color:var(--text-secondary);}
+.k-budget strong{color:var(--text-primary);}
+.k-avatars{display:flex;}
+.kav{width:1.25rem;height:1.25rem;border-radius:50%;border:1.5px solid #fff;font-size:0.5rem;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;margin-left:-4px;}
+.kav:first-child{margin-left:0;}
+
+/* Timeline strip */
+.timeline-section{margin-top:1.5rem;}
+.section-title{font-size:1.125rem;font-weight:700;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem;color:#fff;text-shadow:0 2px 4px rgba(0,0,0,0.2);}
+.section-title i{color:var(--accent-green);}
+
+.timeline-table{width:100%;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);border:1.5px solid var(--border-gray);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-sm);}
+table{width:100%;border-collapse:collapse;}
+th{padding:0.75rem 1rem;font-size:0.6875rem;color:var(--text-secondary);text-align:left;text-transform:uppercase;letter-spacing:0.025em;border-bottom:2px solid var(--border-gray);background:var(--bg-secondary);font-weight:600;}
+td{padding:1rem;font-size:0.8125rem;border-bottom:1px solid var(--border-gray);}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--bg-secondary);}
+.badge{display:inline-flex;align-items:center;gap:0.25rem;padding:0.25rem 0.625rem;border-radius:999px;font-size:0.6875rem;font-weight:600;}
+.badge.ongoing{background:#eff6ff;color:#3b82f6;}
+.badge.completed{background:#f0fdf4;color:#16a34a;}
+.badge.delayed{background:#fef2f2;color:#ef4444;}
+.badge.ns{background:#f1f5f9;color:#64748b;}
+.pb-wrap{display:flex;align-items:center;gap:0.5rem;}
+.pb-bg{flex:1;height:6px;background:var(--border-gray);border-radius:3px;}
+.pb-fill{height:100%;border-radius:3px;}
+.pct{font-size:0.6875rem;font-weight:600;min-width:28px;}
+.update-btn{background:var(--bg-secondary);border:2px solid var(--info-blue);color:var(--info-blue);font-size:0.6875rem;font-weight:600;padding:0.25rem 0.625rem;border-radius:var(--radius-sm);cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:0.25rem;transition:all .2s;box-shadow:0 2px 4px rgba(23,162,184,0.2);}
+.update-btn:hover{background:var(--info-blue);color:#fff;border-color:var(--info-blue);transform:translateY(-1px);box-shadow:0 4px 8px rgba(23,162,184,0.3);}
+.k-finance-links{display:flex;gap:0.35rem;margin-top:0.5rem;flex-wrap:wrap;}
+.k-fin-link{display:inline-flex;align-items:center;justify-content:center;width:1.65rem;height:1.65rem;border-radius:8px;border:1px solid var(--border-gray);color:var(--primary-green);background:#fff;font-size:0.7rem;text-decoration:none;transition:all .15s;}
+.k-fin-link:hover{background:var(--primary-green);color:#fff;border-color:var(--primary-green);}
+</style>
+</head>
+<body>
+<nav id="rdomms-project-nav" data-active="status-tracking"></nav>
+<script src="../assets/js/rpn-nav-shared.js?v=2"></script>
+<script src="../assets/js/project-finance-links.js?v=4"></script>
+<script src="../assets/js/project-nav.js?v=8"></script>
+
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1>Status Tracking</h1>
+      <p>Real-time overview of all project statuses and progress.</p>
+    </div>
+    <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+      <a href="project-health.php" class="btn btn-outline"><i class="fas fa-heart-pulse"></i> Project Health</a>
+      <a href="../finance/budget-allocation.php" class="btn btn-outline"><i class="fas fa-wallet"></i> Budget Allocation</a>
+      <a href="../finance/expense-tracking.php" class="btn btn-outline"><i class="fas fa-receipt"></i> Expenses</a>
+      <a href="all-projects.php" class="btn btn-outline"><i class="fas fa-folder"></i> All Projects</a>
+      <a href="create-project.php" class="btn btn-primary"><i class="fas fa-plus"></i> New Project</a>
+    </div>
+  </div>
+
+  <!-- Summary -->
+  <div class="summary-strip">
+    <div class="ss-card active">
+      <div class="ss-num" style="color:var(--primary-green);">0</div>
+      <div class="ss-label">Total</div>
+      <div class="ss-bar" style="background:var(--primary-green);"></div>
+    </div>
+    <div class="ss-card">
+      <div class="ss-num" style="color:#3b82f6;">0</div>
+      <div class="ss-label">Ongoing</div>
+      <div class="ss-bar" style="background:#3b82f6;"></div>
+    </div>
+    <div class="ss-card">
+      <div class="ss-num" style="color:#22c55e;">0</div>
+      <div class="ss-label">Completed</div>
+      <div class="ss-bar" style="background:#22c55e;"></div>
+    </div>
+    <div class="ss-card">
+      <div class="ss-num" style="color:#ef4444;">0</div>
+      <div class="ss-label">Delayed</div>
+      <div class="ss-bar" style="background:#ef4444;"></div>
+    </div>
+    <div class="ss-card">
+      <div class="ss-num" style="color:#64748b;">0</div>
+      <div class="ss-label">Not Started</div>
+      <div class="ss-bar" style="background:#cbd5e1;"></div>
+    </div>
+  </div>
+
+  <!-- Kanban Board -->
+  <div class="board">
+    <!-- Not Started -->
+    <div class="column">
+      <div class="col-header">
+        <div class="col-dot" style="background:#cbd5e1;"></div>
+        Not Started
+        <span class="col-count">0</span>
+      </div>
+      <div class="col-body" data-status="not-started"></div>
+    </div>
+
+    <!-- Ongoing -->
+    <div class="column">
+      <div class="col-header">
+        <div class="col-dot" style="background:#3b82f6;"></div>
+        Ongoing
+        <span class="col-count">0</span>
+      </div>
+      <div class="col-body" data-status="ongoing"></div>
+    </div>
+
+    <!-- Delayed -->
+    <div class="column">
+      <div class="col-header">
+        <div class="col-dot" style="background:#ef4444;"></div>
+        Delayed
+        <span class="col-count">0</span>
+      </div>
+      <div class="col-body" data-status="delayed"></div>
+    </div>
+
+    <!-- Completed -->
+    <div class="column">
+      <div class="col-header">
+        <div class="col-dot" style="background:#22c55e;"></div>
+        Completed
+        <span class="col-count">0</span>
+      </div>
+      <div class="col-body" data-status="completed"></div>
+    </div>
+  </div>
+
+  <!-- Table View -->
+  <div class="timeline-section">
+    <div class="section-title"><i class="fas fa-table"></i> All Projects – Detailed Status</div>
+    <div class="timeline-table">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Project</th>
+            <th>Location</th>
+            <th>Progress</th>
+            <th>Budget Used</th>
+            <th>Status</th>
+            <th>Due Date</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="statusTableBody">
+          <tr>
+            <td colspan="8" style="text-align:center;padding:1.5rem;color:var(--text-secondary);">Loading projects...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/js/rdomms-security.js"></script>
+<script src="../assets/js/localStorage-service.js"></script>
+<script>
+let projectHealthMap = {};
+
+async function loadProjectHealthMap() {
+  try {
+    const res = await fetch('../api/projects/health.php', {
+      headers: { 'X-Requested-With': 'XMLHttpRequest' },
+      credentials: 'same-origin'
+    });
+    const payload = await res.json();
+    if (res.ok && payload?.status === 'success' && Array.isArray(payload.data?.projects)) {
+      projectHealthMap = {};
+      payload.data.projects.forEach((row) => {
+        projectHealthMap[String(row.projectId)] = row;
+      });
+    }
+  } catch (error) {
+    console.warn('Project health map load failed:', error);
+  }
+}
+
+function getHealthSpendLine(projectId) {
+  const health = projectHealthMap[String(projectId)];
+  if (!health) return '';
+  const spent = typeof formatRdommsCurrencyHtml === 'function'
+    ? formatRdommsCurrencyHtml(health.spentCommitted)
+    : formatCurrencyHtml(health.spentCommitted);
+  return `<div class="k-budget" style="margin-top:0.35rem;">Spent: <strong>${spent}</strong></div>`;
+}
+
+function projectFinanceLinksHtml(project) {
+  const PF = window.RDOMMSProjectFinance;
+  if (!PF || !project?.id) return '';
+  const budgetUrl = PF.buildBudgetAllocationUrl(project.id, project.name, '../finance');
+  const expenseUrl = PF.buildExpenseTrackingUrl(project.id, project.name, '../finance');
+  const healthUrl = PF.buildProjectHealthUrl(project.id, '.');
+  return `
+    <div class="k-finance-links">
+      <a href="${budgetUrl}" class="k-fin-link" title="Allocate budget"><i class="fas fa-wallet"></i></a>
+      <a href="${expenseUrl}" class="k-fin-link" title="Record expense"><i class="fas fa-receipt"></i></a>
+      <a href="${healthUrl}" class="k-fin-link" title="Project health"><i class="fas fa-heart-pulse"></i></a>
+    </div>
+  `;
+}
+
+function renderBudgetApprovalActions(project) {
+  const PF = window.RDOMMSProjectFinance;
+  if (!PF || !PF.canUserApproveBudget?.()) return '';
+  if (PF.getBudgetApprovalStatus(project) !== 'pending') return '';
+  const id = project.id;
+  return `
+    <div class="k-budget-actions" style="margin-top:0.5rem;display:flex;gap:0.35rem;flex-wrap:wrap;">
+      <button type="button" class="pf-approve-btn" onclick="approveProjectBudgetAction('${escapeJsString(id)}')"><i class="fas fa-check"></i> Approve budget</button>
+      <button type="button" class="pf-reject-btn" onclick="rejectProjectBudgetAction('${escapeJsString(id)}')"><i class="fas fa-times"></i> Reject</button>
+    </div>
+  `;
+}
+
+function renderDeregistrationActions(project) {
+  const PF = window.RDOMMSProjectFinance;
+  if (!PF || !project?.id) return '';
+  const id = project.id;
+  const status = PF.getDeregistrationStatus(project);
+  let html = '';
+
+  if (status === 'pending' && PF.canUserApproveDeregistration?.()) {
+    html += `
+      <div class="k-budget-actions" style="margin-top:0.5rem;display:flex;gap:0.35rem;flex-wrap:wrap;">
+        <button type="button" class="pf-approve-btn" onclick="approveProjectDeregistrationAction('${escapeJsString(id)}')"><i class="fas fa-check"></i> Approve removal</button>
+        <button type="button" class="pf-reject-btn" onclick="rejectProjectDeregistrationAction('${escapeJsString(id)}')"><i class="fas fa-times"></i> Reject removal</button>
+      </div>
+    `;
+  } else if (status === 'none' || status === 'rejected') {
+    html += `
+      <div class="k-budget-actions" style="margin-top:0.5rem;display:flex;gap:0.35rem;flex-wrap:wrap;">
+        <button type="button" class="pf-reject-btn" onclick="requestProjectDeregistrationAction('${escapeJsString(id)}')"><i class="fas fa-user-slash"></i> Request removal</button>
+      </div>
+    `;
+  } else if (status === 'pending') {
+    html += `
+      <div class="k-budget-actions" style="margin-top:0.5rem;display:flex;gap:0.35rem;flex-wrap:wrap;">
+        <button type="button" class="pf-reject-btn" onclick="cancelProjectDeregistrationAction('${escapeJsString(id)}')"><i class="fas fa-ban"></i> Cancel removal request</button>
+      </div>
+    `;
+  }
+
+  return html;
+}
+
+async function requestProjectDeregistrationAction(projectId) {
+  try {
+    const ok = await window.RDOMMSProjectFinance.promptProjectDeregistration(projectId);
+    if (ok) await initPage();
+  } catch (error) {
+    alert(error.message || 'Unable to request project removal.');
+  }
+}
+
+async function cancelProjectDeregistrationAction(projectId) {
+  if (!confirm('Cancel the pending removal request for this project?')) return;
+  try {
+    await window.RDOMMSProjectFinance.cancelProjectDeregistration(projectId);
+    await initPage();
+    alert('Removal request cancelled.');
+  } catch (error) {
+    alert(error.message || 'Unable to cancel removal request.');
+  }
+}
+
+async function approveProjectDeregistrationAction(projectId) {
+  if (!confirm('Approve removal? This permanently deletes the project, budget allocations, and linked expenses.')) return;
+  try {
+    await window.RDOMMSProjectFinance.approveProjectDeregistration(projectId);
+    await initPage();
+    alert('Project and linked records were removed.');
+  } catch (error) {
+    alert(error.message || 'Unable to approve project removal.');
+  }
+}
+
+async function rejectProjectDeregistrationAction(projectId) {
+  const reason = prompt('Enter reason for rejecting the removal request:');
+  if (!reason || !reason.trim()) return;
+  try {
+    await window.RDOMMSProjectFinance.rejectProjectDeregistration(projectId, reason.trim());
+    await initPage();
+    alert('Removal request rejected.');
+  } catch (error) {
+    alert(error.message || 'Unable to reject removal request.');
+  }
+}
+
+async function approveProjectBudgetAction(projectId) {
+  try {
+    await window.RDOMMSProjectFinance.approveProjectBudget(projectId);
+    await initPage();
+    alert('Project budget approved.');
+  } catch (error) {
+    alert(error.message || 'Unable to approve budget.');
+  }
+}
+
+async function rejectProjectBudgetAction(projectId) {
+  const reason = prompt('Enter rejection reason:');
+  if (!reason || !reason.trim()) return;
+  try {
+    await window.RDOMMSProjectFinance.rejectProjectBudget(projectId, reason.trim());
+    await initPage();
+    alert('Project budget rejected.');
+  } catch (error) {
+    alert(error.message || 'Unable to reject budget.');
+  }
+}
+
+async function resubmitProjectBudgetAction(projectId, currentBudget) {
+  const nextBudget = prompt('Enter revised budget amount:', String(currentBudget || 0));
+  if (nextBudget === null) return;
+  const amount = Number(nextBudget);
+  if (!Number.isFinite(amount) || amount <= 0) {
+    alert('Enter a valid budget amount.');
+    return;
+  }
+  try {
+    await window.RDOMMSProjectFinance.resubmitProjectBudget(projectId, amount);
+    await initPage();
+    alert('Budget request resubmitted for approval.');
+  } catch (error) {
+    alert(error.message || 'Unable to resubmit budget.');
+  }
+}
+function normalizeProject(project) {
+  const budget = Number(project.budget) || 0;
+  const budgetApprovalStatus = String(
+    project.budgetApprovalStatus || project.budget_approval_status || 'draft'
+  ).trim().toLowerCase();
+  const budgetCanOperate = project.budgetCanOperate ?? project.budget_can_operate
+    ?? (budget <= 0 || budgetApprovalStatus === 'approved');
+
+  return {
+    ...project,
+    id: project.project_id || project.id,
+    startDate: project.startDate || project.start_date || '',
+    dueDate: project.dueDate || project.end_date || '',
+    createdAt: project.createdAt || project.created_at || '',
+    team: Array.isArray(project.team) ? project.team : (project.team ? (() => { try { return JSON.parse(project.team); } catch (e) { return []; } })() : []),
+    budget,
+    beneficiaries: Number(project.beneficiaries) || 0,
+    progress: Number(project.progress) || 0,
+    status: project.status || 'not-started',
+    location: project.location || project.district || '',
+    budgetApprovalStatus,
+    budgetCanOperate,
+    budgetRejectReason: project.budgetRejectReason || project.budget_reject_reason || '',
+    createdBy: Number(project.createdBy || project.created_by || 0) || 0,
+    deregistrationStatus: project.deregistrationStatus || project.deregistration_status || 'none',
+    deregistrationReason: project.deregistrationReason || project.deregistration_reason || '',
+    deregistrationRejectReason: project.deregistrationRejectReason || project.deregistration_reject_reason || '',
+  };
+}
+
+function isAdminViewer() {
+  const role = String((JSON.parse(localStorage.getItem('currentUser') || '{}')).role || '').toLowerCase();
+  if (window.RDOMMSRBAC?.isAdminRole) {
+    return window.RDOMMSRBAC.isAdminRole(role);
+  }
+  return role === 'admin' || role === 'mkurugenzi_mtendaji' || role === 'administrator';
+}
+
+function getCurrentUserId() {
+  try {
+    return Number(JSON.parse(localStorage.getItem('currentUser') || '{}').id || 0) || 0;
+  } catch (error) {
+    return 0;
+  }
+}
+
+function canCurrentUserUpdateProject(project) {
+  if (isAdminViewer()) return true;
+  const userId = getCurrentUserId();
+  const creatorId = Number(project?.createdBy || project?.created_by || 0) || 0;
+  return userId > 0 && creatorId > 0 && userId === creatorId;
+}
+
+function renderProjectUpdateButton(project) {
+  if (!canCurrentUserUpdateProject(project)) {
+    return '';
+  }
+
+  const isCompleted = project.status === 'completed';
+  const isNotStarted = project.status === 'not-started';
+  return `
+    <button class="update-btn" onclick="updateProject('${escapeJsString(project.id)}')">
+      <i class="fas ${isCompleted ? 'fa-check' : (isNotStarted ? 'fa-play' : 'fa-edit')}"></i>
+      ${isCompleted ? 'Done' : (isNotStarted ? 'Start' : 'Update')}
+    </button>
+  `;
+}
+
+function getDashboardDateRange() {
+  const fallback = {
+    start: new Date('2020-01-01'),
+    end: new Date('2030-12-31')
+  };
+
+  try {
+    const saved = JSON.parse(localStorage.getItem('dashboardDateRange') || 'null');
+    if (!saved || !saved.start || !saved.end) return fallback;
+
+    const start = new Date(saved.start);
+    const end = new Date(saved.end);
+    if (isNaN(start) || isNaN(end) || start > end) return fallback;
+
+    return { start, end };
+  } catch (error) {
+    return fallback;
+  }
+}
+
+function isProjectInDashboardRange(project) {
+  const range = getDashboardDateRange();
+  const referenceDate = project.dueDate || project.createdAt || project.startDate;
+  if (!referenceDate) return true;
+
+  const date = new Date(referenceDate);
+  if (isNaN(date)) return true;
+
+  return date >= range.start && date <= range.end;
+}
+
+function filterProjectsByDashboardRange(projects) {
+  if (isAdminViewer()) {
+    return Array.isArray(projects) ? projects : [];
+  }
+  return projects.filter(isProjectInDashboardRange);
+}
+
+async function loadProjects(options = {}) {
+  const allowCacheFallback = options.allowCacheFallback !== false;
+
+  try {
+    const res = await fetch(`../api/projects.php?t=${Date.now()}`, {
+      headers: { 'X-Requested-With': 'XMLHttpRequest' },
+      credentials: 'same-origin',
+      cache: 'no-store'
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data?.message || `Failed to load projects (${res.status})`);
+    }
+    if (data.status === 'success' && Array.isArray(data.data)) {
+      const projects = data.data.map(normalizeProject);
+      localStorage.setItem('rd_projects', JSON.stringify(projects));
+      return projects;
+    }
+    throw new Error(data?.message || 'Invalid projects response');
+  } catch (error) {
+    console.warn('API load failed:', error);
+    if (!allowCacheFallback) {
+      throw error;
+    }
+  }
+
+  const stored = localStorage.getItem('rd_projects');
+  return stored ? JSON.parse(stored).map(normalizeProject) : [];
+}
+
+async function fetchProjectFresh(projectId) {
+  const res = await fetch(`../api/projects.php?id=${encodeURIComponent(projectId)}&t=${Date.now()}`, {
+    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+    credentials: 'same-origin',
+    cache: 'no-store'
+  });
+  const data = await res.json().catch(() => null);
+  if (!res.ok || data?.status !== 'success' || !data?.data) {
+    throw new Error(data?.message || 'Failed to load project details');
+  }
+  return normalizeProject(data.data);
+}
+
+function formatProjectUpdateError(error, payload) {
+  const code = payload?.code || '';
+  if (code === 'not_project_owner') {
+    return 'Huwezi kusasisha mradi huu. Ni muundaji wa mradi tu anaweza kuupdate.';
+  }
+  if (code === 'budget_not_approved') {
+    return payload?.message || 'Bajeti bado haijaidhinishwa. Subiri accountant aapprove.';
+  }
+  if (code === 'deregistration_pending') {
+    return payload?.message || 'Mradi una ombi la kuondolewa linalosubiri. Subiri au futa ombi kwanza.';
+  }
+  return error?.message || payload?.message || 'Imeshindikana kusasisha mradi.';
+}
+
+// Calculate status counts
+function getStatusCounts(projects) {
+  const counts = { total: projects.length, ongoing: 0, completed: 0, delayed: 0, 'not-started': 0 };
+  projects.forEach(p => {
+    if (counts[p.status] !== undefined) counts[p.status]++;
+  });
+  return counts;
+}
+
+// Get progress color
+function getProgressColor(progress) {
+  if (progress >= 70) return '#22c55e';
+  if (progress >= 40) return '#3b82f6';
+  if (progress > 0) return '#f59e0b';
+  return '#cbd5e1';
+}
+
+// Get sector icon
+function getSectorIcon(sector) {
+  const icons = {
+    'Water': 'fa-tint',
+    'Agriculture': 'fa-seedling',
+    'Health': 'fa-heartbeat',
+    'Education': 'fa-graduation-cap',
+    'Infrastructure': 'fa-road',
+    'Energy': 'fa-solar-panel',
+    'Orphanage Support': 'fa-home',
+    'Water Transmission Association': 'fa-tint',
+    'Administration': 'fa-building',
+    'Pottery': 'fa-hammer',
+    'Vocational Training Center': 'fa-graduation-cap',
+    'Emergency': 'fa-exclamation-triangle',
+    'Store': 'fa-store',
+    'Workshop': 'fa-tools',
+    'Other': 'fa-ellipsis-h'
+  };
+  return icons[sector] || 'fa-folder';
+}
+
+// Get sector color
+function getSectorColor(sector) {
+  const colors = {
+    'Water': '#3b82f6',
+    'Agriculture': '#22c55e',
+    'Health': '#f59e0b',
+    'Education': '#ef4444',
+    'Infrastructure': '#a855f7',
+    'Energy': '#10b981',
+    'Orphanage Support': '#3b82f6',
+    'Water Transmission Association': '#06b6d4',
+    'Administration': '#8b5cf6',
+    'Pottery': '#f59e0b',
+    'Vocational Training Center': '#ef4444',
+    'Emergency': '#dc2626',
+    'Store': '#a855f7',
+    'Workshop': '#6b7280',
+    'Other': '#64748b'
+  };
+  return colors[sector] || '#6b7280';
+}
+
+function formatCurrency(amount) {
+  if (typeof formatRdommsCurrency === 'function') {
+    return formatRdommsCurrency(amount || 0);
+  }
+  return 'TSH ' + Number(amount || 0).toLocaleString('en-US');
+}
+
+function formatCurrencyHtml(amount) {
+  if (typeof formatRdommsCurrencyHtml === 'function') {
+    return formatRdommsCurrencyHtml(amount || 0);
+  }
+  return formatCurrency(amount);
+}
+
+function escapeJsString(value) {
+  return String(value).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+}
+
+// Render summary cards
+function renderSummary(counts) {
+  const cards = document.querySelectorAll('.ss-card');
+  cards[0].querySelector('.ss-num').textContent = counts.total;
+  cards[1].querySelector('.ss-num').textContent = counts.ongoing;
+  cards[2].querySelector('.ss-num').textContent = counts.completed;
+  cards[3].querySelector('.ss-num').textContent = counts.delayed;
+  cards[4].querySelector('.ss-num').textContent = counts['not-started'];
+}
+
+// Render Kanban board
+function renderKanban(projects) {
+  const columns = {
+    'not-started': document.querySelector('.col-body[data-status="not-started"]'),
+    'ongoing': document.querySelector('.col-body[data-status="ongoing"]'),
+    'delayed': document.querySelector('.col-body[data-status="delayed"]'),
+    'completed': document.querySelector('.col-body[data-status="completed"]')
+  };
+  
+  const counts = {
+    'not-started': 0,
+    'ongoing': 0,
+    'delayed': 0,
+    'completed': 0
+  };
+  
+  // Clear existing cards
+  Object.values(columns).forEach(col => col.innerHTML = '');
+
+  if (!projects.length) {
+    Object.values(columns).forEach(col => {
+      col.innerHTML = '<div style="padding:1rem;color:var(--text-secondary);font-size:0.8125rem;text-align:center;">No projects</div>';
+    });
+  }
+  
+  projects.forEach(project => {
+    const status = project.status || 'not-started';
+    counts[status]++;
+    
+    const card = document.createElement('div');
+    card.className = 'k-card';
+    card.innerHTML = `
+      <div class="k-sector"><i class="fas ${getSectorIcon(project.sector)}" style="color:${getSectorColor(project.sector)};"></i> ${project.sector}</div>
+      <div class="k-title">${project.name}</div>
+      <div class="k-loc"><i class="fas fa-map-marker-alt"></i> ${project.location || project.district || ''}</div>
+      <div class="k-progress-bg"><div class="k-progress-fill" style="width:${project.progress}%;background:${getProgressColor(project.progress)};"></div></div>
+      <div class="k-foot">
+        <div>
+          <div class="k-budget">Budget: <strong>${formatCurrencyHtml(project.budget)}</strong></div>
+          ${window.RDOMMSProjectFinance?.renderBudgetApprovalBadge ? RDOMMSProjectFinance.renderBudgetApprovalBadge(project) : ''}
+          ${window.RDOMMSProjectFinance?.renderDeregistrationBadge ? RDOMMSProjectFinance.renderDeregistrationBadge(project) : ''}
+          ${getHealthSpendLine(project.id)}
+          ${projectFinanceLinksHtml(project)}
+          ${renderBudgetApprovalActions(project)}
+          ${renderDeregistrationActions(project)}
+        </div>
+        <div class="k-avatars">
+          ${(project.team || []).slice(0, 3).map((member, i) => 
+            `<div class="kav" style="background:${getSectorColor(project.sector)};">${member.substring(0, 2).toUpperCase()}</div>`
+          ).join('')}
+        </div>
+      </div>
+    `;
+    
+    if (columns[status]) {
+      columns[status].appendChild(card);
+    }
+  });
+  
+  // Update counts
+  document.querySelector('.column:nth-child(1) .col-count').textContent = counts['not-started'];
+  document.querySelector('.column:nth-child(2) .col-count').textContent = counts['ongoing'];
+  document.querySelector('.column:nth-child(3) .col-count').textContent = counts['delayed'];
+  document.querySelector('.column:nth-child(4) .col-count').textContent = counts['completed'];
+}
+
+// Render table
+function renderTable(projects) {
+  const tbody = document.getElementById('statusTableBody');
+  tbody.innerHTML = '';
+  
+  projects.forEach((project, index) => {
+    const tr = document.createElement('tr');
+    const isDelayed = project.status === 'delayed';
+    const isCompleted = project.status === 'completed';
+    const isNotStarted = project.status === 'not-started';
+    
+    let badgeClass = 'ongoing';
+    let badgeText = 'Ongoing';
+    if (isCompleted) { badgeClass = 'completed'; badgeText = 'Completed'; }
+    else if (isDelayed) { badgeClass = 'delayed'; badgeText = 'Delayed'; }
+    else if (isNotStarted) { badgeClass = 'ns'; badgeText = 'Not Started'; }
+    
+    const progressColor = getProgressColor(project.progress);
+    
+    tr.innerHTML = `
+      <td style="color:var(--gray-500);">${String(index + 1).padStart(3, '0')}</td>
+      <td><strong>${project.name}</strong></td>
+      <td>${project.location || project.district || ''}</td>
+      <td>
+        <div class="pb-wrap">
+          <div class="pb-bg"><div class="pb-fill" style="width:${project.progress}%;background:${progressColor};"></div></div>
+          <span class="pct" style="color:${progressColor};">${project.progress}%</span>
+        </div>
+      </td>
+      <td>${formatCurrencyHtml(project.budget)}</td>
+      <td><span class="badge ${badgeClass}">${badgeText}</span></td>
+      <td>${isDelayed ? '<span style="color:var(--danger);"><i class="fas fa-exclamation-circle"></i> Overdue</span>' : (project.dueDate || '—')}</td>
+      <td>
+        ${renderBudgetApprovalActions(project)}
+        ${typeof renderDeregistrationActions === 'function' ? renderDeregistrationActions(project) : ''}
+        ${renderProjectUpdateButton(project)}
+      </td>
+    `;
+    
+    tbody.appendChild(tr);
+  });
+}
+
+// Update project status
+async function updateProject(projectId) {
+  let project;
+  try {
+    project = await fetchProjectFresh(projectId);
+  } catch (error) {
+    alert(formatProjectUpdateError(error));
+    return;
+  }
+
+  const previousStatus = project.status;
+  const previousProgress = project.progress;
+  let changed = false;
+
+  if (project.status === 'not-started') {
+    const operateCheck = window.RDOMMSProjectFinance?.validateProjectCanOperate
+      ? RDOMMSProjectFinance.validateProjectCanOperate(project)
+      : { ok: true, errors: [] };
+    if (!operateCheck.ok) {
+      alert(operateCheck.errors[0] || 'Budget approval is required before starting this project.');
+      if (window.RDOMMSProjectFinance?.getBudgetApprovalStatus(project) === 'rejected') {
+        resubmitProjectBudgetAction(project.id, project.budget);
+      }
+      return;
+    }
+    if (Number(project.budget) <= 0) {
+      const proceed = confirm(
+        'This project has no budget set. Allocate budget in Finance before tracking spend.\n\nStart project anyway?'
+      );
+      if (!proceed) return;
+    }
+    project.status = 'ongoing';
+    project.progress = Math.max(project.progress, 10);
+    changed = true;
+  } else if (project.status === 'ongoing') {
+    const newProgress = prompt('Enter new progress percentage (0-100):', project.progress);
+    if (newProgress === null) {
+      return;
+    }
+    const parsedProgress = Number.parseInt(newProgress, 10);
+    const health = projectHealthMap[String(project.id)] || {};
+    const validation = window.RDOMMSProjectFinance?.validateProgressUpdate
+      ? RDOMMSProjectFinance.validateProgressUpdate({
+          ...project,
+          endDate: project.dueDate || project.endDate || project.end_date,
+          linkedExpenseCount: health.linkedExpenseCount || 0,
+          budgetApprovalStatus: project.budgetApprovalStatus,
+          budgetCanOperate: project.budgetCanOperate
+        }, parsedProgress)
+      : { ok: true, warnings: [], errors: [] };
+
+    if (!validation.ok) {
+      alert(validation.errors[0] || 'Invalid progress value.');
+      return;
+    }
+    if (validation.warnings?.length && !confirm(validation.warnings.join('\n\n') + '\n\nContinue?')) {
+      return;
+    }
+
+    project.progress = parsedProgress;
+    if (project.progress >= 100) {
+      project.progress = 100;
+      project.status = 'completed';
+    }
+    changed = project.status !== previousStatus || project.progress !== previousProgress;
+  } else if (project.status === 'delayed') {
+    const operateCheck = window.RDOMMSProjectFinance?.validateProjectCanOperate
+      ? RDOMMSProjectFinance.validateProjectCanOperate(project)
+      : { ok: true, errors: [] };
+    if (!operateCheck.ok) {
+      alert(operateCheck.errors[0] || 'Budget approval is required before resuming this project.');
+      return;
+    }
+    project.status = 'ongoing';
+    changed = true;
+  } else {
+    return;
+  }
+
+  if (!changed) {
+    return;
+  }
+
+  try {
+    const res = await fetch('../api/projects.php', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      credentials: 'same-origin',
+      body: JSON.stringify({
+        id: project.id,
+        status: project.status,
+        progress: project.progress
+      })
+    });
+    const result = await res.json().catch(() => null);
+    if (!res.ok || result?.status !== 'success') {
+      throw new Error(formatProjectUpdateError(null, result));
+    }
+    await initPage();
+    alert('Project updated successfully!');
+  } catch (error) {
+    alert(formatProjectUpdateError(error));
+  }
+}
+
+// Initialize page
+async function initPage() {
+  await loadProjectHealthMap();
+  const projects = await loadProjects();
+  const filteredProjects = filterProjectsByDashboardRange(projects);
+  const displayProjects = filteredProjects.length ? filteredProjects : projects;
+  const counts = getStatusCounts(displayProjects);
+  
+  renderSummary(counts);
+  renderKanban(displayProjects);
+  renderTable(displayProjects);
+}
+
+// Listen for storage changes from other tabs
+window.addEventListener('storage', (e) => {
+  if (e.key === 'rd_projects' || e.key === 'dashboardDateRange') {
+    initPage();
+  }
+});
+
+// Initialize on load
+initPage();
+</script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+# Redirect legacy Reports HTML pages to PHP entry points
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule ^(generate-reports|variance-analysis)\.html$ $1.php [R=301,L,QSA]
+</IfModule>

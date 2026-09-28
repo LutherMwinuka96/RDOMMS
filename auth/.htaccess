@@ -1,0 +1,5 @@
+# Redirect legacy auth HTML pages to PHP entry points
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule ^(signin|signup|forgot_password|reset_password)\.html$ $1.php [R=301,L,QSA]
+</IfModule>

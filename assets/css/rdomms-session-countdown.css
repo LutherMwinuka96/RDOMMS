@@ -1,0 +1,195 @@
+/* Session timer — minimal pill: progress ring + time */
+.rdomms-session-countdown {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 34px;
+  padding: 0 10px 0 6px;
+  border-radius: 999px;
+  border: 1px solid rgba(21, 128, 61, 0.18);
+  background: #fff;
+  color: #14532d;
+  cursor: pointer;
+  user-select: none;
+  flex-shrink: 0;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.06);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.rdomms-session-countdown:hover {
+  border-color: rgba(21, 128, 61, 0.32);
+  box-shadow: 0 4px 12px rgba(21, 128, 61, 0.12);
+}
+
+.rdomms-session-countdown:active {
+  transform: scale(0.97);
+}
+
+.rdomms-session-countdown:focus-visible {
+  outline: 2px solid rgba(34, 197, 94, 0.5);
+  outline-offset: 2px;
+}
+
+.rdomms-session-countdown[hidden] {
+  display: none !important;
+}
+
+.rdomms-session-countdown--floating {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 1300;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+}
+
+.rdomms-session-countdown__ring {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  display: block;
+}
+
+.rdomms-session-countdown__ring svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  transform: rotate(-90deg);
+}
+
+.rdomms-session-countdown__track {
+  fill: none;
+  stroke: rgba(21, 128, 61, 0.14);
+  stroke-width: 2.5;
+}
+
+.rdomms-session-countdown__progress {
+  fill: none;
+  stroke: #16a34a;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  transition: stroke 0.3s ease, stroke-dashoffset 0.8s linear;
+}
+
+.rdomms-session-countdown__time {
+  font-size: 12px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  color: #0f172a;
+  line-height: 1;
+  min-width: 38px;
+  text-align: left;
+}
+
+/* Warning — under 1 minute */
+.rdomms-session-countdown--warn {
+  border-color: rgba(245, 158, 11, 0.35);
+  background: #fffbeb;
+}
+
+.rdomms-session-countdown--warn .rdomms-session-countdown__track {
+  stroke: rgba(245, 158, 11, 0.2);
+}
+
+.rdomms-session-countdown--warn .rdomms-session-countdown__progress {
+  stroke: #d97706;
+}
+
+.rdomms-session-countdown--warn .rdomms-session-countdown__time {
+  color: #92400e;
+}
+
+/* Critical — under 30 seconds */
+.rdomms-session-countdown--critical {
+  border-color: rgba(239, 68, 68, 0.4);
+  background: #fef2f2;
+  animation: rdommsSessionPulse 1.2s ease-in-out infinite;
+}
+
+.rdomms-session-countdown--critical .rdomms-session-countdown__track {
+  stroke: rgba(239, 68, 68, 0.18);
+}
+
+.rdomms-session-countdown--critical .rdomms-session-countdown__progress {
+  stroke: #dc2626;
+}
+
+.rdomms-session-countdown--critical .rdomms-session-countdown__time {
+  color: #991b1b;
+}
+
+/* Dark topbars (project nav, etc.) */
+.rdomms-session-countdown--on-dark {
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.rdomms-session-countdown--on-dark .rdomms-session-countdown__track {
+  stroke: rgba(255, 255, 255, 0.2);
+}
+
+.rdomms-session-countdown--on-dark .rdomms-session-countdown__progress {
+  stroke: #86efac;
+}
+
+.rdomms-session-countdown--on-dark .rdomms-session-countdown__time {
+  color: #fff;
+}
+
+.rdomms-session-countdown--on-dark.rdomms-session-countdown--warn {
+  border-color: rgba(251, 191, 36, 0.45);
+  background: rgba(245, 158, 11, 0.15);
+}
+
+.rdomms-session-countdown--on-dark.rdomms-session-countdown--warn .rdomms-session-countdown__progress {
+  stroke: #fbbf24;
+}
+
+.rdomms-session-countdown--on-dark.rdomms-session-countdown--critical {
+  border-color: rgba(248, 113, 113, 0.5);
+  background: rgba(239, 68, 68, 0.18);
+}
+
+.rdomms-session-countdown--on-dark.rdomms-session-countdown--critical .rdomms-session-countdown__progress {
+  stroke: #f87171;
+}
+
+@keyframes rdommsSessionPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.15); }
+  50% { box-shadow: 0 0 0 5px rgba(239, 68, 68, 0); }
+}
+
+@media (max-width: 768px) {
+  .rdomms-session-countdown {
+    height: 32px;
+    padding: 0 8px 0 5px;
+    gap: 5px;
+  }
+
+  .rdomms-session-countdown__ring {
+    width: 24px;
+    height: 24px;
+  }
+
+  .rdomms-session-countdown__time {
+    font-size: 11px;
+    min-width: 34px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rdomms-session-countdown--critical {
+    animation: none;
+  }
+
+  .rdomms-session-countdown__progress {
+    transition: stroke 0.3s ease;
+  }
+
+  .rdomms-session-countdown:active {
+    transform: none;
+  }
+}

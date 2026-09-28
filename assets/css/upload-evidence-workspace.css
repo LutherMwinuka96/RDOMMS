@@ -1,0 +1,249 @@
+/* Upload evidence — extends shared planning workspace (mp-*) */
+
+.planning-page.ue-evidence .ue-form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.planning-page.ue-evidence .ue-form-grid .mp-field--full {
+  grid-column: 1 / -1;
+}
+
+.ue-upload-zone {
+  border: 2px dashed rgba(33, 72, 45, 0.22);
+  border-radius: 16px;
+  padding: 28px 18px;
+  text-align: center;
+  background: #f8fbf8;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.ue-upload-zone:hover,
+.ue-upload-zone.is-dragover {
+  border-color: #58a46a;
+  background: #eaf6ed;
+}
+
+.ue-upload-zone i {
+  font-size: 1.75rem;
+  color: #2d5a38;
+  margin-bottom: 8px;
+}
+
+.ue-upload-zone h4 {
+  margin: 0 0 4px;
+  font-size: 0.92rem;
+  color: #163120;
+}
+
+.ue-upload-zone p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #5f7168;
+}
+
+.ue-upload-zone input {
+  display: none;
+}
+
+.ue-file-queue {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.ue-file-chip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid rgba(22, 48, 33, 0.1);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.ue-file-chip-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.ue-file-chip-main i {
+  color: #2d5a38;
+}
+
+.ue-file-name {
+  font-weight: 700;
+  font-size: 0.84rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ue-file-meta {
+  font-size: 0.72rem;
+  color: #5f7168;
+}
+
+.ue-type-badge {
+  display: inline-flex;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
+.ue-type-badge--photo { background: #eff6ff; color: #1d4ed8; }
+.ue-type-badge--video { background: #fdf4ff; color: #7e22ce; }
+.ue-type-badge--document { background: #fff7ed; color: #c2410c; }
+.ue-type-badge--audio { background: #ecfdf5; color: #047857; }
+.ue-type-badge--other { background: #f3f4f6; color: #4b5563; }
+
+.ue-list-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.ue-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.ue-filters input,
+.ue-filters select {
+  border: 1px solid rgba(22, 48, 33, 0.12);
+  border-radius: 12px;
+  padding: 9px 12px;
+  background: #fff;
+  font-size: 0.84rem;
+  min-width: 140px;
+}
+
+.ue-filters input[type="search"] {
+  flex: 1;
+  min-width: 180px;
+}
+
+.ue-export-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.ue-export-row select {
+  border: 1px solid rgba(22, 48, 33, 0.12);
+  border-radius: 12px;
+  padding: 9px 12px;
+  background: #fff;
+  font-weight: 700;
+  color: #163120;
+}
+
+.ue-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.ue-detail-item {
+  background: #f8fbf8;
+  border: 1px solid rgba(22, 48, 33, 0.1);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.ue-detail-item .k {
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #5f7168;
+}
+
+.ue-detail-item .v {
+  margin-top: 4px;
+  font-weight: 700;
+  color: #163120;
+  font-size: 0.86rem;
+  word-break: break-word;
+}
+
+.ue-file-preview-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ue-file-preview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid rgba(22, 48, 33, 0.1);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.ue-preview-thumb {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1px solid rgba(22, 48, 33, 0.1);
+  background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ue-cell-sub {
+  margin-top: 3px;
+  font-size: 0.72rem;
+  color: #5f7168;
+}
+
+.planning-page.ue-evidence .mp-btn--sm {
+  padding: 7px 11px;
+  font-size: 0.78rem;
+}
+
+@media (max-width: 960px) {
+  .planning-page.ue-evidence .ue-form-grid,
+  .ue-detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .ue-filters input,
+  .ue-filters select {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .ue-export-row {
+    width: 100%;
+  }
+
+  .ue-export-row .mp-btn {
+    flex: 1;
+    justify-content: center;
+  }
+}

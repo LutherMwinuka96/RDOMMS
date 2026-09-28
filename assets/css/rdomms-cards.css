@@ -1,0 +1,51 @@
+@import url('rdomms-responsive.css');
+
+/**
+ * RDOMMS — neutral cards without colored accent stripes or edge borders.
+ */
+.stat-card::before,
+.stat::before,
+.planning-page .stat-card::before,
+.planning-page .stat::before,
+.form-card::before,
+.auth-card::before,
+.rdomms-toast-card::before,
+.card-accent-line {
+  display: none !important;
+  content: none !important;
+}
+
+.stat-card.actual::before,
+.stat-card.variance::before,
+.stat-card.util::before {
+  display: none !important;
+}
+
+.plan-card,
+.plan-card.pending,
+.plan-card.approved,
+.plan-card.rejected {
+  border-left-width: 1px !important;
+  border-left-style: solid !important;
+  border-left-color: var(--border, var(--border-gray, #dbe6de)) !important;
+}
+
+.request-card.pending-card,
+.request-card.approved-card,
+.request-card.rejected-card {
+  border-left-width: 1px !important;
+  border-left-style: solid !important;
+  border-left-color: var(--border, #dee2e6) !important;
+}
+
+.alert-row.unread,
+.alert-row.unread-danger,
+.alert-row.unread-warning {
+  border-left-width: 1px !important;
+  border-left-style: solid !important;
+  border-left-color: var(--border, #e5e7eb) !important;
+}
+
+.contact-item.active {
+  border-left-color: transparent !important;
+}

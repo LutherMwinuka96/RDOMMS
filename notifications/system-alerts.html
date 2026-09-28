@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="../assets/js/rdomms-security.js"></script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RDO|MMS – System Alerts</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+<link rel="stylesheet" href="../assets/css/rdomms-icons-offline.css">
+<link rel="stylesheet" href="../assets/css/rdomms-toast.css">
+<script src="../assets/js/rdomms-toast.js"></script>
+<style>
+:root { --primary:#2d5016; --secondary:#4a7c28; --dark:#1a3009; --danger:#dc3545; --text:#212529; --muted:#6c757d; --border:#dee2e6; --radius:0.75rem; }
+*{box-sizing:border-box;margin:0;padding:0} body{font-family:Inter,sans-serif;background:#f0f4f1;color:var(--text);min-height:100vh}
+.page{max-width:1200px;margin:0 auto;padding:1.25rem 1.25rem 3rem}
+.page-loading{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;background:rgba(15,36,20,.35);color:#fff;font-weight:600;gap:.75rem}
+.page-loading.hidden{display:none}
+.hero{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:1.25rem 1.5rem;background:linear-gradient(135deg,var(--dark),var(--primary));color:#fff;border-radius:1rem;margin-bottom:1rem}
+.hero h1{font-size:1.6rem}.hero p{opacity:.92;margin-top:.35rem;max-width:560px}
+.header-actions,.alert-actions,.form-actions{display:flex;gap:.5rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.55rem .9rem;border-radius:var(--radius);border:none;font:inherit;font-weight:600;cursor:pointer;text-decoration:none}
+.btn-outline{background:#fff;color:var(--primary)} .btn-primary{background:var(--secondary);color:#fff} .btn-light{background:#fff;border:1px solid var(--border);color:var(--primary)} .btn-danger{background:var(--danger);color:#fff} .btn-sm{padding:.35rem .55rem;font-size:.75rem}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1rem}
+@media(max-width:800px){.stats-grid{grid-template-columns:1fr 1fr}.layout{grid-template-columns:1fr!important}}
+.stat-card,.panel{background:#fff;border:1px solid var(--border);border-radius:1rem;padding:1rem}
+.stat-label{font-size:.75rem;color:var(--muted)} .stat-value{font-size:1.4rem;font-weight:800;color:var(--primary);margin-top:.15rem}
+.layout{display:grid;grid-template-columns:280px 1fr;gap:1rem;align-items:start}
+.form-group{display:flex;flex-direction:column;gap:.35rem;margin-bottom:.75rem}
+.form-group label{font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase}
+.form-control,.filter-control{width:100%;padding:.7rem;border:1px solid var(--border);border-radius:var(--radius);font:inherit}
+.filters{display:grid;gap:.65rem;margin-bottom:.85rem}
+.alert-row{display:flex;justify-content:space-between;gap:.75rem;padding:.85rem;border-bottom:1px solid var(--border)}
+.alert-row.unread{background:#f8fff8}
+.alert-title{font-weight:700;margin-bottom:.25rem}
+.alert-meta,.alert-desc{font-size:.82rem;color:var(--muted)}
+.badge{display:inline-block;padding:.15rem .45rem;border-radius:999px;font-size:.65rem;font-weight:700;text-transform:uppercase;margin-left:.25rem}
+.badge-critical,.badge-danger{background:#fee2e2;color:#991b1b}.badge-warning{background:#fef3c7;color:#92400e}.badge-info{background:#dbeafe;color:#1e40af}.badge-success{background:#dcfce7;color:#166534}.badge-module{background:#eef7ef;color:var(--primary)}
+.empty-state{text-align:center;padding:2rem;color:var(--muted)}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<div id="pageLoading" class="page-loading hidden"><i class="fas fa-spinner fa-spin"></i> Loading alerts…</div>
+<div class="page">
+  <div class="hero">
+    <div>
+      <h1><i class="fas fa-bell"></i> <span id="pageTitle">System Alerts</span></h1>
+      <p id="pageSubtitle">Monitor warnings and system notifications stored in the database.</p>
+    </div>
+    <div class="header-actions">
+      <a href="../RDOMMS.html" class="btn btn-outline"><i class="fas fa-house"></i> Dashboard</a>
+      <a href="approval-requests.php" class="btn btn-light"><i class="fas fa-clipboard-check"></i> Approvals</a>
+      <button type="button" class="btn btn-light" id="markAllReadBtn"><i class="fas fa-check-double"></i> Mark all read</button>
+      <button type="button" class="btn btn-danger btn-sm" id="clearAllBtn"><i class="fas fa-trash"></i> Clear all</button>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Critical</div><div class="stat-value" id="countCritical">0</div></div>
+    <div class="stat-card"><div class="stat-label">Warnings</div><div class="stat-value" id="countWarning">0</div></div>
+    <div class="stat-card"><div class="stat-label">Info</div><div class="stat-value" id="countInfo">0</div></div>
+    <div class="stat-card"><div class="stat-label">Resolved</div><div class="stat-value" id="countResolved">0</div></div>
+  </div>
+
+  <div class="layout">
+    <aside class="panel" id="publishPanel">
+      <h2 style="font-size:1rem;color:var(--primary);margin-bottom:.75rem"><i class="fas fa-plus-circle"></i> Publish Alert</h2>
+      <div class="form-group"><label for="newTitle">Title *</label><input id="newTitle" class="form-control" type="text"></div>
+      <div class="form-group"><label for="newSeverity">Severity</label><select id="newSeverity" class="form-control"><option value="info">Info</option><option value="warning">Warning</option><option value="critical">Critical</option><option value="success">Resolved</option></select></div>
+      <div class="form-group"><label for="newModule">Module</label><select id="newModule" class="form-control"><option>System</option><option>Finance</option><option>Projects</option><option>Beneficiaries</option><option>Users</option></select></div>
+      <div class="form-group"><label for="newDesc">Description</label><textarea id="newDesc" class="form-control" rows="3"></textarea></div>
+      <button type="button" class="btn btn-primary" id="createAlertBtn" style="width:100%"><i class="fas fa-paper-plane"></i> Publish</button>
+    </aside>
+
+    <section class="panel">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem">
+        <h2 style="font-size:1rem;color:var(--primary)"><i class="fas fa-list"></i> Alert Feed</h2>
+        <span class="badge badge-module"><span id="unreadCount">0</span> unread</span>
+      </div>
+      <div class="filters">
+        <input id="searchInput" class="filter-control" type="search" placeholder="Search alerts…">
+        <select id="filterSeverity" class="filter-control"><option value="">All severities</option><option value="critical">Critical</option><option value="warning">Warning</option><option value="info">Info</option><option value="success">Resolved</option></select>
+        <select id="filterModule" class="filter-control"><option value="">All modules</option><option>System</option><option>Finance</option><option>Projects</option><option>Beneficiaries</option><option>Users</option></select>
+        <select id="filterRead" class="filter-control"><option value="">All</option><option value="unread">Unread</option><option value="read">Read</option></select>
+      </div>
+      <div id="alertList"></div>
+      <div class="empty-state" id="emptyState" style="display:none"><i class="fas fa-folder-open"></i><p>No alerts match your filters.</p></div>
+    </section>
+  </div>
+</div>
+<script src="../assets/js/system-alerts.js?v=2"></script>
+</body>
+</html>

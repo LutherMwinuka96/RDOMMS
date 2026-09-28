@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RDO|MMS – Project Health</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+<link rel="stylesheet" href="../assets/css/rdomms-icons-offline.css">
+<link rel="stylesheet" href="../assets/css/project-nav.css?v=3">
+<link rel="stylesheet" href="../assets/css/rdomms-currency.css">
+<script src="../assets/js/number-format.js"></script>
+<script src="../assets/js/rdomms-security.js"></script>
+<style>
+:root{
+  --primary-green:#2d5016;--secondary-green:#4a7c28;--accent-green:#6dbd6d;
+  --success-green:#28a745;--warning-amber:#ffc107;--danger-red:#dc3545;--info-blue:#17a2b8;
+  --text-primary:#212529;--text-secondary:#6c757d;--border-gray:#dee2e6;--bg-secondary:#f8f9fa;
+  --shadow-sm:0 2px 4px rgba(0,0,0,0.08);--shadow:0 4px 8px rgba(0,0,0,0.12);
+  --radius-md:0.75rem;--radius-lg:1rem;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#2d5016 0%,#4a7c28 100%);color:var(--text-primary);min-height:100vh;}
+.page{max-width:1400px;margin:0 auto;padding:2rem 1.5rem;}
+.page-header{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap;}
+.page-header h1{font-size:1.75rem;font-weight:700;color:#fff;text-shadow:0 2px 4px rgba(0,0,0,0.2);}
+.page-header p{color:rgba(255,255,255,0.92);font-size:0.9375rem;margin-top:0.35rem;max-width:640px;}
+.header-actions{display:flex;gap:0.5rem;flex-wrap:wrap;}
+.btn{display:inline-flex;align-items:center;gap:0.5rem;padding:0.625rem 1rem;border-radius:var(--radius-md);font-size:0.875rem;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .2s;text-decoration:none;}
+.btn-outline{background:#fff;color:var(--info-blue);border:2px solid var(--info-blue);}
+.btn-outline:hover{border-color:var(--primary-green);color:var(--primary-green);}
+.btn-primary{background:linear-gradient(135deg,var(--primary-green),var(--secondary-green));color:#fff;border:2px solid var(--dark-green,#1a3009);}
+.summary-strip{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0.75rem;margin-bottom:1.25rem;}
+.ss-card{background:rgba(255,255,255,0.96);border:1.5px solid var(--border-gray);border-radius:var(--radius-lg);padding:1rem;text-align:center;box-shadow:var(--shadow-sm);}
+.ss-num{font-size:1.5rem;font-weight:800;line-height:1.1;}
+.ss-label{font-size:0.65rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.04em;font-weight:600;margin-top:0.25rem;}
+.panel{background:rgba(255,255,255,0.96);border:1.5px solid var(--border-gray);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:1.25rem;}
+.panel-toolbar{display:flex;gap:0.75rem;flex-wrap:wrap;padding:1rem 1.25rem;border-bottom:1px solid var(--border-gray);background:var(--bg-secondary);align-items:center;}
+.panel-toolbar input,.panel-toolbar select{padding:0.5rem 0.75rem;border:1px solid var(--border-gray);border-radius:var(--radius-md);font:inherit;font-size:0.875rem;min-width:160px;}
+.panel-toolbar input{flex:1;min-width:200px;}
+.health-table{width:100%;border-collapse:collapse;}
+.health-table th{padding:0.75rem 1rem;font-size:0.65rem;text-transform:uppercase;letter-spacing:.04em;color:var(--text-secondary);text-align:left;border-bottom:2px solid var(--border-gray);background:var(--bg-secondary);}
+.health-table td{padding:0.875rem 1rem;font-size:0.8125rem;border-bottom:1px solid var(--border-gray);vertical-align:middle;}
+.health-table tr:hover td{background:rgba(45,80,22,0.04);}
+.health-table tr{cursor:pointer;}
+.health-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:0.35rem;}
+.health-good{background:var(--success-green);}
+.health-warning{background:var(--warning-amber);}
+.health-critical{background:var(--danger-red);}
+.badge{display:inline-flex;align-items:center;gap:0.25rem;padding:0.2rem 0.55rem;border-radius:999px;font-size:0.6875rem;font-weight:600;}
+.badge.ongoing{background:#eff6ff;color:#3b82f6;}
+.badge.completed{background:#ecfdf5;color:var(--success-green);}
+.badge.delayed{background:#fef3c7;color:#b45309;}
+.badge.not-started{background:#f1f5f9;color:#64748b;}
+.util-bar{width:72px;height:6px;background:var(--border-gray);border-radius:999px;overflow:hidden;display:inline-block;vertical-align:middle;margin-right:0.35rem;}
+.util-fill{height:100%;border-radius:999px;}
+.alert-chips{display:flex;flex-wrap:wrap;gap:0.25rem;}
+.alert-chip{font-size:0.625rem;padding:0.15rem 0.45rem;border-radius:999px;font-weight:600;white-space:nowrap;}
+.alert-chip.danger{background:#fee2e2;color:#b91c1c;}
+.alert-chip.warning{background:#fef3c7;color:#b45309;}
+.alert-chip.info{background:#e0f2fe;color:#0369a1;}
+.empty-state{padding:2.5rem;text-align:center;color:var(--text-secondary);}
+.empty-state i{font-size:2rem;margin-bottom:0.75rem;color:var(--text-secondary);}
+.modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,0.55);display:none;align-items:center;justify-content:center;padding:1rem;z-index:1000;}
+.modal-overlay.open{display:flex;}
+.modal{background:#fff;border-radius:var(--radius-lg);max-width:560px;width:100%;max-height:90vh;overflow:auto;box-shadow:var(--shadow);}
+.modal-head{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border-gray);display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;}
+.modal-head h2{font-size:1.125rem;}
+.modal-body{padding:1.25rem 1.5rem;}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem 1rem;margin-bottom:1rem;}
+.modal-grid div label{display:block;font-size:0.65rem;text-transform:uppercase;color:var(--text-secondary);margin-bottom:0.15rem;}
+.modal-grid div span{font-weight:600;font-size:0.875rem;}
+.modal-actions{display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:1rem;}
+.modal-close{background:none;border:none;font-size:1.25rem;cursor:pointer;color:var(--text-secondary);}
+@media (max-width:1100px){.summary-strip{grid-template-columns:repeat(3,minmax(0,1fr));}}
+@media (max-width:768px){
+  .page{padding:1.25rem 1rem;}
+  .summary-strip{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .health-table{display:block;overflow-x:auto;}
+  .modal-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<nav id="rdomms-project-nav" data-active="project-health"></nav>
+<script src="../assets/js/rpn-nav-shared.js?v=2"></script>
+<script src="../assets/js/project-finance-links.js?v=3"></script>
+<script src="../assets/js/project-nav.js?v=8"></script>
+
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1><i class="fas fa-heart-pulse"></i> Project Health</h1>
+      <p>Validate progress, budget usage, compliance flags, and linked expenses for every project in your scope.</p>
+    </div>
+    <div class="header-actions">
+      <a href="status-tracking.php" class="btn btn-outline"><i class="fas fa-tasks"></i> Status Tracking</a>
+      <a href="../finance/budget-allocation.php" class="btn btn-outline"><i class="fas fa-wallet"></i> Budget Allocation</a>
+      <a href="../finance/expense-tracking.php" class="btn btn-outline"><i class="fas fa-receipt"></i> Expense Tracking</a>
+      <button type="button" class="btn btn-primary" id="refreshBtn"><i class="fas fa-rotate"></i> Refresh</button>
+    </div>
+  </div>
+
+  <div class="summary-strip" id="summaryStrip">
+    <div class="ss-card"><div class="ss-num" id="sumTotal">—</div><div class="ss-label">Projects</div></div>
+    <div class="ss-card"><div class="ss-num" style="color:var(--success-green)" id="sumGood">—</div><div class="ss-label">Healthy</div></div>
+    <div class="ss-card"><div class="ss-num" style="color:#b45309" id="sumWarning">—</div><div class="ss-label">Warning</div></div>
+    <div class="ss-card"><div class="ss-num" style="color:var(--danger-red)" id="sumCritical">—</div><div class="ss-label">Critical</div></div>
+    <div class="ss-card"><div class="ss-num" id="sumBudget">—</div><div class="ss-label">Total Budget</div></div>
+    <div class="ss-card"><div class="ss-num" id="sumSpent">—</div><div class="ss-label">Total Spent</div></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-toolbar">
+      <input type="search" id="searchInput" placeholder="Search projects…" aria-label="Search projects">
+      <select id="healthFilter" aria-label="Filter by health">
+        <option value="all">All health levels</option>
+        <option value="critical">Critical only</option>
+        <option value="warning">Warning only</option>
+        <option value="good">Healthy only</option>
+      </select>
+      <select id="statusFilter" aria-label="Filter by status">
+        <option value="all">All statuses</option>
+        <option value="ongoing">Ongoing</option>
+        <option value="delayed">Delayed</option>
+        <option value="not-started">Not started</option>
+        <option value="completed">Completed</option>
+      </select>
+    </div>
+    <div id="tableWrap">
+      <table class="health-table">
+        <thead>
+          <tr>
+            <th>Health</th>
+            <th>Project</th>
+            <th>Status</th>
+            <th>Progress</th>
+            <th>Budget</th>
+            <th>Spent</th>
+            <th>Remaining</th>
+            <th>Utilization</th>
+            <th>Alerts</th>
+          </tr>
+        </thead>
+        <tbody id="healthTableBody">
+          <tr><td colspan="9" style="text-align:center;padding:2rem;color:var(--text-secondary);">Loading project health…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="detailModal" aria-hidden="true">
+  <div class="modal" role="dialog" aria-labelledby="modalTitle">
+    <div class="modal-head">
+      <div>
+        <h2 id="modalTitle">Project</h2>
+        <p id="modalSubtitle" style="font-size:0.8125rem;color:var(--text-secondary);margin-top:0.25rem;"></p>
+      </div>
+      <button type="button" class="modal-close" id="modalClose" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+let healthRows = [];
+let selectedProject = null;
+
+function financeLinksForProject(project) {
+  const PF = window.RDOMMSProjectFinance;
+  if (!PF) {
+    return {
+      budget: '../finance/budget-allocation.php',
+      expense: '../finance/expense-tracking.php'
+    };
+  }
+  return {
+    budget: PF.buildBudgetAllocationUrl(project.projectId, project.name, '../finance'),
+    expense: PF.buildExpenseTrackingUrl(project.projectId, project.name, '../finance')
+  };
+}
+
+function formatMoney(value) {
+  if (typeof formatRdommsCurrency === 'function') return formatRdommsCurrency(value);
+  return 'TSH ' + Number(value || 0).toLocaleString('en-US');
+}
+
+function formatMoneyHtml(value) {
+  if (typeof formatRdommsCurrencyHtml === 'function') return formatRdommsCurrencyHtml(value);
+  return escapeHtml(formatMoney(value));
+}
+
+function escapeHtml(str) {
+  return String(str || '').replace(/[&<>"']/g, (m) => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[m]));
+}
+
+function statusBadge(status) {
+  const key = String(status || 'unknown').toLowerCase();
+  const labels = {
+    ongoing: 'Ongoing', completed: 'Completed', delayed: 'Delayed', 'not-started': 'Not started'
+  };
+  return `<span class="badge ${key.replace(/\s/g, '-')}">${escapeHtml(labels[key] || status)}</span>`;
+}
+
+function healthLabel(level) {
+  const map = { good: 'Healthy', warning: 'Warning', critical: 'Critical' };
+  return map[level] || level;
+}
+
+function utilColor(pct) {
+  if (pct > 100) return 'var(--danger-red)';
+  if (pct >= 85) return 'var(--warning-amber)';
+  if (pct >= 50) return 'var(--info-blue)';
+  return 'var(--success-green)';
+}
+
+function renderAlerts(alerts, compact) {
+  if (!alerts || !alerts.length) {
+    return compact ? '<span style="color:var(--text-secondary);font-size:0.75rem;">None</span>' : '<p style="color:var(--text-secondary);">No compliance flags.</p>';
+  }
+  const chips = alerts.map((a) =>
+    `<span class="alert-chip ${escapeHtml(a.tone || 'info')}">${escapeHtml(a.label)}</span>`
+  ).join('');
+  return `<div class="alert-chips">${chips}</div>`;
+}
+
+function getFilteredRows() {
+  const q = String(document.getElementById('searchInput').value || '').trim().toLowerCase();
+  const health = document.getElementById('healthFilter').value;
+  const status = document.getElementById('statusFilter').value;
+
+  return healthRows.filter((row) => {
+    if (health !== 'all' && row.health !== health) return false;
+    if (status !== 'all' && String(row.status).toLowerCase() !== status) return false;
+    if (!q) return true;
+    const hay = [row.name, row.location, row.sector, row.fundingSource, row.donorName].join(' ').toLowerCase();
+    return hay.includes(q);
+  });
+}
+
+function renderTable() {
+  const tbody = document.getElementById('healthTableBody');
+  const rows = getFilteredRows();
+
+  if (!rows.length) {
+    tbody.innerHTML = `<tr><td colspan="9"><div class="empty-state"><i class="fas fa-folder-open"></i><p>No projects match your filters.</p></div></td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = rows.map((row) => {
+    const pct = Number(row.utilizationPct || 0);
+    return `
+      <tr data-id="${escapeHtml(row.projectId)}">
+        <td><span class="health-dot health-${escapeHtml(row.health)}"></span>${healthLabel(row.health)}</td>
+        <td><strong>${escapeHtml(row.name)}</strong><br><small style="color:var(--text-secondary);">${escapeHtml(row.location || '—')}</small></td>
+        <td>${statusBadge(row.status)}</td>
+        <td>${Number(row.progress || 0)}%</td>
+        <td>${formatMoneyHtml(row.budget)}</td>
+        <td>${formatMoneyHtml(row.spentCommitted)}</td>
+        <td>${formatMoneyHtml(row.remaining)}</td>
+        <td>
+          <span class="util-bar"><span class="util-fill" style="width:${Math.min(pct, 100)}%;background:${utilColor(pct)}"></span></span>
+          ${pct.toFixed(1)}%
+        </td>
+        <td>${renderAlerts(row.alerts, true)}</td>
+      </tr>
+    `;
+  }).join('');
+
+  tbody.querySelectorAll('tr[data-id]').forEach((tr) => {
+    tr.addEventListener('click', () => {
+      const id = tr.getAttribute('data-id');
+      const project = healthRows.find((r) => String(r.projectId) === String(id));
+      if (project) openModal(project);
+    });
+  });
+}
+
+function renderSummary(summary) {
+  document.getElementById('sumTotal').textContent = summary.total ?? 0;
+  document.getElementById('sumGood').textContent = summary.good ?? 0;
+  document.getElementById('sumWarning').textContent = summary.warning ?? 0;
+  document.getElementById('sumCritical').textContent = summary.critical ?? 0;
+  document.getElementById('sumBudget').textContent = formatMoney(summary.totalBudget);
+  document.getElementById('sumSpent').textContent = formatMoney(summary.totalSpent);
+}
+
+function openModal(project) {
+  selectedProject = project;
+  document.getElementById('modalTitle').textContent = project.name;
+  document.getElementById('modalSubtitle').textContent =
+    `${healthLabel(project.health)} · ${project.linkedExpenseCount} linked expense(s) · ${project.documentCount} document(s)`;
+
+  const links = financeLinksForProject(project);
+
+  document.getElementById('modalBody').innerHTML = `
+    <div class="modal-grid">
+      <div><label>Status</label><span>${statusBadge(project.status)}</span></div>
+      <div><label>Progress</label><span>${project.progress}%</span></div>
+      <div><label>Budget</label><span>${formatMoneyHtml(project.budget)}</span></div>
+      <div><label>Spent (committed)</label><span>${formatMoneyHtml(project.spentCommitted)}</span></div>
+      <div><label>Remaining</label><span>${formatMoneyHtml(project.remaining)}</span></div>
+      <div><label>Utilization</label><span>${Number(project.utilizationPct || 0).toFixed(1)}%</span></div>
+      <div><label>Funding source</label><span>${escapeHtml(project.fundingSource || '—')}</span></div>
+      <div><label>Donor / partner</label><span>${escapeHtml(project.donorName || '—')}</span></div>
+      <div><label>Start</label><span>${escapeHtml(project.startDate || '—')}</span></div>
+      <div><label>End</label><span>${escapeHtml(project.endDate || '—')}</span></div>
+      <div><label>Team</label><span>${project.teamCount} member(s)</span></div>
+      <div><label>Linked expenses</label><span>${project.linkedExpenseCount}</span></div>
+    </div>
+    <h3 style="font-size:0.875rem;margin-bottom:0.5rem;">Compliance flags</h3>
+    ${renderAlerts(project.alerts, false)}
+    <div class="modal-actions">
+      <a href="status-tracking.php" class="btn btn-outline"><i class="fas fa-tasks"></i> Update progress</a>
+      <a href="${links.budget}" class="btn btn-outline"><i class="fas fa-wallet"></i> Allocate budget</a>
+      <a href="${links.expense}" class="btn btn-outline"><i class="fas fa-receipt"></i> Record expense</a>
+      <a href="../documents/project-documents.php" class="btn btn-outline"><i class="fas fa-file-alt"></i> Documents</a>
+    </div>
+  `;
+  document.getElementById('detailModal').classList.add('open');
+  document.getElementById('detailModal').setAttribute('aria-hidden', 'false');
+}
+
+function closeModal() {
+  document.getElementById('detailModal').classList.remove('open');
+  document.getElementById('detailModal').setAttribute('aria-hidden', 'true');
+  selectedProject = null;
+}
+
+async function loadHealth() {
+  const tbody = document.getElementById('healthTableBody');
+  tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:2rem;">Loading…</td></tr>';
+
+  try {
+    const res = await fetch('../api/projects/health.php', {
+      headers: { 'X-Requested-With': 'XMLHttpRequest' },
+      credentials: 'same-origin'
+    });
+    const payload = await res.json();
+    if (!res.ok || payload.status !== 'success' || !payload.data) {
+      throw new Error(payload.message || 'Failed to load');
+    }
+    healthRows = Array.isArray(payload.data.projects) ? payload.data.projects : [];
+    renderSummary(payload.data.summary || {});
+    renderTable();
+
+    const focusId = new URLSearchParams(window.location.search).get('project_id');
+    if (focusId) {
+      const row = healthRows.find((p) => String(p.projectId) === String(focusId));
+      if (row) openModal(row);
+    }
+  } catch (error) {
+    console.warn(error);
+    tbody.innerHTML = `<tr><td colspan="9"><div class="empty-state"><i class="fas fa-triangle-exclamation"></i><p>${escapeHtml(error.message || 'Could not load project health.')}</p></div></td></tr>`;
+  }
+}
+
+document.getElementById('refreshBtn').addEventListener('click', loadHealth);
+document.getElementById('searchInput').addEventListener('input', renderTable);
+document.getElementById('healthFilter').addEventListener('change', renderTable);
+document.getElementById('statusFilter').addEventListener('change', renderTable);
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('detailModal').addEventListener('click', (e) => {
+  if (e.target.id === 'detailModal') closeModal();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeModal();
+});
+
+loadHealth();
+</script>
+</body>
+</html>

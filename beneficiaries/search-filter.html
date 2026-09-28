@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RDO|MMS – Search & Filter</title>
+<meta name="description" content="Search and filter registered beneficiaries in RDO|MMS.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+<link rel="stylesheet" href="../assets/css/rdomms-icons-offline.css">
+<link rel="stylesheet" href="../assets/css/rdomms-session-countdown.css?v=2">
+<link rel="stylesheet" href="../assets/css/project-nav.css?v=3">
+<link rel="stylesheet" href="../assets/css/rdomms-toast.css">
+<script src="../assets/js/rdomms-security.js"></script>
+<script src="../assets/js/localStorage-service.js"></script>
+<script src="../assets/js/rdomms-toast.js"></script>
+<script src="../assets/vendor/html2pdf.bundle.min.js"></script>
+<script src="../assets/vendor/sheetjs/xlsx.full.min.js"></script>
+<script src="../assets/js/rdomms-export.js"></script>
+<style>
+:root {
+  --primary-green: #2d5016;
+  --secondary-green: #4a7c28;
+  --dark-green: #1a3009;
+  --success-green: #28a745;
+  --danger-red: #dc3545;
+  --text-primary: #212529;
+  --text-secondary: #6c757d;
+  --border-gray: #dee2e6;
+  --bg-secondary: #f8f9fa;
+  --shadow-sm: 0 2px 4px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 8px rgba(0,0,0,0.12);
+  --radius-lg: 1rem;
+  --radius-md: 0.75rem;
+  --font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-family);
+  background:
+    radial-gradient(circle at top left, rgba(74, 124, 40, 0.14), transparent 28%),
+    linear-gradient(180deg, #fbfcf9 0%, #f0f4f1 100%);
+  color: var(--text-primary);
+  min-height: 100vh;
+}
+.page { max-width: 1280px; margin: 0 auto; padding: 1.25rem 1.25rem 3rem; }
+.page-loading {
+  position: fixed; inset: 0; z-index: 2000;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(15, 36, 20, 0.35); backdrop-filter: blur(3px);
+  color: #fff; font-weight: 600; gap: 0.75rem;
+}
+.page-loading.hidden { display: none; }
+.page-hero {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 1.25rem; flex-wrap: wrap; margin-bottom: 1.25rem;
+  padding: 1.35rem 1.5rem;
+  background: linear-gradient(135deg, var(--dark-green) 0%, var(--primary-green) 55%, #166534 100%);
+  border: 1px solid rgba(255,255,255,0.12); border-radius: var(--radius-lg); box-shadow: var(--shadow-md);
+}
+.page-hero-main { display: flex; align-items: center; gap: 1.15rem; flex: 1; min-width: 240px; }
+.hero-icon-wrap {
+  width: 4.25rem; height: 4.25rem; border-radius: 1rem;
+  background: rgba(255,255,255,0.95); display: flex; align-items: center; justify-content: center;
+  box-shadow: var(--shadow-md); flex-shrink: 0;
+}
+.hero-icon-wrap img { width: 2.75rem; height: 2.75rem; object-fit: contain; }
+.page-hero h1 { font-size: 1.75rem; font-weight: 700; color: #fff; }
+.page-hero p { color: rgba(255,255,255,0.92); font-size: 0.9375rem; margin-top: 0.4rem; max-width: 560px; line-height: 1.5; }
+.header-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+.btn {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  padding: 0.55rem 1rem; border-radius: var(--radius-md);
+  font-size: 0.8125rem; font-weight: 600; cursor: pointer; border: none;
+  font-family: inherit; text-decoration: none; transition: transform 0.15s;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn-primary { background: linear-gradient(135deg, var(--primary-green), var(--secondary-green)); color: #fff; border: 2px solid var(--dark-green); }
+.btn-outline { background: rgba(255,255,255,0.95); color: var(--primary-green); border: 2px solid rgba(255,255,255,0.5); }
+.btn-light { background: #fff; color: var(--primary-green); border: 1.5px solid var(--border-gray); }
+.btn-danger { background: var(--danger-red); color: #fff; }
+.btn-sm { padding: 0.35rem 0.55rem; font-size: 0.75rem; }
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.25rem; }
+@media (max-width: 900px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px) { .stats-grid { grid-template-columns: 1fr; } }
+.stat-card {
+  background: rgba(255,255,255,0.97); border: 1.5px solid var(--border-gray);
+  border-radius: var(--radius-lg); padding: 1rem 1.15rem;
+  display: flex; gap: 0.85rem; align-items: center;
+}
+.stat-icon {
+  width: 2.75rem; height: 2.75rem; border-radius: 0.75rem; background: var(--bg-secondary);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.stat-icon img { width: 1.5rem; height: 1.5rem; object-fit: contain; }
+.stat-label { font-size: 0.75rem; color: var(--text-secondary); font-weight: 600; }
+.stat-value { font-size: 1.35rem; font-weight: 800; color: var(--primary-green); margin-top: 0.15rem; }
+.layout { display: grid; grid-template-columns: 280px 1fr; gap: 1.25rem; align-items: start; }
+@media (max-width: 960px) { .layout { grid-template-columns: 1fr; } }
+.panel {
+  background: rgba(255,255,255,0.97); border: 1.5px solid var(--border-gray);
+  border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); overflow: hidden;
+}
+.panel-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap;
+  padding: 1rem 1.15rem; border-bottom: 1px solid var(--border-gray);
+  background: linear-gradient(180deg, #fff, #f9fbf8);
+}
+.panel-title { font-size: 1rem; font-weight: 800; color: var(--primary-green); display: flex; align-items: center; gap: 0.5rem; }
+.panel-sub { padding: 0 1.15rem 0.85rem; font-size: 0.8125rem; color: var(--text-secondary); border-bottom: 1px solid var(--border-gray); }
+.count-badge {
+  display: inline-flex; align-items: center; padding: 0.28rem 0.65rem;
+  border-radius: 999px; font-size: 0.72rem; font-weight: 800; background: #eef7ef; color: var(--primary-green);
+}
+.filter-body { padding: 1rem 1.15rem; display: flex; flex-direction: column; gap: 0.85rem; }
+.filter-group { display: flex; flex-direction: column; gap: 0.35rem; }
+.filter-group label {
+  font-size: 0.72rem; font-weight: 700; color: var(--text-secondary);
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.form-control {
+  width: 100%; padding: 0.7rem 0.8rem; border-radius: var(--radius-md);
+  border: 1.5px solid var(--border-gray); background: #fff; color: var(--text-primary); font: inherit;
+}
+.form-control:focus { border-color: var(--primary-green); box-shadow: 0 0 0 3px rgba(45, 80, 22, 0.1); outline: none; }
+.filter-actions { display: flex; flex-direction: column; gap: 0.5rem; padding-top: 0.25rem; }
+.table-wrap { overflow-x: auto; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 0.8125rem; }
+.data-table th, .data-table td {
+  padding: 0.7rem 0.85rem; text-align: left; border-bottom: 1px solid var(--border-gray); vertical-align: middle;
+}
+.data-table th {
+  background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+  color: #fff; font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.04em;
+}
+.data-table tbody tr:hover td { background: rgba(45, 80, 22, 0.04); }
+.data-table .num { font-variant-numeric: tabular-nums; font-weight: 600; }
+.cell-title { font-weight: 700; }
+.cell-sub { font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.1rem; }
+.actions { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+.badge {
+  display: inline-block; padding: 0.2rem 0.55rem; border-radius: 999px;
+  font-size: 0.6875rem; font-weight: 600; text-transform: capitalize;
+}
+.badge.approved { background: #d1fae5; color: #065f46; }
+.badge.pending { background: #fef3c7; color: #92400e; }
+.badge.rejected { background: #fee2e2; color: #991b1b; }
+.empty-state { display: none; text-align: center; padding: 2.5rem 1rem; color: var(--text-secondary); }
+.empty-state i { display: block; font-size: 1.75rem; margin-bottom: 0.65rem; opacity: 0.35; color: var(--primary-green); }
+.toolbar {
+  display: flex; gap: 0.65rem; flex-wrap: wrap; padding: 1rem 1.15rem; border-bottom: 1px solid var(--border-gray);
+}
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: none;
+  align-items: center; justify-content: center; z-index: 9999; padding: 1rem;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: #fff; border-radius: var(--radius-lg); padding: 1.5rem;
+  max-width: 620px; width: 100%; max-height: 90vh; overflow: auto; box-shadow: var(--shadow-md);
+}
+.modal h2 { font-size: 1.125rem; color: var(--primary-green); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+.preview-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem 1rem; }
+.preview-grid dt { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-secondary); font-weight: 700; }
+.preview-grid dd { margin: 0.15rem 0 0; font-size: 0.875rem; font-weight: 600; }
+.preview-grid .span-2 { grid-column: 1 / -1; }
+.modal-actions { display: flex; gap: 0.5rem; margin-top: 1.25rem; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+
+<div id="pageLoading" class="page-loading hidden" aria-live="polite">
+  <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+  <span>Loading beneficiaries…</span>
+</div>
+
+<div class="page">
+  <div class="page-hero">
+    <div class="page-hero-main">
+      <div class="hero-icon-wrap">
+        <img src="../assets/photos/systemicon/filter.png" alt="Search and Filter">
+      </div>
+      <div>
+        <h1>Search & Filter</h1>
+        <p>Find beneficiaries quickly using text search, category, status, location, and registration date filters.</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <a href="../RDOMMS.html" class="btn btn-outline"><i class="fas fa-house"></i> Dashboard</a>
+      <a href="beneficiary-list.php" class="btn btn-outline"><i class="fas fa-list"></i> List</a>
+      <a href="register-beneficiary.php" class="btn btn-primary"><i class="fas fa-user-plus"></i> Register</a>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon"><img src="../assets/photos/systemicon/magnifying-glass.png" alt=""></div>
+      <div>
+        <div class="stat-label">Matches</div>
+        <div class="stat-value" id="statMatches">0</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon"><img src="../assets/photos/systemicon/statustrack.png" alt=""></div>
+      <div>
+        <div class="stat-label">Active</div>
+        <div class="stat-value" id="statActive">0</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon"><img src="../assets/photos/systemicon/beneficiarycategory.png" alt=""></div>
+      <div>
+        <div class="stat-label">Groups</div>
+        <div class="stat-value" id="statGroups">0</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon"><img src="../assets/photos/systemicon/beneficiary.png" alt=""></div>
+      <div>
+        <div class="stat-label">People covered</div>
+        <div class="stat-value" id="statPeople">0</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <aside class="panel">
+      <div class="panel-head">
+        <div class="panel-title"><i class="fas fa-sliders"></i> Filters</div>
+      </div>
+      <p class="panel-sub">Results update as you type or change filters.</p>
+      <div class="filter-body">
+        <div class="filter-group">
+          <label for="searchInput">Search</label>
+          <input type="search" id="searchInput" class="form-control" placeholder="Name, code, phone, location…">
+        </div>
+        <div class="filter-group">
+          <label for="filterCategory">Category</label>
+          <select id="filterCategory" class="form-control">
+            <option value="">All categories</option>
+            <option value="kindergarten">Kindergarten</option>
+            <option value="primary-school">Primary</option>
+            <option value="secondary-school">Secondary</option>
+            <option value="college">College / VET</option>
+            <option value="university">University</option>
+            <option value="vulnerable-households">Vulnerable</option>
+            <option value="children">Children</option>
+            <option value="youth">Youth</option>
+            <option value="women">Women</option>
+            <option value="elderly">Elderly</option>
+            <option value="persons-with-disabilities">PWD</option>
+            <option value="households">Households</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filterStatus">Status</label>
+          <select id="filterStatus" class="form-control">
+            <option value="">All statuses</option>
+            <option value="active">Active</option>
+            <option value="pending">Pending</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filterType">Record type</label>
+          <select id="filterType" class="form-control">
+            <option value="">All types</option>
+            <option value="individual">Individual</option>
+            <option value="group">Group</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filterDistrict">District</label>
+          <select id="filterDistrict" class="form-control">
+            <option value="">All districts</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filterLocation">Location</label>
+          <select id="filterLocation" class="form-control">
+            <option value="">All locations</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filterDateFrom">Registered from</label>
+          <input type="date" id="filterDateFrom" class="form-control">
+        </div>
+        <div class="filter-group">
+          <label for="filterDateTo">Registered to</label>
+          <input type="date" id="filterDateTo" class="form-control">
+        </div>
+        <div class="filter-actions">
+          <button type="button" class="btn btn-light" id="btnClearFilters"><i class="fas fa-filter-circle-xmark"></i> Clear filters</button>
+          <button type="button" class="btn btn-light" id="btnRefresh"><i class="fas fa-rotate"></i> Refresh data</button>
+        </div>
+      </div>
+    </aside>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div class="panel-title"><i class="fas fa-table-list"></i> Search Results</div>
+        <span class="count-badge" id="resultsCount">0 matches</span>
+      </div>
+      <p class="panel-sub" id="tableMeta">Loading beneficiaries…</p>
+      <div class="toolbar">
+        <select id="exportFormat" class="form-control" style="width:auto;min-width:120px" title="Export format">
+          <option value="pdf" selected>PDF</option>
+          <option value="word">Word</option>
+          <option value="excel">Excel</option>
+          <option value="csv">CSV</option>
+        </select>
+        <button type="button" class="btn btn-primary" id="btnExport"><i class="fas fa-file-export"></i> Export results</button>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Type</th>
+              <th>Count</th>
+              <th>Location</th>
+              <th>District</th>
+              <th>Phone</th>
+              <th>Status</th>
+              <th>Registered</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="beneficiaryTableBody"></tbody>
+        </table>
+        <div class="empty-state" id="emptyState">
+          <i class="fas fa-folder-open"></i>
+          <h3 style="color:var(--text-primary);margin-bottom:0.35rem">No matching records</h3>
+          <p>Adjust your filters or <a href="register-beneficiary.php">register a beneficiary</a>.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="modal-overlay" id="viewModal" aria-hidden="true">
+  <div class="modal" role="dialog" aria-labelledby="viewModalTitle">
+    <h2 id="viewModalTitle"><i class="fas fa-eye"></i> Beneficiary details</h2>
+    <div id="viewModalBody"></div>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-light" id="btnCloseView"><i class="fas fa-xmark"></i> Close</button>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/js/search-filter.js?v=1"></script>
+</body>
+</html>

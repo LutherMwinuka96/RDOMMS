@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Report Studio | RDO|MMS</title>
+<meta name="description" content="Generate and export RDO|MMS system reports from live database records.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+<link rel="stylesheet" href="../assets/css/rdomms-icons-offline.css">
+<link rel="stylesheet" href="../assets/css/rdomms-session-countdown.css?v=2">
+<link rel="stylesheet" href="../assets/css/project-nav.css?v=4">
+<link rel="stylesheet" href="../assets/css/rdomms-toast.css">
+<link rel="stylesheet" href="../assets/css/rdomms-currency.css">
+<script src="../assets/js/rdomms-security.js"></script>
+<script src="../assets/js/localStorage-service.js"></script>
+<script src="../assets/js/number-format.js"></script>
+<script src="../assets/js/rdomms-departments.js"></script>
+<script src="../assets/js/rdomms-organizations.js"></script>
+<script src="../assets/vendor/chart.umd.min.js"></script>
+<script src="../assets/vendor/sheetjs/xlsx.full.min.js"></script>
+<style>
+:root {
+  --forest: #0f2414;
+  --canopy: #1f5a36;
+  --leaf: #4a7c28;
+  --cream: #f4f7f5;
+  --ink: #16201a;
+  --mid: #607066;
+  --ghost: #94a3b8;
+  --border: #dbe6de;
+  --red: #dc2626;
+  --sky: #2563eb;
+  --shadow-sm: 0 8px 18px rgba(17, 40, 24, 0.06);
+  --shadow-md: 0 18px 42px rgba(17, 40, 24, 0.1);
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(74, 124, 40, 0.14), transparent 28%),
+    linear-gradient(180deg, #fbfcf9 0%, var(--cream) 100%);
+  color: var(--ink);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+button, input, select { font: inherit; }
+.page { max-width: 1180px; margin: 0 auto; padding: 1.25rem; }
+
+.hero {
+  padding: 1.5rem 1.75rem;
+  border-radius: var(--radius-xl);
+  background: linear-gradient(135deg, var(--forest), var(--canopy));
+  color: #fff;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 1.25rem;
+}
+.eyebrow {
+  display: inline-flex; align-items: center; gap: .45rem;
+  padding: .35rem .75rem; border-radius: 999px;
+  background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.16);
+  font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  margin-bottom: .65rem;
+}
+.hero h1 { font-size: clamp(1.6rem, 2.5vw, 2.2rem); font-weight: 800; letter-spacing: -.03em; margin-bottom: .35rem; }
+.hero p { color: rgba(255,255,255,.84); font-size: .92rem; max-width: 52ch; }
+.hero-chip {
+  display: inline-flex; align-items: center; gap: .4rem; margin-top: .85rem;
+  padding: .35rem .8rem; border-radius: 999px;
+  background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.14);
+  font-size: .74rem; font-weight: 600;
+}
+
+.card {
+  background: rgba(255,255,255,.94);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  margin-bottom: 1.25rem;
+}
+.card-head {
+  padding: 1.1rem 1.25rem .9rem;
+  border-bottom: 1px solid var(--border);
+}
+.card-title { font-size: 1rem; font-weight: 800; color: var(--forest); }
+.card-subtitle { font-size: .82rem; color: var(--mid); margin-top: .2rem; }
+.card-body { padding: 1.15rem 1.25rem 1.25rem; }
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.form-group { display: flex; flex-direction: column; gap: .4rem; }
+.form-group label {
+  font-size: .76rem; font-weight: 700; color: var(--mid);
+  text-transform: uppercase; letter-spacing: .05em;
+}
+.form-group input, .form-group select {
+  width: 100%; padding: .82rem 1rem;
+  border: 1.5px solid var(--border); border-radius: 14px; background: #fff;
+}
+.form-group input:focus, .form-group select:focus {
+  outline: none; border-color: var(--leaf);
+  box-shadow: 0 0 0 4px rgba(74, 124, 40, 0.12);
+}
+.presets { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1rem; }
+.preset-btn {
+  padding: .42rem .72rem; border-radius: 999px;
+  border: 1px solid var(--border); background: #f8fbf8;
+  font-size: .72rem; font-weight: 700; color: var(--mid); cursor: pointer;
+}
+.preset-btn.is-active, .preset-btn:hover {
+  background: rgba(74,124,40,.1); border-color: rgba(74,124,40,.28); color: var(--canopy);
+}
+.action-row { display: flex; flex-wrap: wrap; gap: .6rem; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .45rem;
+  padding: .72rem 1.2rem; border: none; border-radius: 14px;
+  font-size: .84rem; font-weight: 700; cursor: pointer;
+}
+.btn:disabled { opacity: .65; cursor: not-allowed; }
+.btn-primary { background: linear-gradient(135deg, var(--canopy), var(--leaf)); color: #fff; box-shadow: var(--shadow-sm); }
+.btn-ghost { background: #fff; color: var(--mid); border: 1.5px solid var(--border); }
+.btn-pdf { background: var(--red); color: #fff; }
+.btn-docx { background: var(--sky); color: #fff; }
+.btn.is-loading::after {
+  content: ''; width: 14px; height: 14px;
+  border: 2px solid rgba(255,255,255,.35); border-top-color: #fff;
+  border-radius: 50%; animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Report output */
+.active-filters {
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #f0f7f2;
+  border: 1px solid rgba(74, 124, 40, 0.2);
+  font-size: 0.8rem;
+  color: var(--mid);
+  line-height: 1.45;
+}
+
+.active-filters strong {
+  color: var(--forest);
+}
+
+#reportOutput { display: none; }
+#reportOutput.is-visible { display: block; }
+
+.report-head {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  gap: 1rem; flex-wrap: wrap; margin-bottom: 1.1rem;
+}
+.rpt-title { font-size: 1.2rem; font-weight: 800; color: var(--forest); }
+.rpt-meta { font-size: .8rem; color: var(--ghost); margin-top: .25rem; }
+
+.chart-panel {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.1rem 1.25rem;
+  margin-bottom: 1.1rem;
+}
+.chart-panel-title {
+  font-size: .78rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: .06em; color: var(--mid); margin-bottom: .75rem;
+}
+.chart-canvas-wrap { height: 320px; position: relative; }
+
+.summary-chips {
+  display: flex; flex-wrap: wrap; gap: .5rem;
+  margin-bottom: 1rem;
+}
+.summary-chip {
+  padding: .5rem .85rem; border-radius: 12px;
+  background: #f8fbf8; border: 1px solid var(--border);
+  font-size: .78rem;
+}
+.summary-chip strong { color: var(--forest); font-weight: 800; }
+
+.filter-chips {
+  display: flex; flex-wrap: wrap; gap: .45rem;
+  margin-bottom: .85rem;
+}
+.filter-chip {
+  display: inline-flex; align-items: center; gap: .35rem;
+  padding: .38rem .72rem; border-radius: 999px;
+  background: rgba(74, 124, 40, .1); border: 1px solid rgba(74, 124, 40, .22);
+  font-size: .72rem; font-weight: 700; color: var(--canopy);
+}
+.filter-chip i { font-size: .68rem; opacity: .85; }
+
+.table-panel {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 1.1rem;
+}
+.table-panel-head {
+  padding: .85rem 1.1rem;
+  border-bottom: 1px solid var(--border);
+  font-size: .78rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .06em; color: var(--mid);
+}
+.table-scroll { overflow-x: auto; }
+.rpt-table {
+  width: 100%; border-collapse: collapse; font-size: .82rem;
+}
+.rpt-table th {
+  background: var(--forest); color: #dff0d2;
+  padding: .65rem .85rem; text-align: left;
+  font-size: .7rem; text-transform: uppercase; letter-spacing: .04em;
+  white-space: nowrap;
+}
+.rpt-table td {
+  padding: .6rem .85rem; border-bottom: 1px solid var(--border);
+}
+.rpt-table tbody tr:hover { background: #f8fbf8; }
+
+.export-bar {
+  display: flex; flex-wrap: wrap; gap: .65rem;
+  padding: 1rem 1.1rem;
+  background: linear-gradient(180deg, #f8fbf8, #fff);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.empty-state {
+  text-align: center; padding: 3rem 1.5rem;
+  border: 1px dashed var(--border); border-radius: var(--radius-xl);
+  background: rgba(255,255,255,.7); color: var(--ghost);
+}
+.empty-state i { font-size: 2.5rem; color: rgba(74,124,40,.3); margin-bottom: .75rem; }
+.empty-state h3 { font-size: 1rem; font-weight: 800; color: var(--mid); margin-bottom: .35rem; }
+
+.loading-overlay {
+  position: fixed; inset: 0;
+  background: rgba(15, 36, 20, 0.35);
+  display: none; align-items: center; justify-content: center;
+  z-index: 3000; backdrop-filter: blur(4px);
+}
+.loading-overlay.active { display: flex; }
+.loading-card {
+  background: #fff; border-radius: 18px; padding: 1.25rem 1.5rem;
+  box-shadow: var(--shadow-md); display: flex; align-items: center; gap: .85rem;
+  font-weight: 700; color: var(--forest);
+}
+.loading-card i { color: var(--leaf); }
+
+@media (max-width: 720px) {
+  .page { padding: 1rem; }
+  .form-grid { grid-template-columns: 1fr; }
+  .export-bar { flex-direction: column; }
+  .export-bar .btn { width: 100%; justify-content: center; }
+  .chart-canvas-wrap { min-height: 220px; }
+}
+</style>
+</head>
+<body>
+
+<nav id="rdomms-reports-nav" data-active="generate-reports"></nav>
+
+<div class="page">
+  <header class="hero">
+    <div class="eyebrow"><i class="fas fa-chart-pie"></i> Report Studio</div>
+    <h1>Generate system reports</h1>
+    <p>Select a report type, set the period, then view charts and tables — download PDF or DOCX.</p>
+  </header>
+
+  <section class="card">
+    <div class="card-head">
+      <div class="card-title"><i class="fas fa-sliders"></i> Configure report</div>
+      <div class="card-subtitle">Choose report type, dates, and filters.</div>
+    </div>
+    <div class="card-body">
+      <div class="form-grid">
+        <div class="form-group" style="grid-column:1/-1">
+          <label for="reportType">Report type</label>
+          <select id="reportType">
+            <option value="">Select report type</option>
+            <option value="executive">Executive Overview</option>
+            <option value="projects">Project Portfolio</option>
+            <option value="beneficiaries">Beneficiary Coverage</option>
+            <option value="planning">Planning &amp; Delivery</option>
+            <option value="finance">Finance Summary</option>
+            <option value="users">Users &amp; Access</option>
+            <option value="operations">Operations &amp; Alerts</option>
+            <option value="master">System Master Report</option>
+          </select>
+        </div>
+        <div class="form-group" style="grid-column:1/-1">
+          <label>Quick period</label>
+          <div class="presets" id="datePresets">
+            <button type="button" class="preset-btn is-active" data-preset="this-month">This month</button>
+            <button type="button" class="preset-btn" data-preset="last-month">Last month</button>
+            <button type="button" class="preset-btn" data-preset="this-year">This year</button>
+            <button type="button" class="preset-btn" data-preset="ytd">YTD</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="startDate">Start date</label>
+          <input type="date" id="startDate">
+        </div>
+        <div class="form-group">
+          <label for="endDate">End date</label>
+          <input type="date" id="endDate">
+        </div>
+        <div class="form-group">
+          <label for="stationFilter">Station</label>
+          <select id="stationFilter" data-rdomms-organization data-empty-label="All stations"></select>
+        </div>
+        <div class="form-group">
+          <label for="departmentName">Department</label>
+          <select id="departmentName" data-rdomms-department data-empty-label="All departments"></select>
+        </div>
+      </div>
+      <div class="action-row">
+        <button type="button" class="btn btn-primary" id="generateBtn"><i class="fas fa-wand-magic-sparkles"></i> Generate report</button>
+      </div>
+      <div class="active-filters" id="activeFiltersPreview" aria-live="polite">
+        Select report type, period, and optional station/department — then click <strong>Generate report</strong>.
+      </div>
+    </div>
+  </section>
+
+  <div id="reportEmptyState" class="empty-state">
+    <i class="fas fa-chart-column"></i>
+    <h3>No report yet</h3>
+    <p>Select a report type and click Generate to view charts and tables.</p>
+  </div>
+
+  <section id="reportOutput" aria-live="polite">
+    <div class="card">
+      <div class="card-body">
+        <div class="report-head">
+          <div>
+            <div class="rpt-title" id="reportTitle">—</div>
+            <div class="rpt-meta" id="reportMeta">—</div>
+            <div class="filter-chips" id="filterChips" hidden></div>
+          </div>
+        </div>
+
+        <div class="summary-chips" id="summaryChips"></div>
+
+        <div class="chart-panel">
+          <div class="chart-panel-title" id="chartTitle">Visualization</div>
+          <div class="chart-canvas-wrap">
+            <canvas id="mainChart"></canvas>
+          </div>
+        </div>
+
+        <div class="table-panel">
+          <div class="table-panel-head" id="tableTitle">Report data</div>
+          <div class="table-scroll" id="reportTableWrap"></div>
+        </div>
+
+        <div class="export-bar">
+          <button type="button" class="btn btn-pdf" id="exportPdfBtn"><i class="fas fa-file-pdf"></i> Export PDF</button>
+          <button type="button" class="btn btn-docx" id="exportDocxBtn"><i class="fas fa-file-word"></i> Download Word</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="loading-overlay" id="loadingOverlay" aria-hidden="true">
+  <div class="loading-card"><i class="fas fa-spinner fa-spin"></i> Loading report data…</div>
+</div>
+
+<script src="../assets/js/rdomms-toast.js"></script>
+<script src="../assets/js/generate-reports.js?v=14"></script>
+<script src="../assets/js/rpn-nav-shared.js?v=2"></script>
+<script src="../assets/js/reports-nav.js?v=5"></script>
+</body>
+</html>

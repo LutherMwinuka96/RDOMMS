@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RDO|MMS – Activity Log</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+<link rel="stylesheet" href="../assets/css/rdomms-icons-offline.css">
+<link rel="stylesheet" href="../assets/css/rdomms-session-countdown.css?v=2">
+<link rel="stylesheet" href="../assets/css/rdomms-toast.css">
+<link rel="stylesheet" href="../assets/css/rdomms-theme.css">
+<script src="../assets/js/rdomms-security.js"></script>
+<script src="../assets/js/localStorage-service.js"></script>
+<script src="../assets/js/rdomms-system-settings.js"></script>
+<script src="../assets/js/rdomms-toast.js"></script>
+<script src="../assets/vendor/html2pdf.bundle.min.js"></script>
+<script src="../assets/vendor/sheetjs/xlsx.full.min.js"></script>
+<script src="../assets/js/rdomms-export.js"></script>
+<style>
+:root { --primary:#2d5016; --secondary:#4a7c28; --dark:#1a3009; --danger:#dc3545; --text:#212529; --muted:#6c757d; --border:#dee2e6; --radius:0.75rem; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,sans-serif;background:linear-gradient(180deg,#fbfcf9 0%,#f0f4f1 100%);color:var(--text);min-height:100vh}
+.page{max-width:1280px;margin:0 auto;padding:1.25rem 1.25rem 3rem}
+.page-loading{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;background:rgba(15,36,20,.35);color:#fff;font-weight:600;gap:.75rem}
+.page-loading.hidden{display:none}
+.hero{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:1.25rem 1.5rem;background:linear-gradient(135deg,var(--dark),var(--primary));color:#fff;border-radius:1rem;margin-bottom:1rem}
+.hero h1{font-size:1.55rem}.hero p{opacity:.92;margin-top:.35rem;max-width:560px;line-height:1.5}
+.header-actions{display:flex;gap:.5rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.55rem .9rem;border-radius:var(--radius);border:none;font:inherit;font-weight:600;cursor:pointer;text-decoration:none}
+.btn-outline{background:#fff;color:var(--primary)} .btn-light{background:#fff;border:1px solid var(--border);color:var(--primary)} .btn-danger{background:#fee2e2;color:var(--danger);border:1px solid #fecaca}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1rem}
+@media(max-width:900px){.stats-grid{grid-template-columns:1fr 1fr}}
+.stat-card,.panel{background:#fff;border:1px solid var(--border);border-radius:1rem;padding:1rem}
+.stat-label{font-size:.75rem;color:var(--muted)} .stat-value{font-size:1.45rem;font-weight:800;color:var(--primary);margin-top:.15rem}
+.filters{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr 1fr auto;gap:.65rem;margin-bottom:1rem}
+@media(max-width:1000px){.filters{grid-template-columns:1fr 1fr 1fr}.filters .full{grid-column:1/-1}}
+@media(max-width:640px){.filters{grid-template-columns:1fr}}
+.control{width:100%;padding:.7rem;border:1px solid var(--border);border-radius:var(--radius);font:inherit;background:#fff}
+.panel-head{padding-bottom:.75rem;margin-bottom:.75rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:.5rem;flex-wrap:wrap}
+.panel-head h2{font-size:1rem;color:var(--primary)}
+.table-wrap{overflow:auto}
+table{width:100%;border-collapse:collapse;font-size:.82rem}
+thead th{text-align:left;background:#f8faf9;color:#355548;font-size:.72rem;text-transform:uppercase;padding:.75rem;border-bottom:1px solid var(--border)}
+tbody td{padding:.75rem;border-bottom:1px solid #edf2ef;vertical-align:top}
+tbody tr:hover{background:#fbfdfb}
+.sev{display:inline-flex;align-items:center;gap:.25rem;border-radius:999px;padding:.18rem .5rem;font-size:.68rem;font-weight:700}
+.sev-info{background:#eff6ff;color:#1d4ed8}.sev-success{background:#f0fdf4;color:#15803d}.sev-warning{background:#fffbeb;color:#b45309}.sev-danger{background:#fef2f2;color:#b91c1c}
+.mono{font-family:ui-monospace,Consolas,monospace;font-size:.74rem;color:#475569}
+.empty-state{text-align:center;padding:2rem;color:var(--muted);display:none}
+.empty-state.show{display:block}
+.pager{display:flex;justify-content:space-between;align-items:center;gap:.75rem;flex-wrap:wrap;padding-top:.85rem;margin-top:.85rem;border-top:1px solid var(--border)}
+.pager-meta{font-size:.82rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<div id="pageLoading" class="page-loading"><i class="fas fa-spinner fa-spin"></i> Loading activity log…</div>
+<div class="page">
+  <div class="hero">
+    <div>
+      <h1><i class="fas fa-list-check"></i> <span id="activityLogTitle">Activity Log</span></h1>
+      <p id="activityLogSubtitle">Audit trail of user actions and system events stored in the database.</p>
+    </div>
+    <div class="header-actions">
+      <a href="../RDOMMS.html" class="btn btn-outline"><i class="fas fa-house"></i> Dashboard</a>
+      <a href="all-users.php" class="btn btn-light" id="allUsersLink"><i class="fas fa-users"></i> All Users</a>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Total Events</div><div class="stat-value" id="statTotal">0</div></div>
+    <div class="stat-card"><div class="stat-label">Today</div><div class="stat-value" id="statToday">0</div></div>
+    <div class="stat-card"><div class="stat-label">Warnings</div><div class="stat-value" id="statWarn">0</div></div>
+    <div class="stat-card"><div class="stat-label">Critical</div><div class="stat-value" id="statCritical">0</div></div>
+  </div>
+
+  <div class="panel" style="margin-bottom:1rem;padding:.85rem">
+    <div class="panel-head">
+      <h2><i class="fas fa-filter"></i> Filters & Export</h2>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <select id="exportFormat" class="control" style="width:auto;min-width:110px">
+          <option value="pdf">PDF</option>
+          <option value="word">Word</option>
+          <option value="excel">Excel</option>
+        </select>
+        <button type="button" class="btn btn-light" id="exportBtn"><i class="fas fa-file-export"></i> Export</button>
+        <button type="button" class="btn btn-danger" id="clearBtn" style="display:none"><i class="fas fa-trash"></i> Clear Old Logs</button>
+      </div>
+    </div>
+    <div class="filters">
+      <input id="searchInput" class="control full" type="search" placeholder="Search action, details, user…">
+      <select id="moduleFilter" class="control">
+        <option value="">All Modules</option>
+        <option value="Users">Users</option>
+        <option value="Roles">Roles</option>
+        <option value="Auth">Auth</option>
+        <option value="System">System</option>
+        <option value="Beneficiaries">Beneficiaries</option>
+        <option value="Projects">Projects</option>
+        <option value="Finance">Finance</option>
+        <option value="Planning">Planning</option>
+        <option value="Reports">Reports</option>
+        <option value="Notifications">Notifications</option>
+      </select>
+      <select id="severityFilter" class="control">
+        <option value="">All Severity</option>
+        <option value="info">Info</option>
+        <option value="success">Success</option>
+        <option value="warning">Warning</option>
+        <option value="danger">Critical</option>
+      </select>
+      <input id="fromDate" class="control" type="date">
+      <input id="toDate" class="control" type="date">
+      <button type="button" class="btn btn-light" id="resetBtn"><i class="fas fa-rotate-left"></i> Reset</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <h2><i class="fas fa-table"></i> Event Records</h2>
+      <span class="stat-label" id="countText">0 records</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>User</th>
+            <th>Module</th>
+            <th>Action</th>
+            <th>Severity</th>
+            <th>Details</th>
+            <th>IP</th>
+          </tr>
+        </thead>
+        <tbody id="logsBody"></tbody>
+      </table>
+    </div>
+    <div class="empty-state" id="emptyState"><i class="fas fa-folder-open"></i> No activity logs found for the selected filters.</div>
+    <div class="pager">
+      <div class="pager-meta" id="pagerMeta">Showing 0–0</div>
+      <div style="display:flex;gap:.45rem">
+        <button type="button" class="btn btn-light" id="prevBtn"><i class="fas fa-angle-left"></i> Prev</button>
+        <button type="button" class="btn btn-light" id="nextBtn">Next <i class="fas fa-angle-right"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="../assets/js/activity-log.js?v=2"></script>
+</body>
+</html>

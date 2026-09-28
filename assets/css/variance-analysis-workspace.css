@@ -1,0 +1,466 @@
+﻿/* Variance Analysis — mirrors planning/all-plans.php layout */
+
+.planning-page.va-variance {
+  --green-950: #0f2414;
+  --green-900: #163120;
+  --green-800: #21482d;
+  --green-700: #2d5a38;
+  --green-600: #3d7a4d;
+  --green-500: #58a46a;
+  --green-100: #eaf6ed;
+  --text-900: #16201a;
+  --text-700: #3f5148;
+  --text-500: #66786f;
+  --line: rgba(22, 48, 33, 0.12);
+  --shadow-md: 0 12px 28px rgba(13, 39, 23, 0.12);
+  --shadow-sm: 0 6px 18px rgba(13, 39, 23, 0.08);
+  --radius-xl: 30px;
+  --font: 'Inter', 'Segoe UI', Tahoma, sans-serif;
+  --warning: #b7791f;
+  --warning-soft: #fff7e6;
+  --success: #2f855a;
+  --success-soft: #ecfdf5;
+  --danger: #c74d4d;
+  --danger-soft: #fff1f1;
+  font-family: var(--font);
+  color: var(--text-900);
+  background:
+    radial-gradient(circle at top left, rgba(88, 164, 106, 0.20), transparent 26%),
+    radial-gradient(circle at right 15%, rgba(231, 221, 201, 0.86), transparent 22%),
+    linear-gradient(160deg, #f7faf7 0%, #edf4ef 100%) !important;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.planning-page.va-variance::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(120deg, rgba(255, 255, 255, 0.30), transparent 35%),
+    radial-gradient(circle at 18% 18%, rgba(88, 164, 106, 0.08), transparent 28%);
+  z-index: 0;
+}
+
+.planning-page.va-variance .page-shell {
+  position: relative;
+  z-index: 1;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.planning-page.va-variance .layout-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  margin-top: 22px;
+}
+
+.planning-page.va-variance .panel {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border: 1px solid rgba(22, 48, 33, 0.10) !important;
+  border-radius: var(--radius-xl) !important;
+  box-shadow: var(--shadow-md) !important;
+  backdrop-filter: blur(14px);
+  overflow: hidden;
+}
+
+.planning-page.va-variance .panel-header {
+  padding: 20px 22px 0;
+  border-bottom: none;
+}
+
+.planning-page.va-variance .panel-title {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--green-900) !important;
+}
+
+.planning-page.va-variance .panel-subtitle {
+  margin: 8px 0 0;
+  color: var(--text-500);
+  line-height: 1.6;
+}
+
+.planning-page.va-variance .section-body {
+  padding: 22px;
+}
+
+.planning-page.va-variance .summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.planning-page.va-variance .summary-card {
+  background: linear-gradient(180deg, #fff 0%, #f8fbf8 100%);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 14px 16px;
+  box-shadow: var(--shadow-sm);
+  min-width: 0;
+}
+
+.planning-page.va-variance .summary-card .k {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-500);
+}
+
+.planning-page.va-variance .summary-card .v {
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: var(--green-900);
+  margin-top: 6px;
+  min-width: 0;
+}
+
+.planning-page.va-variance .summary-card .s {
+  font-size: 0.78rem;
+  color: var(--text-500);
+  margin-top: 4px;
+}
+
+.planning-page.va-variance .va-note {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(45, 90, 56, 0.16);
+  background: var(--green-100);
+  font-size: 0.86rem;
+  line-height: 1.55;
+}
+
+.planning-page.va-variance .va-note > i {
+  color: var(--green-600);
+  margin-top: 2px;
+}
+
+.planning-page.va-variance .va-note strong {
+  color: var(--green-900);
+}
+
+.planning-page.va-variance .va-note p {
+  margin: 4px 0 0;
+  color: var(--text-500);
+}
+
+.planning-page.va-variance .va-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.planning-page.va-variance .preset-btn {
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #fff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-500);
+  cursor: pointer;
+}
+
+.planning-page.va-variance .preset-btn.is-active {
+  background: linear-gradient(135deg, var(--green-900), var(--green-700));
+  color: #fff;
+  border-color: transparent;
+}
+
+.planning-page.va-variance .toolbar {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 14px;
+  align-items: center;
+}
+
+.planning-page.va-variance .filters-inline {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.planning-page.va-variance .filters-inline input,
+.planning-page.va-variance .filters-inline select {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 11px 14px;
+  background: #fff;
+  min-width: 150px;
+  color: var(--text-900);
+}
+
+.planning-page.va-variance .filters-inline input[type='search'] {
+  flex: 1;
+  min-width: 220px;
+}
+
+.planning-page.va-variance .btn-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.planning-page.va-variance .action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 16px;
+  border-radius: 14px !important;
+  border: 1px solid transparent;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.planning-page.va-variance .action-btn.primary {
+  background: linear-gradient(135deg, var(--green-900), var(--green-700)) !important;
+  color: #fff !important;
+}
+
+.planning-page.va-variance .action-btn.secondary {
+  background: #fff !important;
+  border-color: var(--line) !important;
+  color: var(--green-900) !important;
+}
+
+.planning-page.va-variance .action-btn.ghost {
+  background: transparent !important;
+  border-color: var(--line) !important;
+  color: var(--text-700) !important;
+}
+
+.planning-page.va-variance .export-format-select {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 11px 14px;
+  background: #fff;
+  font-weight: 700;
+  color: var(--green-900);
+}
+
+.planning-page.va-variance .active-filters {
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: var(--green-100);
+  border: 1px solid rgba(45, 90, 56, 0.18);
+  font-size: 0.84rem;
+  color: var(--text-500);
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.planning-page.va-variance .va-module-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.planning-page.va-variance .va-module-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--line);
+  color: var(--green-800);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: var(--shadow-sm);
+}
+
+.planning-page.va-variance .view-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.planning-page.va-variance .tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-500);
+  cursor: pointer;
+}
+
+.planning-page.va-variance .tab-btn.active {
+  background: linear-gradient(135deg, var(--green-900), var(--green-700));
+  color: #fff;
+  border-color: transparent;
+}
+
+.planning-page.va-variance .va-charts {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.planning-page.va-variance .va-chart-panel {
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: #fff;
+  padding: 16px 18px;
+  box-shadow: var(--shadow-sm);
+}
+
+.planning-page.va-variance .va-chart-title {
+  margin: 0 0 12px;
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: var(--green-900);
+}
+
+.planning-page.va-variance .va-chart-box {
+  height: 280px;
+  position: relative;
+}
+
+.planning-page.va-variance .va-table-title {
+  margin: 0 0 12px;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--green-900);
+}
+
+.planning-page.va-variance .va-table-wrap {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: auto;
+}
+
+.planning-page.va-variance .plan-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.planning-page.va-variance .plan-table th,
+.planning-page.va-variance .plan-table td {
+  border-bottom: 1px solid var(--line);
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: top;
+  font-size: 0.88rem;
+}
+
+.planning-page.va-variance .plan-table th {
+  background: linear-gradient(135deg, var(--green-900), var(--green-700));
+  color: #fff;
+  font-weight: 700;
+}
+
+.planning-page.va-variance .plan-table .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.planning-page.va-variance .empty-row {
+  display: none;
+  padding: 36px 18px;
+  border-radius: 18px;
+  border: 1px dashed rgba(33, 72, 45, 0.25);
+  background: #f8fbf8;
+  color: var(--text-500);
+  text-align: center;
+  margin-top: 12px;
+}
+
+.planning-page.va-variance .empty-row.is-visible {
+  display: block;
+}
+
+.planning-page.va-variance .empty-row i {
+  display: block;
+  font-size: 1.4rem;
+  margin-bottom: 8px;
+  color: var(--green-500);
+}
+
+.planning-page.va-variance .stat-value-wrap { min-width: 0; width: 100%; }
+.planning-page.va-variance .stat-value {
+  display: inline-block;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.planning-page.va-variance .stat-value.success { color: var(--success); }
+.planning-page.va-variance .stat-value.warning { color: var(--warning); }
+.planning-page.va-variance .stat-value.danger { color: var(--danger); }
+
+.planning-page.va-variance .badge {
+  display: inline-flex;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.planning-page.va-variance .badge.success { background: var(--success-soft); color: var(--success); }
+.planning-page.va-variance .badge.warning { background: var(--warning-soft); color: var(--warning); }
+.planning-page.va-variance .badge.danger { background: var(--danger-soft); color: var(--danger); }
+
+.planning-page.va-variance .var-positive { color: var(--success); font-weight: 700; }
+.planning-page.va-variance .var-negative { color: var(--danger); font-weight: 700; }
+
+.planning-page.va-variance .va-loading {
+  position: fixed;
+  inset: 0;
+  z-index: 4000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 36, 20, 0.45);
+}
+.planning-page.va-variance .va-loading.active { display: flex; }
+.planning-page.va-variance .va-loading-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: var(--shadow-md);
+  font-weight: 700;
+  color: var(--green-900);
+}
+
+@media (max-width: 1100px) {
+  .planning-page.va-variance .summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .planning-page.va-variance .va-charts { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 760px) {
+  .planning-page.va-variance .page-shell { padding: 14px; }
+  .planning-page.va-variance .summary-grid { grid-template-columns: 1fr; }
+  .planning-page.va-variance .panel-header,
+  .planning-page.va-variance .section-body { padding-left: 16px; padding-right: 16px; }
+  .planning-page.va-variance .filters-inline { width: 100%; }
+  .planning-page.va-variance .filters-inline input,
+  .planning-page.va-variance .filters-inline select { width: 100%; min-width: 0; }
+  .planning-page.va-variance .action-btn { width: 100%; justify-content: center; }
+}

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RDO|MMS – Role Management</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+<link rel="stylesheet" href="../assets/css/rdomms-icons-offline.css">
+<link rel="stylesheet" href="../assets/css/rdomms-session-countdown.css?v=2">
+<link rel="stylesheet" href="../assets/css/rdomms-toast.css">
+<script src="../assets/js/rdomms-security.js"></script>
+<script src="../assets/js/localStorage-service.js"></script>
+<script src="../assets/js/rdomms-toast.js"></script>
+<style>
+:root { --primary:#2d5016; --secondary:#4a7c28; --dark:#1a3009; --danger:#dc3545; --text:#212529; --muted:#6c757d; --border:#dee2e6; --radius:0.75rem; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,sans-serif;background:linear-gradient(180deg,#fbfcf9 0%,#f0f4f1 100%);color:var(--text);min-height:100vh}
+.page{max-width:1280px;margin:0 auto;padding:1.25rem 1.25rem 3rem}
+.page-loading{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;background:rgba(15,36,20,.35);color:#fff;font-weight:600;gap:.75rem}
+.page-loading.hidden{display:none}
+.hero{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:1.25rem 1.5rem;background:linear-gradient(135deg,var(--dark),var(--primary));color:#fff;border-radius:1rem;margin-bottom:1rem}
+.hero h1{font-size:1.55rem}.hero p{opacity:.92;margin-top:.35rem;max-width:560px;line-height:1.5}
+.header-actions{display:flex;gap:.5rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.55rem .9rem;border-radius:var(--radius);border:none;font:inherit;font-weight:600;cursor:pointer;text-decoration:none}
+.btn-outline{background:#fff;color:var(--primary)} .btn-light{background:#fff;border:1px solid var(--border);color:var(--primary)} .btn-primary{background:var(--secondary);color:#fff} .btn-danger{background:#fee2e2;color:var(--danger);border:1px solid #fecaca}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1rem}
+@media(max-width:800px){.stats-grid{grid-template-columns:1fr}}
+.stat-card,.panel{background:#fff;border:1px solid var(--border);border-radius:1rem;padding:1rem}
+.stat-label{font-size:.75rem;color:var(--muted)} .stat-value{font-size:1.45rem;font-weight:800;color:var(--primary);margin-top:.15rem}
+.layout{display:grid;grid-template-columns:340px 1fr;gap:1rem;align-items:start}
+@media(max-width:980px){.layout{grid-template-columns:1fr}}
+.panel-head{padding-bottom:.75rem;margin-bottom:.75rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:.5rem}
+.panel-head h2{font-size:1rem;color:var(--primary)}
+.role-list{display:flex;flex-direction:column;gap:.55rem}
+.role-item{border:1px solid var(--border);border-radius:var(--radius);padding:.75rem;display:flex;justify-content:space-between;gap:.65rem}
+.role-item h3{font-size:.88rem;margin-bottom:.15rem}.role-item p{font-size:.78rem;color:var(--muted)}
+.badge{display:inline-flex;align-items:center;gap:.25rem;border-radius:999px;padding:.18rem .55rem;font-size:.68rem;font-weight:700;margin-top:.35rem}
+.b-admin{background:#eff6ff;color:#1d4ed8}.b-custom{background:#f3f4f6;color:#374151}
+.table-wrap{overflow:auto}
+table{width:100%;border-collapse:collapse;font-size:.82rem}
+thead th{text-align:left;background:#f8faf9;color:#355548;font-size:.72rem;text-transform:uppercase;padding:.75rem;border-bottom:1px solid var(--border)}
+tbody td{padding:.75rem;border-bottom:1px solid #edf2ef;vertical-align:middle}
+.perm-chip{display:inline-flex;align-items:center;gap:.25rem;border-radius:999px;padding:.15rem .45rem;font-size:.68rem;font-weight:700}
+.perm-yes{background:#f0fdf4;color:#15803d}.perm-no{background:#fef2f2;color:#b91c1c}
+.actions{display:flex;gap:.25rem}
+.icon-btn{width:30px;height:30px;border:0;border-radius:8px;background:transparent;color:#64748b;cursor:pointer}
+.icon-btn:hover{background:#eef7ef;color:var(--primary)} .icon-btn.danger:hover{background:#fef2f2;color:var(--danger)}
+.empty-state{text-align:center;padding:1.5rem;color:var(--muted);font-size:.84rem}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9999;padding:1rem}
+.modal-overlay.open{display:flex}
+.modal{background:#fff;border-radius:1rem;max-width:640px;width:100%;max-height:90vh;overflow:auto;border:1px solid var(--border)}
+.modal-head{padding:1rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.modal-body{padding:1rem}.modal-actions{padding:1rem;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:.5rem;flex-wrap:wrap}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:.65rem}
+@media(max-width:640px){.modal-grid{grid-template-columns:1fr}}
+.control{width:100%;padding:.7rem;border:1px solid var(--border);border-radius:var(--radius);font:inherit;background:#fff}
+.form-group{display:flex;flex-direction:column;gap:.35rem;margin-bottom:.75rem}
+.form-group label{font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase}
+.checks{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem}
+@media(max-width:640px){.checks{grid-template-columns:1fr 1fr}}
+.check-row{display:flex;align-items:center;gap:.4rem;font-size:.82rem}
+.check-row input{accent-color:var(--primary)}
+</style>
+</head>
+<body>
+<div id="pageLoading" class="page-loading"><i class="fas fa-spinner fa-spin"></i> Loading roles…</div>
+<div class="page">
+  <div class="hero">
+    <div>
+      <h1><i class="fas fa-user-tag"></i> Role Management</h1>
+      <p>Define roles and module permissions stored in the database. Admin access only.</p>
+    </div>
+    <div class="header-actions">
+      <a href="../RDOMMS.html" class="btn btn-outline"><i class="fas fa-house"></i> Dashboard</a>
+      <a href="all-users.php" class="btn btn-light"><i class="fas fa-users"></i> All Users</a>
+      <button type="button" class="btn btn-light" id="newRoleBtn"><i class="fas fa-plus"></i> New Role</button>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Total Roles</div><div class="stat-value" id="statTotal">0</div></div>
+    <div class="stat-card"><div class="stat-label">Admin-level</div><div class="stat-value" id="statAdmin">0</div></div>
+    <div class="stat-card"><div class="stat-label">Custom Roles</div><div class="stat-value" id="statCustom">0</div></div>
+  </div>
+
+  <div class="layout">
+    <section class="panel">
+      <div class="panel-head"><h2><i class="fas fa-layer-group"></i> Available Roles</h2></div>
+      <div class="role-list" id="rolesList"></div>
+      <div class="empty-state" id="rolesEmpty" style="display:none">No roles yet. Create one to get started.</div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2><i class="fas fa-table"></i> Permission Matrix</h2>
+        <span class="stat-label" id="matrixMeta">0 roles</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Role</th>
+              <th>Projects</th>
+              <th>Planning</th>
+              <th>Finance</th>
+              <th>Reports</th>
+              <th>Users</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="matrixBody"></tbody>
+        </table>
+      </div>
+      <div class="empty-state" id="matrixEmpty" style="display:none">Permission matrix will appear once roles are loaded.</div>
+    </section>
+  </div>
+</div>
+
+<div class="modal-overlay" id="roleModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="roleModalTitle"><i class="fas fa-pen"></i> Role</h3>
+      <button type="button" class="icon-btn" data-close="roleModal"><i class="fas fa-times"></i></button>
+    </div>
+    <form id="roleForm">
+      <div class="modal-body">
+        <input type="hidden" id="roleId">
+        <div class="modal-grid">
+          <div class="form-group">
+            <label for="roleName">Role Name</label>
+            <input class="control" id="roleName" placeholder="e.g. Field Officer" required>
+          </div>
+          <div class="form-group">
+            <label for="roleType">Role Type</label>
+            <select class="control" id="roleType" required>
+              <option value="custom">Custom</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="roleDesc">Description</label>
+          <textarea class="control" id="roleDesc" rows="2" placeholder="Short description of this role"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Module Permissions</label>
+          <div class="checks">
+            <label class="check-row"><input type="checkbox" id="permProjects"> Projects</label>
+            <label class="check-row"><input type="checkbox" id="permPlanning"> Planning</label>
+            <label class="check-row"><input type="checkbox" id="permFinance"> Finance</label>
+            <label class="check-row"><input type="checkbox" id="permReports"> Reports</label>
+            <label class="check-row"><input type="checkbox" id="permUsers"> Users</label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-light" data-close="roleModal">Cancel</button>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Role</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-head"><h3><i class="fas fa-trash"></i> Confirm Delete</h3><button type="button" class="icon-btn" data-close="deleteModal"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body"><p id="deleteText"></p></div>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-light" data-close="deleteModal">Cancel</button>
+      <button type="button" class="btn btn-danger" id="confirmDeleteBtn"><i class="fas fa-trash"></i> Delete</button>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/js/role-management.js?v=1"></script>
+</body>
+</html>
